@@ -1,104 +1,100 @@
 @guest
-    @yield('content')
+
+@yield('content')
+
 @else
 
-<!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
 
-    <!-- CSRF Token -->
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+        <!-- CSRF Token -->
+        <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>{{ config('app.name', 'Kasir') }}</title>
 
-    <!-- Fonts -->
-    <link href="{{ asset('lib/fontawesome/css/fontawesome.css') }}" rel="stylesheet">
+        <link href="{{ asset('sbadmin/assets/simple-datatables.css') }}" rel="stylesheet" />
+        <link href="{{ asset('sbadmin/css/styles.css') }}" rel="stylesheet" />
 
-    <!-- Styles -->
-    <link href="{{ asset('lib/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+        @yield('style')
 
-    @yield('style')
-</head>
-<body>
-    <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'POS') }}
-                </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
-                    <div>
-                        <!-- Left Side Of Navbar -->
-                        <ul class="navbar-nav mr-auto">
-                            <li class="nav-item">
-                                <a class="nav-link text-uppercase" aria-current="page" href="#">Dashboard</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-uppercase" aria-current="page" href="#">Master</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-uppercase" aria-current="page" href="#">Pembelian</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-uppercase" aria-current="page" href="#">Stok</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-uppercase" aria-current="page" href="#">Produksi</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-uppercase" aria-current="page" href="#">Kas/Bank</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-uppercase" aria-current="page" href="#">Penjualan</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-uppercase" aria-current="page" href="#">Akuntansi</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-uppercase" aria-current="page" href="#">Efaktur</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div>
-                        <!-- Right Side Of Navbar -->
-                        <ul class="navbar-nav ml-auto">
-                            <!-- Authentication Links -->
-                            <div class="dropdown">
-                                <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                    {{ Auth::user()->name }}
-                                </button>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                    <li><a class="dropdown-item" href="{{ route('logout') }}"
-                                        onclick="event.preventDefault();
-                                                    document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a></li>
-                                </ul>
+        <script src="{{ asset('sbadmin/assets/fontawesome.js') }}" crossorigin="anonymous"></script>
+    </head>
+    <body class="sb-nav-fixed">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+            <!-- Navbar Brand-->
+            <a class="navbar-brand ps-3" href="index.html">{{ config('app.name', 'Kasir') }}</a>
+            <!-- Sidebar Toggle-->
+            <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
+            <!-- Navbar Search-->
+            <div class="d-none d-md-inline-block form-inline ms-auto">
+                <!-- Navbar-->
+                <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{ Auth::user()->name }}</a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="#!">Profile</a></li>
+                            <li>
+                                <a class="dropdown-item" href="{{ route('logout') }}"
+                                    onclick="event.preventDefault();
+                                    document.getElementById('logout-form').submit();">Logout
+                                </a>
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                     @csrf
                                 </form>
-                            </div>
+                            </li>
                         </ul>
-                    </div>
-                </div>
+                    </li>
+                </ul>
             </div>
         </nav>
+        <div id="layoutSidenav">
+            <div id="layoutSidenav_nav">
+                <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+                    <div class="sb-sidenav-menu">
+                        <div class="nav">
+                            <div class="sb-sidenav-menu-heading">Core</div>
+                            <a class="nav-link" href="index.html">
+                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                Dashboard
+                            </a>
+                            <div class="sb-sidenav-menu-heading">Master</div>
+                            <a class="nav-link" href="{{ route('produk_category.index') }}">
+                                <div class="sb-nav-link-icon"><i class="fas fa-copy"></i></div>
+                                Produk Kategori
+                            </a>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+            <div id="layoutSidenav_content">
+                <main>
+                    @yield('content')
+                </main>
+                <footer class="py-4 bg-light mt-auto">
+                    <div class="container-fluid px-4">
+                        <div class="d-flex align-items-center justify-content-between small">
+                            <div class="text-muted">Copyright &copy; Your Website 2021</div>
+                            <div>
+                                <a href="#">Privacy Policy</a>
+                                &middot;
+                                <a href="#">Terms &amp; Conditions</a>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </div>
+        <script src="{{ asset('sbadmin/assets/bootstrap.bundle.min.js') }}" crossorigin="anonymous"></script>
+        <script src="{{ asset('sbadmin/js/scripts.js') }}"></script>
 
-        <main class="py-4">
-            @yield('content')
-        </main>
-    </div>
-
-    <script src="{{ asset('lib/bootstrap/js/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('lib/jquery/jquery.js') }}"></script>
-
-    @yield('script')
-</body>
+        @yield('script')
+    </body>
 </html>
+
 @endguest
