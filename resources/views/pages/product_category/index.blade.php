@@ -3,13 +3,13 @@
 @section('content')
 
 <div class="container-fluid px-4">
-    <h3 class="mt-4">Dashboard</h3>
+    <h3 class="mt-4">Produk Kategori</h3>
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item active"></li>
     </ol>
     <div class="col-md-12 mb-4">
         <span class="border border-1 px-2 py-1">
-            <i class="fas fa-plus"></i>
+            <a href="{{ route('produk_category.create') }}"><i class="fas fa-plus"></i></a>
         </span>
     </div>
     <div class="card mb-4">
@@ -31,8 +31,8 @@
                         <td>1</td>
                         <td>Tiger Nixon</td>
                         <td class="text-center">
-                            <a href="#" class="border-0 bg-white text-dark mx-2" title="Lihat"><i class="fas fa-edit"></i></a> |
-                            <a href="#" class="text-dark mx-2" title="Print"><i class="fas fa-trash"></i></a>
+                            <a href="#" class="border-0 bg-white mx-2" title="Lihat"><i class="fas fa-edit"></i></a> |
+                            <a href="#" class="mx-2" title="Print"><i class="fas fa-trash"></i></a>
                         </td>
                     </tr>
                 </tbody>

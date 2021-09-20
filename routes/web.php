@@ -27,4 +27,6 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::middleware(['auth'])->group(function () {
     // product category
     Route::get('produk_category', [ProductCategoryController::class, 'index'])->name('produk_category.index');
+    Route::get('produk_category/create', [ProductCategoryController::class, 'create'])->name('produk_category.create');
+    Route::post('produk_category/store', [ProductCategoryController::class, 'store'])->name('produk_category.store');
 });
