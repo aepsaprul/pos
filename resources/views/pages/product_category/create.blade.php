@@ -5,11 +5,13 @@
 <div class="container-fluid px-4">
     <h3 class="mt-4">Tambah Produk Kategori</h3>
     <ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item active"></li>
+        <li class="breadcrumb-item"><a href="{{ route('home') }}">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('produk_category.index') }}" class="fs-underline-none">Produk Kategori</a></li>
+        <li class="breadcrumb-item">Tambah</li>
     </ol>
     <div class="card mb-4">
         <div class="card-header">
-            <a href="{{ route('produk_category.index') }}" class="text-decoration-none"><i class="fas fa-arrow-left me-1"></i> Kembali</a>
+            Tambah
         </div>
         <div class="card-body">
             <form action="{{ route('produk_category.store') }}" method="post">
