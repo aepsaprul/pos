@@ -53,7 +53,7 @@
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="#">Customer</a>
+                            <a class="nav-link" aria-current="page" href="{{ route('customer.index') }}">Customer</a>
                         </li>
                     </ul>
                     <div class="btn-group d-flex">
