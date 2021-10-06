@@ -19,7 +19,7 @@ class CreateProductsTable extends Migration
             $table->string('product_name', 50)->nullable();
             $table->integer('product_category_id')->nullable();
             $table->float('product_price', 8, 2)->nullable();
-            $table->float('reorder_level')->nullable();
+            $table->integer('stock')->nullable();
             $table->timestamps();
         });
     }

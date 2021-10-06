@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,5 +24,11 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::middleware(['auth'])->group(function () {
+
+    // customer
     Route::get('customer', [CustomerController::class, 'index'])->name('customer.index');
+
+    // product
+    Route::post('home/product', [HomeController::class, 'getProduct'])->name('home.product');
+    Route::post('home/sales-save', [HomeController::class, 'salesSave'])->name('home.sales_save');
 });

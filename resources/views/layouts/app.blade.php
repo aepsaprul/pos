@@ -11,7 +11,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Kasir') }}</title>
+    <title>{{ config('app.name', 'POS') }}</title>
 
     <!-- Fonts -->
     <link href="{{ asset('lib/fontawesome-5/css/all.min.css') }}" rel="stylesheet">
@@ -89,6 +89,42 @@
     <script src="{{ asset('lib/bootstrap-5/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('lib/datatables/js/jquery-3.5.1.js') }}"></script>
     <script src="{{ asset('lib/fontawesome-5/js/fontawesome.min.js') }}"></script>
+
+    <script>
+        function format_rupiah(bilangan) {
+            var	number_string = bilangan.toString(),
+                split	= number_string.split(','),
+                sisa 	= split[0].length % 3,
+                rupiah 	= split[0].substr(0, sisa),
+                ribuan 	= split[0].substr(sisa).match(/\d{1,3}/gi);
+
+            if (ribuan) {
+                separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
+            rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+
+            return rupiah;
+        }
+
+        function formatRupiah(angka, prefix) {
+            var number_string = angka.replace(/[^,\d]/g, "").toString(),
+                split = number_string.split(","),
+                sisa = split[0].length % 3,
+                rupiah = split[0].substr(0, sisa),
+                ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+            // tambahkan titik jika yang di input sudah menjadi angka ribuan
+            if (ribuan) {
+                separator = sisa ? "." : "";
+                rupiah += separator + ribuan.join(".");
+            }
+
+            rupiah = split[1] != undefined ? rupiah + "," + split[1] : rupiah;
+            return prefix == undefined ? rupiah : rupiah ? "" + rupiah : "";
+        }
+    </script>
+    </script>
 
     @yield('script')
 </body>
