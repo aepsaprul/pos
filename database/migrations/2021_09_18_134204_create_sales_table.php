@@ -17,7 +17,7 @@ class CreateSalesTable extends Migration
             $table->id();
             $table->integer('user_id')->nullable();
             $table->integer('invoice_id')->nullable();
-            $table->integer('product_code')->nullable();
+            $table->integer('product_id')->nullable();
             $table->integer('quantity')->nullable();
             $table->double('sub_total')->nullable();
             $table->timestamps();
