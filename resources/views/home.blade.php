@@ -228,14 +228,8 @@
             }
         });
 
-        // $('#pay').on('keyup', function() {
-        //     $('#pay').val(format_rupiah(this.value, ""));
-        // })
-
         var payRupiah = document.getElementById("pay");
         payRupiah.addEventListener("keyup", function(e) {
-            // tambahkan 'Rp.' pada saat form di ketik
-            // gunakan fungsi formatpayRupiah() untuk mengubah angka yang di ketik menjadi format angka
             payRupiah.value = formatRupiah(this.value, "");
         });
 

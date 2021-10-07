@@ -34,14 +34,8 @@
                         <li class="nav-item">
                             <a class="nav-link" aria-current="page" href="#">Dashboard</a>
                         </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Produk
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item border-bottom" href="#"><i class="fas fa-chevron-right"></i> Pelanggan</a></li>
-                                <li><a class="dropdown-item" href="#"><i class="fas fa-chevron-right"></i> Jenis Pekerjaan</a></li>
-                            </ul>
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="#">Produk</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
