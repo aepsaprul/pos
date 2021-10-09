@@ -27,6 +27,11 @@ Route::middleware(['auth'])->group(function () {
 
     // customer
     Route::get('customer', [CustomerController::class, 'index'])->name('customer.index');
+    Route::post('customer/store', [CustomerController::class, 'store'])->name('customer.store');
+    Route::post('customer/update', [CustomerController::class, 'update'])->name('customer.update');
+    Route::get('customer/{id}/edit', [CustomerController::class, 'edit'])->name('customer.edit');
+    Route::get('customer/{id}/delete_btn', [CustomerController::class, 'deleteBtn'])->name('customer.delete_btn');
+    Route::post('customer/delete', [CustomerController::class, 'delete'])->name('customer.delete');
 
     // product
     Route::post('home/product', [HomeController::class, 'getProduct'])->name('home.product');
