@@ -207,6 +207,17 @@
     </div>
 </div>
 
+{{-- modal proses berhasil  --}}
+<div class="modal fade modal-proses" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                Proses sukses.... <i class="fas fa-check" style="color: #32a893;"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @section('script')
@@ -231,6 +242,8 @@
         $('#form_create').submit(function(e) {
             e.preventDefault();
 
+            $('.modal-create').modal('hide');
+
             var formData = {
                 customer_name: $('#create_customer_name').val(),
                 email: $('#create_email').val(),
@@ -244,9 +257,10 @@
                 type: 'POST',
                 data: formData,
                 success: function(response) {
+                    $('.modal-proses').modal('show');
                     setTimeout(() => {
                         window.location.reload(1);
-                    }, 100);
+                    }, 1000);
                 }
             });
         });
@@ -281,6 +295,8 @@
         $('#form_edit').submit(function(e) {
             e.preventDefault();
 
+            $('.modal-edit').modal('hide');
+
             var formData = {
                 id: $('#edit_customer_id').val(),
                 customer_name: $('#edit_customer_name').val(),
@@ -295,9 +311,10 @@
                 type: 'POST',
                 data: formData,
                 success: function(response) {
+                    $('.modal-proses').modal('show');
                     setTimeout(() => {
                         window.location.reload(1);
-                    }, 100);
+                    }, 1000);
                 }
             });
         });
@@ -329,6 +346,8 @@
         $('#form_delete').submit(function(e) {
             e.preventDefault();
 
+            $('.modal-delete').modal('hide');
+
             var formData = {
                 id: $('#delete_customer_id').val(),
                 _token: CSRF_TOKEN
@@ -339,9 +358,10 @@
                 type: 'POST',
                 data: formData,
                 success: function(response) {
+                    $('.modal-proses').modal('show');
                     setTimeout(() => {
                         window.location.reload(1);
-                    }, 100);
+                    }, 1000);
                 }
             });
         });
