@@ -3,6 +3,7 @@
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductCategoryController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\Route;
 
@@ -44,6 +45,14 @@ Route::middleware(['auth'])->group(function () {
     Route::post('product_category/delete', [ProductCategoryController::class, 'delete'])->name('product_category.delete');
 
     // product
+    Route::get('product', [ProductController::class, 'index'])->name('product.index');
+    Route::post('product/store', [ProductController::class, 'store'])->name('product.store');
+    Route::post('product/update', [ProductController::class, 'update'])->name('product.update');
+    Route::get('product/{id}/edit', [ProductController::class, 'edit'])->name('product.edit');
+    Route::get('product/{id}/delete_btn', [ProductController::class, 'deleteBtn'])->name('product.delete_btn');
+    Route::post('product/delete', [ProductController::class, 'delete'])->name('product.delete');
+
+    // home
     Route::post('home/product', [HomeController::class, 'getProduct'])->name('home.product');
     Route::post('home/sales-save', [HomeController::class, 'salesSave'])->name('home.sales_save');
 

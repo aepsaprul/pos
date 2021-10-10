@@ -32,13 +32,13 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 text-uppercase">
                         <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="#">Dashboard</a>
+                            <a class="nav-link" aria-current="page" href="{{ route('home') }}">Dashboard</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" aria-current="page" href="{{ route('product_category.index') }}">Kategori</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="#">Produk</a>
+                            <a class="nav-link" aria-current="page" href="{{ route('product.index') }}">Produk</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">

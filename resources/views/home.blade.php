@@ -2,7 +2,7 @@
 
 @section('style')
 <style>
-    * {
+    .justify-content-center {
         font-size: 12px;
     }
 </style>
