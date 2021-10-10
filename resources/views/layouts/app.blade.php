@@ -49,6 +49,9 @@
                         <li class="nav-item">
                             <a class="nav-link" aria-current="page" href="{{ route('customer.index') }}">Customer</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="{{ route('supplier.index') }}">Supplier</a>
+                        </li>
                     </ul>
                     <div class="btn-group d-flex">
                         <button type="button" class="btn dropdown-toggle text-uppercase" data-bs-toggle="dropdown" aria-expanded="false">

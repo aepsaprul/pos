@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -36,4 +37,12 @@ Route::middleware(['auth'])->group(function () {
     // product
     Route::post('home/product', [HomeController::class, 'getProduct'])->name('home.product');
     Route::post('home/sales-save', [HomeController::class, 'salesSave'])->name('home.sales_save');
+
+    // supplier
+    Route::get('supplier', [SupplierController::class, 'index'])->name('supplier.index');
+    Route::post('supplier/store', [SupplierController::class, 'store'])->name('supplier.store');
+    Route::post('supplier/update', [SupplierController::class, 'update'])->name('supplier.update');
+    Route::get('supplier/{id}/edit', [SupplierController::class, 'edit'])->name('supplier.edit');
+    Route::get('supplier/{id}/delete_btn', [SupplierController::class, 'deleteBtn'])->name('supplier.delete_btn');
+    Route::post('supplier/delete', [SupplierController::class, 'delete'])->name('supplier.delete');
 });
