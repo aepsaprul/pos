@@ -21,7 +21,7 @@
 <div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <h6 class="text-uppercase text-center">Data Customer</h6>
+            <h6 class="text-uppercase text-center">Data Kategori Produk</h6>
             @if (session('status'))
                 <div class="alert alert-success">
                     {{ session('status') }}
@@ -48,21 +48,15 @@
                 <thead style="background-color: #32a893;">
                     <tr>
                         <th class="text-white text-center fw-bold">No</th>
-                        <th class="text-white text-center fw-bold">Nama</th>
-                        <th class="text-white text-center fw-bold">Telepon</th>
-                        <th class="text-white text-center fw-bold">Email</th>
-                        <th class="text-white text-center fw-bold">Alamat</th>
+                        <th class="text-white text-center fw-bold">Nama Kategori</th>
                         <th class="text-white text-center fw-bold">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($customers as $key => $item)
+                    @foreach ($product_categories as $key => $item)
                         <tr>
                             <td class="text-center">{{ $key + 1 }}</td>
-                            <td>{{ $item->customer_name }}</td>
-                            <td>{{ $item->contact }}</td>
-                            <td>{{ $item->email }}</td>
-                            <td>{{ $item->address }}</td>
+                            <td>{{ $item->category_name }}</td>
                             <td class="text-center">
                                 <div class="btn-group">
                                     <button
@@ -114,27 +108,13 @@
         <div class="modal-content">
             <form id="form_create">
                 <div class="modal-header" style="background-color: #32a893;">
-                    <h5 class="modal-title text-white">Tambah Customer</h5>
+                    <h5 class="modal-title text-white">Tambah Kategori</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="create_customer_name" class="form-label">Nama Customer</label>
-                        <input type="text" class="form-control form-control-sm" id="create_customer_name" name="create_customer_name">
-                    </div>
-                    <div class="mb-3">
-                        <label for="create_contact" class="form-label">Telepon</label>
-                        <input type="text" class="form-control form-control-sm" id="create_contact" name="create_contact">
-                    </div>
-                    <div class="mb-3">
-                        <label for="create_email" class="form-label">Email</label>
-                        <input type="email" class="form-control form-control-sm" id="create_email" name="create_email">
-                    </div>
-                    <div class="mb-3">
-                        <div class="form-floating">
-                            <textarea id="create_address" class="form-control form-control-sm" name="create_address" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px"></textarea>
-                            <label for="floatingTextarea2">Alamat</label>
-                        </div>
+                        <label for="create_category_name" class="form-label">Nama Kategori</label>
+                        <input type="text" class="form-control form-control-sm" id="create_category_name" name="create_category_name">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -152,30 +132,16 @@
             <form id="form_edit">
 
                 {{-- id  --}}
-                <input type="hidden" id="edit_customer_id" name="edit_customer_id">
+                <input type="hidden" id="edit_category_id" name="edit_category_id">
 
                 <div class="modal-header" style="background-color: #32a893;">
-                    <h5 class="modal-title text-white">Ubah Customer</h5>
+                    <h5 class="modal-title text-white">Ubah Kategori</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="edit_customer_name" class="form-label">Nama Customer</label>
-                        <input type="text" class="form-control form-control-sm" id="edit_customer_name" name="edit_customer_name">
-                    </div>
-                    <div class="mb-3">
-                        <label for="edit_contact" class="form-label">Telepon</label>
-                        <input type="text" class="form-control form-control-sm" id="edit_contact" name="edit_contact">
-                    </div>
-                    <div class="mb-3">
-                        <label for="edit_email" class="form-label">Email</label>
-                        <input type="email" class="form-control form-control-sm" id="edit_email" name="edit_email">
-                    </div>
-                    <div class="mb-3">
-                        <div class="form-floating">
-                            <textarea id="edit_address" class="form-control form-control-sm" name="edit_address" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px"></textarea>
-                            <label for="floatingTextarea2">Alamat</label>
-                        </div>
+                        <label for="edit_category_name" class="form-label">Nama Kategori</label>
+                        <input type="text" class="form-control form-control-sm" id="edit_category_name" name="edit_category_name">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -193,7 +159,7 @@
             <form id="form_delete">
 
                 {{-- id  --}}
-                <input type="hidden" id="delete_customer_id" name="delete_customer_id">
+                <input type="hidden" id="delete_category_id" name="delete_category_id">
 
                 <div class="modal-header">
                     <h5 class="modal-title">Yakin akan dihapus <span class="delete_title text-decoration-underline"></span> ?</h5>
@@ -240,7 +206,7 @@
         });
 
         $(document).on('shown.bs.modal', '.modal-create', function() {
-            $('#create_customer_name').focus();
+            $('#create_category_name').focus();
         });
 
         $('#form_create').submit(function(e) {
@@ -249,15 +215,12 @@
             $('.modal-create').modal('hide');
 
             var formData = {
-                customer_name: $('#create_customer_name').val(),
-                email: $('#create_email').val(),
-                contact: $('#create_contact').val(),
-                address: $('#create_address').val(),
+                category_name: $('#create_category_name').val(),
                 _token: CSRF_TOKEN
             }
 
             $.ajax({
-                url: '{{ URL::route('customer.store') }} ',
+                url: '{{ URL::route('product_category.store') }} ',
                 type: 'POST',
                 data: formData,
                 success: function(response) {
@@ -273,7 +236,7 @@
             e.preventDefault();
 
             var id = $(this).attr('data-id');
-            var url = '{{ route("customer.edit", ":id") }}';
+            var url = '{{ route("product_category.edit", ":id") }}';
             url = url.replace(':id', id );
 
             var formData = {
@@ -286,18 +249,17 @@
                 type: 'GET',
                 data: formData,
                 success: function(response) {
-                    $('#edit_customer_id').val(response.customer_id);
-                    $('#edit_customer_name').val(response.customer_name);
-                    $('#edit_email').val(response.email);
-                    $('#edit_contact').val(response.contact);
-                    $('#edit_address').val(response.address);
+                    $('#edit_category_id').val(response.category_id);
+                    $('#edit_category_name').val(response.category_name);
+
+                    // modal show
                     $('.modal-edit').modal('show');
                 }
             })
         });
 
         $(document).on('shown.bs.modal', '.modal-edit', function() {
-            $('#edit_customer_name').focus();
+            $('#edit_category_name').focus();
         });
 
         $('#form_edit').submit(function(e) {
@@ -306,16 +268,13 @@
             $('.modal-edit').modal('hide');
 
             var formData = {
-                id: $('#edit_customer_id').val(),
-                customer_name: $('#edit_customer_name').val(),
-                email: $('#edit_email').val(),
-                contact: $('#edit_contact').val(),
-                address: $('#edit_address').val(),
+                id: $('#edit_category_id').val(),
+                category_name: $('#edit_category_name').val(),
                 _token: CSRF_TOKEN
             }
 
             $.ajax({
-                url: '{{ URL::route('customer.update') }}',
+                url: '{{ URL::route('product_category.update') }}',
                 type: 'POST',
                 data: formData,
                 success: function(response) {
@@ -331,7 +290,7 @@
             e.preventDefault()
 
             var id = $(this).attr('data-id');
-            var url = '{{ route("customer.delete_btn", ":id") }}';
+            var url = '{{ route("product_category.delete_btn", ":id") }}';
             url = url.replace(':id', id );
 
             var formData = {
@@ -344,8 +303,8 @@
                 type: 'GET',
                 data: formData,
                 success: function(response) {
-                    $('.delete_title').append(response.customer_name);
-                    $('#delete_customer_id').val(response.id);
+                    $('.delete_title').append(response.category_name);
+                    $('#delete_category_id').val(response.id);
                     $('.modal-delete').modal('show');
                 }
             });
@@ -357,12 +316,12 @@
             $('.modal-delete').modal('hide');
 
             var formData = {
-                id: $('#delete_customer_id').val(),
+                id: $('#delete_category_id').val(),
                 _token: CSRF_TOKEN
             }
 
             $.ajax({
-                url: '{{ URL::route('customer.delete') }}',
+                url: '{{ URL::route('product_category.delete') }}',
                 type: 'POST',
                 data: formData,
                 success: function(response) {

@@ -35,6 +35,9 @@
                             <a class="nav-link" aria-current="page" href="#">Dashboard</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="{{ route('product_category.index') }}">Kategori</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" aria-current="page" href="#">Produk</a>
                         </li>
                         <li class="nav-item dropdown">

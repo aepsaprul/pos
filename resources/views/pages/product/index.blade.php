@@ -21,7 +21,7 @@
 <div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <h6 class="text-uppercase text-center">Data Customer</h6>
+            <h6 class="text-uppercase text-center">Data Produk</h6>
             @if (session('status'))
                 <div class="alert alert-success">
                     {{ session('status') }}
@@ -48,21 +48,23 @@
                 <thead style="background-color: #32a893;">
                     <tr>
                         <th class="text-white text-center fw-bold">No</th>
-                        <th class="text-white text-center fw-bold">Nama</th>
-                        <th class="text-white text-center fw-bold">Telepon</th>
-                        <th class="text-white text-center fw-bold">Email</th>
-                        <th class="text-white text-center fw-bold">Alamat</th>
+                        <th class="text-white text-center fw-bold">Kode Produk</th>
+                        <th class="text-white text-center fw-bold">Nama Produk</th>
+                        <th class="text-white text-center fw-bold">Kategori</th>
+                        <th class="text-white text-center fw-bold">Harga</th>
+                        <th class="text-white text-center fw-bold">Stok</th>
                         <th class="text-white text-center fw-bold">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($customers as $key => $item)
+                    @foreach ($products as $key => $item)
                         <tr>
-                            <td class="text-center">{{ $key + 1 }}</td>
-                            <td>{{ $item->customer_name }}</td>
-                            <td>{{ $item->contact }}</td>
-                            <td>{{ $item->email }}</td>
-                            <td>{{ $item->address }}</td>
+                            <td>{{ $key + 1 }}</td>
+                            <td>{{ $item->product_code }}</td>
+                            <td>{{ $item->product_name }}</td>
+                            <td>{{ $item->product_categori_id }}</td>
+                            <td>{{ $item->product_price }}</td>
+                            <td>{{ $item->stock }}</td>
                             <td class="text-center">
                                 <div class="btn-group">
                                     <button
@@ -239,10 +241,6 @@
             $('.modal-create').modal('show');
         });
 
-        $(document).on('shown.bs.modal', '.modal-create', function() {
-            $('#create_customer_name').focus();
-        });
-
         $('#form_create').submit(function(e) {
             e.preventDefault();
 
@@ -294,10 +292,6 @@
                     $('.modal-edit').modal('show');
                 }
             })
-        });
-
-        $(document).on('shown.bs.modal', '.modal-edit', function() {
-            $('#edit_customer_name').focus();
         });
 
         $('#form_edit').submit(function(e) {

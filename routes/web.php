@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\Route;
 
@@ -33,6 +34,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('customer/{id}/edit', [CustomerController::class, 'edit'])->name('customer.edit');
     Route::get('customer/{id}/delete_btn', [CustomerController::class, 'deleteBtn'])->name('customer.delete_btn');
     Route::post('customer/delete', [CustomerController::class, 'delete'])->name('customer.delete');
+
+    // product category
+    Route::get('product_category', [ProductCategoryController::class, 'index'])->name('product_category.index');
+    Route::post('product_category/store', [ProductCategoryController::class, 'store'])->name('product_category.store');
+    Route::post('product_category/update', [ProductCategoryController::class, 'update'])->name('product_category.update');
+    Route::get('product_category/{id}/edit', [ProductCategoryController::class, 'edit'])->name('product_category.edit');
+    Route::get('product_category/{id}/delete_btn', [ProductCategoryController::class, 'deleteBtn'])->name('product_category.delete_btn');
+    Route::post('product_category/delete', [ProductCategoryController::class, 'delete'])->name('product_category.delete');
 
     // product
     Route::post('home/product', [HomeController::class, 'getProduct'])->name('home.product');
