@@ -39,11 +39,11 @@
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Order
+                            Transaksi
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item border-bottom" href="#"><i class="fas fa-chevron-right"></i> Pesanan</a></li>
-                                <li><a class="dropdown-item" href="#"><i class="fas fa-chevron-right"></i> Pekerjaan</a></li>
+                                <li><a class="dropdown-item border-bottom" href="#"><i class="fas fa-chevron-right"></i> Produk Masuk</a></li>
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-chevron-right"></i> Penjualan</a></li>
                             </ul>
                         </li>
                         <li class="nav-item">

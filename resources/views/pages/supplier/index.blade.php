@@ -48,6 +48,7 @@
                 <thead style="background-color: #32a893;">
                     <tr>
                         <th class="text-white text-center fw-bold">No</th>
+                        <th class="text-white text-center fw-bold">Kode</th>
                         <th class="text-white text-center fw-bold">Nama</th>
                         <th class="text-white text-center fw-bold">Telepon</th>
                         <th class="text-white text-center fw-bold">Email</th>
@@ -59,6 +60,7 @@
                     @foreach ($suppliers as $key => $item)
                         <tr>
                             <td>{{ $key + 1 }}</td>
+                            <td>{{ $item->supplier_code }}</td>
                             <td>{{ $item->supplier_name }}</td>
                             <td>{{ $item->supplier_contact }}</td>
                             <td>{{ $item->supplier_email }}</td>
@@ -119,6 +121,10 @@
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
+                        <label for="create_supplier_code" class="form-label">Kode Supplier</label>
+                        <input type="text" class="form-control form-control-sm" id="create_supplier_code" name="create_supplier_code" onkeyup="this.value = this.value.toUpperCase()">
+                    </div>
+                    <div class="mb-3">
                         <label for="create_supplier_name" class="form-label">Nama Supplier</label>
                         <input type="text" class="form-control form-control-sm" id="create_supplier_name" name="create_supplier_name">
                     </div>
@@ -159,6 +165,10 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="edit_supplier_code" class="form-label">Kode Supplier</label>
+                        <input type="text" class="form-control form-control-sm" id="edit_supplier_code" name="edit_supplier_code" onkeyup="this.value = this.value.toUpperCase()">
+                    </div>
                     <div class="mb-3">
                         <label for="edit_supplier_name" class="form-label">Nama Supplier</label>
                         <input type="text" class="form-control form-control-sm" id="edit_supplier_name" name="edit_supplier_name">
@@ -239,12 +249,17 @@
             $('.modal-create').modal('show');
         });
 
+        $(document).on('shown.bs.modal', '.modal-create', function() {
+            $('#create_supplier_code').focus();
+        });
+
         $('#form_create').submit(function(e) {
             e.preventDefault();
 
             $('.modal-create').modal('hide');
 
             var formData = {
+                supplier_code: $('#create_supplier_code').val(),
                 supplier_name: $('#create_supplier_name').val(),
                 email: $('#create_email').val(),
                 contact: $('#create_contact').val(),
@@ -283,13 +298,19 @@
                 data: formData,
                 success: function(response) {
                     $('#edit_supplier_id').val(response.supplier_id);
+                    $('#edit_supplier_code').val(response.supplier_code);
                     $('#edit_supplier_name').val(response.supplier_name);
                     $('#edit_email').val(response.email);
                     $('#edit_contact').val(response.contact);
                     $('#edit_address').val(response.address);
+
                     $('.modal-edit').modal('show');
                 }
             })
+        });
+
+        $(document).on('shown.bs.modal', '.modal-edit', function() {
+            $('#edit_supplier_code').focus();
         });
 
         $('#form_edit').submit(function(e) {
@@ -299,6 +320,7 @@
 
             var formData = {
                 id: $('#edit_supplier_id').val(),
+                supplier_code: $('#edit_supplier_code').val(),
                 supplier_name: $('#edit_supplier_name').val(),
                 email: $('#edit_email').val(),
                 contact: $('#edit_contact').val(),

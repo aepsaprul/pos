@@ -17,6 +17,7 @@ class SupplierController extends Controller
     public function store(Request $request)
     {
         $supplier = new Supplier;
+        $supplier->supplier_code = $request->supplier_code;
         $supplier->supplier_name = $request->supplier_name;
         $supplier->supplier_email = $request->email;
         $supplier->supplier_contact = $request->contact;
@@ -34,6 +35,7 @@ class SupplierController extends Controller
 
         return response()->json([
             'supplier_id' => $supplier->id,
+            'supplier_code' => $supplier->supplier_code,
             'supplier_name' => $supplier->supplier_name,
             'email' => $supplier->supplier_email,
             'contact' => $supplier->supplier_contact,
@@ -44,6 +46,7 @@ class SupplierController extends Controller
     public function update(Request $request)
     {
         $supplier = Supplier::find($request->id);
+        $supplier->supplier_code = $request->supplier_code;
         $supplier->supplier_name = $request->supplier_name;
         $supplier->supplier_email = $request->email;
         $supplier->supplier_contact = $request->contact;
