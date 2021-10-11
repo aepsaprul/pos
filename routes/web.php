@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ChangePasswordController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductCategoryController;
@@ -27,6 +28,9 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::middleware(['auth'])->group(function () {
+    // ubah password
+    Route::get('change-password', [ChangePasswordController::class, 'index'])->name('change.password.index');
+    Route::post('change-password', [ChangePasswordController::class, 'store'])->name('change.password');
 
     // customer
     Route::get('customer', [CustomerController::class, 'index'])->name('customer.index');

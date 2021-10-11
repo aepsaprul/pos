@@ -61,7 +61,7 @@
                             {{ Auth::user()->name }}
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><button class="dropdown-item text-uppercase" type="button">Profile</button></li>
+                            <li><a href="{{ route('change.password.index') }}" class="dropdown-item text-uppercase" type="button">Ubah Password</a></li>
                             <li>
                                 <a class="dropdown-item text-uppercase"
                                     href="{{ route('logout') }}"

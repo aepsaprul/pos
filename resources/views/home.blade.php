@@ -22,19 +22,19 @@
                             <div class="mb-1 row">
                                 <label for="invoice_number" class="col-sm-4 col-form-label">No Nota</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="invoice_number" name="invoice_number" value="0001" disabled>
+                                    <input type="text" class="form-control form-control-sm" id="invoice_number" name="invoice_number" value="0001" disabled>
                                 </div>
                             </div>
                             <div class="mb-1 row">
                                 <label for="invoice_date" class="col-sm-4 col-form-label">Tanggal Nota</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="invoice_date" name="invoice_date" value="{{ date('d-m-Y') }}" disabled>
+                                    <input type="text" class="form-control form-control-sm" id="invoice_date" name="invoice_date" value="{{ date('d-m-Y') }}" disabled>
                                 </div>
                             </div>
                             <div class="mb-1 row">
                                 <label for="product_code" class="col-sm-4 col-form-label">Kode Produk</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="product_code" name="product_code" autofocus>
+                                    <input type="text" class="form-control form-control-sm" id="product_code" name="product_code" autofocus>
                                 </div>
                             </div>
                         </div>
@@ -53,31 +53,31 @@
                         <div class="col-md-4">
                             <div class="mb-3">
                                 <label for="product_name" class="form-label">Nama Produk</label>
-                                <input type="text" class="form-control" id="product_name" name="product_name" disabled>
+                                <input type="text" class="form-control form-control-sm" id="product_name" name="product_name" disabled>
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="mb-3">
                                 <label for="stock" class="form-label">Stok</label>
-                                <input type="text" class="form-control" id="stock" name="stock" disabled>
+                                <input type="text" class="form-control form-control-sm" id="stock" name="stock" disabled>
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="mb-3">
                                 <label for="product_price" class="form-label">Harga Satuan (Rp)</label>
-                                <input type="text" class="form-control" id="product_price" name="product_price" disabled>
+                                <input type="text" class="form-control form-control-sm" id="product_price" name="product_price" disabled>
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="mb-3">
                                 <label for="quantity" class="form-label">Jumlah Jual</label>
-                                <input type="number" class="form-control" id="quantity" name="quantity">
+                                <input type="number" class="form-control form-control-sm" id="quantity" name="quantity">
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="mb-3">
                                 <label for="final_price" class="form-label">Harga Akhir (Rp)</label>
-                                <input type="text" class="form-control" id="final_price" name="final_price" disabled>
+                                <input type="text" class="form-control form-control-sm" id="final_price" name="final_price" disabled>
                             </div>
                         </div>
                     </div>
@@ -134,13 +134,13 @@
                                     <div class="mb-1 row">
                                         <label for="pay" class="col-sm-3 col-form-label">Bayar</label>
                                         <div class="col-sm-9">
-                                            <input type="text" class="form-control" id="pay" name="pay">
+                                            <input type="text" class="form-control form-control-sm" id="pay" name="pay">
                                         </div>
                                     </div>
                                     <div class="mb-1 row">
                                         <label for="change" class="col-sm-3 col-form-label">Kembalian</label>
                                         <div class="col-sm-9">
-                                            <input type="text" class="form-control" id="change" name="change" disabled>
+                                            <input type="text" class="form-control form-control-sm" id="change" name="change" disabled>
                                         </div>
                                     </div>
                                 </div>
@@ -149,7 +149,7 @@
                         <div class="col-sm-3">
                             <div class="row">
                                 <div class="d-grid gap-2 mx-auto">
-                                    <button class="btn btn-primary py-4" type="button">PRINT</button>
+                                    <button class="btn btn-primary btn-sm py-4" type="button">PRINT</button>
                                 </div>
                             </div>
                         </div>
