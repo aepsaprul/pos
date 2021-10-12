@@ -2,6 +2,7 @@
 
 @section('style')
 <link href="{{ asset('lib/datatables/css/dataTables.bootstrap5.min.css') }}" rel="stylesheet">
+<link rel="stylesheet" href="{{ asset('lib/select2/css/select2.min.css') }}">
 
 <style>
     .col-md-12,
@@ -62,9 +63,9 @@
                             <td class="text-center">{{ $key + 1 }}</td>
                             <td>{{ $item->product_code }}</td>
                             <td>{{ $item->product_name }}</td>
-                            <td>{{ $item->product_category_id }}</td>
-                            <td>{{ $item->product_price }}</td>
-                            <td>{{ $item->stock }}</td>
+                            <td>{{ $item->category->category_name }}</td>
+                            <td>{{ rupiah($item->product_price) }}</td>
+                            <td>{{ rupiah($item->stock) }}</td>
                             <td class="text-center">
                                 <div class="btn-group">
                                     <button
@@ -122,7 +123,7 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="create_product_code" class="form-label">Kode Produk</label>
-                        <input type="text" class="form-control form-control-sm" id="create_product_code" name="create_product_code">
+                        <input type="text" class="form-control form-control-sm" id="create_product_code" name="create_product_code" readonly>
                     </div>
                     <div class="mb-3">
                         <label for="create_product_name" class="form-label">Nama Produk</label>
@@ -130,7 +131,9 @@
                     </div>
                     <div class="mb-3">
                         <label for="create_product_category_id" class="form-label">Kategori</label>
-                        <input type="text" class="form-control form-control-sm" id="create_product_category_id" name="create_product_category_id">
+                        <div class="create_product_category_id">
+                            {{-- value in jquery  --}}
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label for="create_product_price" class="form-label">Harga</label>
@@ -165,7 +168,7 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="edit_product_code" class="form-label">Kode Produk</label>
-                        <input type="text" class="form-control form-control-sm" id="edit_product_code" name="edit_product_code">
+                        <input type="text" class="form-control form-control-sm" id="edit_product_code" name="edit_product_code" readonly>
                     </div>
                     <div class="mb-3">
                         <label for="edit_product_name" class="form-label">Nama Produk</label>
@@ -173,7 +176,9 @@
                     </div>
                     <div class="mb-3">
                         <label for="edit_product_category_id" class="form-label">Kategori</label>
-                        <input type="text" class="form-control form-control-sm" id="edit_product_category_id" name="edit_product_category_id">
+                        <div class="edit_product_category_id">
+                            {{-- value in jquery  --}}
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label for="edit_product_price" class="form-label">Harga</label>
@@ -232,6 +237,7 @@
 <script src="{{ asset('lib/datatables/js/dataTables.buttons.min.js') }}"></script>
 <script src="{{ asset('lib/datatables/js/jszip.min.js') }}"></script>
 <script src="{{ asset('lib/datatables/js/buttons.html5.min.js') }}"></script>
+<script src="{{ asset('lib/select2/js/select2.min.js') }}"></script>
 
 <script>
     $(document).ready(function() {
@@ -242,24 +248,59 @@
         });
 
         $('#button-create').on('click', function() {
-            $('.modal-create').modal('show');
+            $('.create_product_category_id').empty();
+
+            var formData = {
+                _token: CSRF_TOKEN
+            }
+
+            $.ajax({
+                url: '{{ URL::route('product.create') }}',
+                type: 'GET',
+                data: formData,
+                success: function(response) {
+                    $('#create_product_code').val(response.product_code);
+
+                    var value = "<select name=\"create_product_category_id\" id=\"create_product_category_id\" class=\"form-control select_category_create\">";
+                    $.each(response.categories, function(index, item) {
+                        value += "<option value=\"" + item.id + "\">" + item.category_name + "</option>";
+                    });
+                    value += "</select>";
+                    $('.create_product_category_id').append(value);
+                    $('.modal-create').modal('show');
+                }
+            });
         });
 
         $(document).on('shown.bs.modal', '.modal-create', function() {
             $('#create_product_name').focus();
+
+            $('.select_category_create').select2({
+                dropdownParent: $('.modal-create')
+            });
+
+            var price = document.getElementById("create_product_price");
+            price.addEventListener("keyup", function(e) {
+                price.value = formatRupiah(this.value, "");
+            });
+
+            var stock = document.getElementById("create_stock");
+            stock.addEventListener("keyup", function(e) {
+                stock.value = formatRupiah(this.value, "");
+            });
         });
+
 
         $('#form_create').submit(function(e) {
             e.preventDefault();
-
             $('.modal-create').modal('hide');
 
             var formData = {
                 product_code: $('#create_product_code').val(),
                 product_name: $('#create_product_name').val(),
                 product_category_id: $('#create_product_category_id').val(),
-                product_price: $('#create_product_price').val(),
-                stock: $('#create_stock').val(),
+                product_price: $('#create_product_price').val().replace(/\./g,''),
+                stock: $('#create_stock').val().replace(/\./g,''),
                 _token: CSRF_TOKEN
             }
 
@@ -278,6 +319,7 @@
 
         $('body').on('click', '.btn-edit', function(e) {
             e.preventDefault();
+            $('.edit_product_category_id').empty();
 
             var id = $(this).attr('data-id');
             var url = '{{ route("product.edit", ":id") }}';
@@ -297,8 +339,21 @@
                     $('#edit_product_code').val(response.product_code);
                     $('#edit_product_name').val(response.product_name);
                     $('#edit_product_category_id').val(response.product_category_id);
-                    $('#edit_product_price').val(response.product_price);
-                    $('#edit_stock').val(response.stock);
+                    $('#edit_product_price').val(format_rupiah(response.product_price));
+                    $('#edit_stock').val(format_rupiah(response.stock));
+
+                    var value = "<select name=\"edit_product_category_id\" id=\"edit_product_category_id\" class=\"form-control select_category_edit\">";
+                    $.each(response.categories, function(index, item) {
+                        value += "<option value=\"" + item.id + "\"";
+                        // sesuai kategori yg terpilih
+                        if (item.id === response.product_category_id) {
+                            value += "selected";
+                        }
+                        value += ">" + item.category_name + "</option>";
+                    });
+                    value += "</select>";
+                    $('.edit_product_category_id').append(value);
+
                     $('.modal-edit').modal('show');
                 }
             })
@@ -306,6 +361,20 @@
 
         $(document).on('shown.bs.modal', '.modal-edit', function() {
             $('#edit_product_name').focus();
+
+            $('.select_category_edit').select2({
+                dropdownParent: $('.modal-edit')
+            });
+
+            var price = document.getElementById("edit_product_price");
+            price.addEventListener("keyup", function(e) {
+                price.value = formatRupiah(this.value, "");
+            });
+
+            var stock = document.getElementById("edit_stock");
+            stock.addEventListener("keyup", function(e) {
+                stock.value = formatRupiah(this.value, "");
+            });
         });
 
         $('#form_edit').submit(function(e) {
@@ -318,8 +387,8 @@
                 product_code: $('#edit_product_code').val(),
                 product_name: $('#edit_product_name').val(),
                 product_category_id: $('#edit_product_category_id').val(),
-                product_price: $('#edit_product_price').val(),
-                stock: $('#edit_stock').val(),
+                product_price: $('#edit_product_price').val().replace(/\./g,''),
+                stock: $('#edit_stock').val().replace(/\./g,''),
                 _token: CSRF_TOKEN
             }
 

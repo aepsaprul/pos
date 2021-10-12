@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\ProductCategory;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -12,6 +13,19 @@ class ProductController extends Controller
         $product = Product::get();
 
         return view('pages.product.index', ['products' => $product]);
+    }
+
+    public function create()
+    {
+        $category = ProductCategory::get();
+
+        $product = Product::max('id');
+        $code = sprintf("%07s", $product + 1);
+
+        return response()->json([
+            'categories' => $category,
+            'product_code' => $code
+        ]);
     }
 
     public function store(Request $request)
@@ -32,6 +46,7 @@ class ProductController extends Controller
     public function edit($id)
     {
         $product = Product::find($id);
+        $category = ProductCategory::get();
 
         return response()->json([
             'product_id' => $product->id,
@@ -40,6 +55,7 @@ class ProductController extends Controller
             'product_category_id' => $product->product_category_id,
             'product_price' => $product->product_price,
             'stock' => $product->stock,
+            'categories' => $category
         ]);
     }
 
