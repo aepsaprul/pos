@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CashierController;
 use App\Http\Controllers\ChangePasswordController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\HomeController;
@@ -68,4 +69,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('supplier/{id}/edit', [SupplierController::class, 'edit'])->name('supplier.edit');
     Route::get('supplier/{id}/delete_btn', [SupplierController::class, 'deleteBtn'])->name('supplier.delete_btn');
     Route::post('supplier/delete', [SupplierController::class, 'delete'])->name('supplier.delete');
+
+    // cashier
+    Route::get('cashier', [CashierController::class, 'index'])->name('cashier.index');
+    Route::post('cashier/product', [CashierController::class, 'getProduct'])->name('cashier.product');
+    Route::post('cashier/sales-save', [CashierController::class, 'salesSave'])->name('cashier.sales_save');
 });

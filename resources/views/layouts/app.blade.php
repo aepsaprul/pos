@@ -19,13 +19,21 @@
     <!-- Styles -->
     <link href="{{ asset('lib/bootstrap-5/bootstrap.min.css') }}" rel="stylesheet">
 
+    <style>
+        nav {
+            box-shadow: 0px -2px 9px 0px rgba(136,128,128,0.79);
+            -webkit-box-shadow: 0px -2px 9px 0px rgba(136,128,128,0.79);
+            -moz-box-shadow: 0px -2px 9px 0px rgba(136,128,128,0.79);
+        }
+    </style>
+
     @yield('style')
 </head>
 <body>
     <div id="app">
         <nav class="navbar navbar-expand-lg navbar-light">
             <div class="container-fluid">
-                <a class="navbar-brand text-uppercase" href="#">{{ config('app.name', 'Kasir') }}</a>
+                <a class="navbar-brand text-uppercase" href="#"><img src="{{ asset('assets/store.png') }}" alt="icon" style="max-width: 30px;"></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -55,6 +63,9 @@
                         <li class="nav-item">
                             <a class="nav-link" aria-current="page" href="{{ route('supplier.index') }}">Supplier</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="{{ route('cashier.index') }}">Kasir</a>
+                        </li>
                     </ul>
                     <div class="btn-group d-flex">
                         <button type="button" class="btn dropdown-toggle text-uppercase" data-bs-toggle="dropdown" aria-expanded="false">
@@ -80,7 +91,7 @@
             </div>
         </nav>
 
-        <main class="py-4">
+        <main class="mt-5">
             @yield('content')
         </main>
     </div>
