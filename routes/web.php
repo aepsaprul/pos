@@ -74,4 +74,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('cashier', [CashierController::class, 'index'])->name('cashier.index');
     Route::post('cashier/product', [CashierController::class, 'getProduct'])->name('cashier.product');
     Route::post('cashier/sales-save', [CashierController::class, 'salesSave'])->name('cashier.sales_save');
+    Route::post('cashier/print', [CashierController::class, 'print'])->name('cashier.print');
+    Route::delete('cashier/{id}/delete', [CashierController::class, 'delete'])->name('cashier.delete');
 });

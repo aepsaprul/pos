@@ -15,20 +15,6 @@
             <div class="row">
                 <div class="col-sm-3">
                     <div class="mb-1 row">
-                        <label for="invoice_number" class="col-sm-4 col-form-label">No Nota</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control form-control-sm" id="invoice_number" name="invoice_number" value="0001" readonly>
-                        </div>
-                    </div>
-                    <div class="mb-1 row">
-                        <label for="invoice_date" class="col-sm-4 col-form-label">Tanggal Nota</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control form-control-sm" id="invoice_date" name="invoice_date" value="{{ date('d-m-Y') }}" readonly>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-3">
-                    <div class="mb-1 row">
                         <label for="product_code" class="col-sm-4 col-form-label"><strong>Kode Produk</strong></label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control form-control-sm" id="product_code" name="product_code" autofocus>
@@ -51,7 +37,7 @@
                     <div class="mb-1 row">
                         <label for="change" class="col-sm-3 col-form-label">Kembalian</label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control form-control-sm" id="change" name="change" readonly>
+                            <input type="text" class="form-control form-control-sm" id="change" name="change" disabled>
                         </div>
                     </div>
                 </div>
@@ -72,35 +58,33 @@
                         <div class="col-md-3">
                             <div class="mb-3">
                                 <label for="product_name" class="form-label">Nama Produk</label>
-                                <input type="text" class="form-control form-control-sm" id="product_name" name="product_name" readonly>
+                                <input type="text" class="form-control form-control-sm" id="product_name" name="product_name" disabled>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="mb-3">
                                 <label for="stock" class="form-label">Stok</label>
-                                <input type="text" class="form-control form-control-sm" id="stock" name="stock" readonly>
+                                <input type="text" class="form-control form-control-sm" id="stock" name="stock" disabled>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="mb-3">
                                 <label for="product_price" class="form-label">Harga Satuan (Rp)</label>
-                                <input type="text" class="form-control form-control-sm" id="product_price" name="product_price" readonly>
+                                <input type="text" class="form-control form-control-sm" id="product_price" name="product_price" disabled>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="mb-3">
                                 <label for="final_price" class="form-label">Harga Akhir (Rp)</label>
-                                <input type="text" class="form-control form-control-sm" id="final_price" name="final_price" readonly>
+                                <input type="text" class="form-control form-control-sm" id="final_price" name="final_price" disabled>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div>
-                    {{-- <button class="btn btn-success btn-sm py-3" type="button" style="width: 50%;">PRINT</button>
-                    <button class="btn btn-danger btn-sm py-3" type="button" style="width: 50%;">RESET</button> --}}
                     <div class="btn-group" role="group" aria-label="Basic outlined example">
-                        <button type="button" class="btn btn-success py-3 px-4">PRINT</button>
-                        <button type="button" class="btn btn-outline-danger py-3 px-4">RESET</button>
+                        <button type="button" class="btn btn-success py-3 px-4 btn-print">PRINT</button>
+                        <button type="button" class="btn btn-outline-danger py-3 px-4 btn-reset">RESET</button>
                     </div>
                 </div>
             </div>
@@ -119,16 +103,16 @@
                 <tbody>
                     @foreach ($sales as $key => $item)
                         <tr>
-                            <td>{{ $key + 1 }}</td>
+                            <td class="text-center">{{ $key + 1 }}</td>
                             <td>{{ $item->product->product_code }}</td>
                             <td>{{ $item->product->product_name }}</td>
-                            <td>{{ $item->product->product_price }}</td>
-                            <td>{{ $item->quantity }}</td>
-                            <td>{{ $item->product->product_price * $item->quantity }}</td>
+                            <td class="text-end">{{ rupiah($item->product->product_price) }}</td>
+                            <td class="text-center">{{ rupiah($item->quantity) }}</td>
+                            <td class="text-end">{{ rupiah($item->product->product_price * $item->quantity) }}</td>
                             <td class="text-center">
                                 <div class="btn-group">
                                     <form
-                                        action="#"
+                                        action="{{ route('cashier.delete', [$item->id]) }}"
                                         method="POST"
                                         class="d-inline">
                                             @method('delete')
@@ -146,6 +130,51 @@
                     @endforeach
                 </tbody>
             </table>
+        </div>
+    </div>
+</div>
+<div class="container-fluid invoice">
+    <div class="row">
+        <div class="col-md-4 col-sm-4 col-4 border border-1">
+            <h3 class="h3 text-center">Nama Toko</h3>
+            <p class="text-center">Jl. Pahlawan Tanpa Tanda Jasa No 2 Timur Masjid Agung</p>
+            <div class="row">
+                <div class="col-md-6 col-sm-6 col-6">
+                    <span>Kode Nota</span>
+                    <span class="invoice_code"></span>
+                </div>
+                <div class="col-md-6 col-sm-6 col-6 text-end">
+                    <span class="invoice_date"></span>
+                    <span class="invoice_time"></span>
+                </div>
+            </div>
+            <hr style="border: 2px dashed #000;">
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-12 invoice_data">
+                    <table width="100%">
+                        @foreach ($sales as $key => $item)
+                        <tr>
+                            <td>{{ $item->product->product_name }}</td>
+                            <td>{{ rupiah($item->quantity) }}</td>
+                            <td class="text-end">{{ rupiah($item->product->product_price * $item->quantity) }}</td>
+                        </tr>
+                        @endforeach
+                        <tr>
+                            <td class="text-end">Total</td>
+                            <td>:</td>
+                            <td class="text-end" style="border-top: 2px dashed #000;">{{ rupiah($total_price) }}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <hr style="border: 2px dashed #000;">
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-12 text-center footer">
+                    <span class="text-center">Telp: 081234567890</span><br>
+                    <span class="text-center">Wa: 081234567890</span><br>
+                    <span class="text-center">Email: toko@gmail.com</span>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -268,6 +297,33 @@
                 }
 
             }
+        });
+
+        $('.invoice').hide();
+
+        $('.btn-print').on('click', function() {
+            var formData = {
+                total_amount: $('#total_price').val(),
+                _token: CSRF_TOKEN
+            }
+
+            $.ajax({
+                url: '{{ URL::route('cashier.print') }}',
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+                    console.log(response);
+                    $('.invoice_code').append(response.invoice_code);
+                    $('.invoice_date').append(response.invoice_date);
+                    $('.invoice_time').append(response.invoice_time);
+
+                    $('.justify-content-center').hide();
+                    $('nav').hide();
+                    $('.invoice').show();
+                    window.print();
+                    window.onafterprint = window.location.reload(1);
+                }
+            });
         });
     });
 </script>
