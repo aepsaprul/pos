@@ -11,8 +11,15 @@ class SalesController extends Controller
     public function index()
     {
         $sales = Invoice::get();
-
         return view('pages.sales.index', ['sales' => $sales]);
+    }
+
+    public function show($id)
+    {
+        $invoice = Invoice::find($id);
+        $sales = Sales::where('invoice_id', $invoice->id)->get();
+
+        return view('pages.sales.show', ['invoice' => $invoice, 'sales' => $sales]);
     }
 
     public function deleteBtn($id)

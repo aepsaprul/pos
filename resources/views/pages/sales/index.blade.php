@@ -65,7 +65,9 @@
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end">
                                         <li>
-                                            <button
+                                            <a
+                                                href="{{ route('sales.show', [$item->id]) }}"
+                                                target="_blank"
                                                 class="dropdown-item py-1 btn-detail"
                                                 data-id="{{ $item->id }}"
                                                 type="button">
@@ -73,7 +75,7 @@
                                                         class="fas fa-eye border border-1 px-2 py-2 me-2 text-white"
                                                         style="background-color: #32a893;">
                                                     </i> Detail
-                                            </button>
+                                            </a>
                                         </li>
                                         <li><hr class="dropdown-divider"></li>
                                         <li>
