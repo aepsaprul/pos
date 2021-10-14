@@ -302,28 +302,36 @@
         $('.invoice').hide();
 
         $('.btn-print').on('click', function() {
-            var formData = {
-                total_amount: $('#total_price').val(),
-                _token: CSRF_TOKEN
-            }
-
-            $.ajax({
-                url: '{{ URL::route('cashier.print') }}',
-                type: 'POST',
-                data: formData,
-                success: function(response) {
-                    console.log(response);
-                    $('.invoice_code').append(response.invoice_code);
-                    $('.invoice_date').append(response.invoice_date);
-                    $('.invoice_time').append(response.invoice_time);
-
-                    $('.justify-content-center').hide();
-                    $('nav').hide();
-                    $('.invoice').show();
-                    window.print();
-                    window.onafterprint = window.location.reload(1);
+            if ($('#total_price').val() == 0) {
+                alert('Data Pembelian Kosong');
+            } else {
+                var formData = {
+                    total_amount: $('#total_price').val(),
+                    _token: CSRF_TOKEN
                 }
-            });
+
+                $.ajax({
+                    url: '{{ URL::route('cashier.print') }}',
+                    type: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        console.log(response);
+                        $('.invoice_code').append(response.invoice_code);
+                        $('.invoice_date').append(response.invoice_date);
+                        $('.invoice_time').append(response.invoice_time);
+
+                        $('.justify-content-center').hide();
+                        $('nav').hide();
+                        $('.invoice').show();
+                        window.print();
+                        window.onafterprint = window.location.reload(1);
+                    }
+                });
+            }
+        });
+
+        $('.btn-reset').on('click', function() {
+            window.location.reload(1);
         });
     });
 </script>

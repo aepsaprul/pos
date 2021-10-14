@@ -6,6 +6,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SalesController;
 use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\Route;
 
@@ -76,4 +77,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('cashier/sales-save', [CashierController::class, 'salesSave'])->name('cashier.sales_save');
     Route::post('cashier/print', [CashierController::class, 'print'])->name('cashier.print');
     Route::delete('cashier/{id}/delete', [CashierController::class, 'delete'])->name('cashier.delete');
+
+    // sales
+    Route::get('sales', [SalesController::class, 'index'])->name('sales.index');
 });
