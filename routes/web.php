@@ -80,4 +80,6 @@ Route::middleware(['auth'])->group(function () {
 
     // sales
     Route::get('sales', [SalesController::class, 'index'])->name('sales.index');
+    Route::get('sales/{id}/delete_btn', [SalesController::class, 'deleteBtn'])->name('sales.delete_btn');
+    Route::post('sales/delete', [SalesController::class, 'delete'])->name('sales.delete');
 });

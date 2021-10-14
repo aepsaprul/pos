@@ -98,56 +98,6 @@
     </div>
 </div>
 
-{{-- modal create  --}}
-<div class="modal fade modal-create" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <form id="form_create">
-                <div class="modal-header" style="background-color: #32a893;">
-                    <h5 class="modal-title text-white">Tambah Kategori</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="create_category_name" class="form-label">Nama Kategori</label>
-                        <input type="text" class="form-control form-control-sm" id="create_category_name" name="create_category_name">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="border-0 text-white" style="background-color: #32a893; padding: 5px 10px;">Simpan</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-{{-- modal edit  --}}
-<div class="modal fade modal-edit" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <form id="form_edit">
-
-                {{-- id  --}}
-                <input type="hidden" id="edit_category_id" name="edit_category_id">
-
-                <div class="modal-header" style="background-color: #32a893;">
-                    <h5 class="modal-title text-white">Ubah Kategori</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="edit_category_name" class="form-label">Nama Kategori</label>
-                        <input type="text" class="form-control form-control-sm" id="edit_category_name" name="edit_category_name">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="border-0 text-white" style="background-color: #32a893; padding: 5px 10px;">Simpan</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
 {{-- modal delete  --}}
 <div class="modal fade modal-delete" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
@@ -155,7 +105,7 @@
             <form id="form_delete">
 
                 {{-- id  --}}
-                <input type="hidden" id="delete_category_id" name="delete_category_id">
+                <input type="hidden" id="delete_invoice_id" name="delete_invoice_id">
 
                 <div class="modal-header">
                     <h5 class="modal-title">Yakin akan dihapus <span class="delete_title text-decoration-underline"></span> ?</h5>
@@ -197,96 +147,11 @@
             'ordering': false
         });
 
-        $('#button-create').on('click', function() {
-            $('.modal-create').modal('show');
-        });
-
-        $(document).on('shown.bs.modal', '.modal-create', function() {
-            $('#create_category_name').focus();
-        });
-
-        $('#form_create').submit(function(e) {
-            e.preventDefault();
-
-            $('.modal-create').modal('hide');
-
-            var formData = {
-                category_name: $('#create_category_name').val(),
-                _token: CSRF_TOKEN
-            }
-
-            $.ajax({
-                url: '{{ URL::route('product_category.store') }} ',
-                type: 'POST',
-                data: formData,
-                success: function(response) {
-                    $('.modal-proses').modal('show');
-                    setTimeout(() => {
-                        window.location.reload(1);
-                    }, 1000);
-                }
-            });
-        });
-
-        $('body').on('click', '.btn-edit', function(e) {
-            e.preventDefault();
-
-            var id = $(this).attr('data-id');
-            var url = '{{ route("product_category.edit", ":id") }}';
-            url = url.replace(':id', id );
-
-            var formData = {
-                id: id,
-                _token: CSRF_TOKEN
-            }
-
-            $.ajax({
-                url: url,
-                type: 'GET',
-                data: formData,
-                success: function(response) {
-                    $('#edit_category_id').val(response.category_id);
-                    $('#edit_category_name').val(response.category_name);
-
-                    // modal show
-                    $('.modal-edit').modal('show');
-                }
-            })
-        });
-
-        $(document).on('shown.bs.modal', '.modal-edit', function() {
-            $('#edit_category_name').focus();
-        });
-
-        $('#form_edit').submit(function(e) {
-            e.preventDefault();
-
-            $('.modal-edit').modal('hide');
-
-            var formData = {
-                id: $('#edit_category_id').val(),
-                category_name: $('#edit_category_name').val(),
-                _token: CSRF_TOKEN
-            }
-
-            $.ajax({
-                url: '{{ URL::route('product_category.update') }}',
-                type: 'POST',
-                data: formData,
-                success: function(response) {
-                    $('.modal-proses').modal('show');
-                    setTimeout(() => {
-                        window.location.reload(1);
-                    }, 1000);
-                }
-            });
-        });
-
         $('body').on('click', '.btn-delete', function(e) {
             e.preventDefault()
 
             var id = $(this).attr('data-id');
-            var url = '{{ route("product_category.delete_btn", ":id") }}';
+            var url = '{{ route("sales.delete_btn", ":id") }}';
             url = url.replace(':id', id );
 
             var formData = {
@@ -299,8 +164,8 @@
                 type: 'GET',
                 data: formData,
                 success: function(response) {
-                    $('.delete_title').append(response.category_name);
-                    $('#delete_category_id').val(response.id);
+                    $('.delete_title').append(response.code);
+                    $('#delete_invoice_id').val(response.id);
                     $('.modal-delete').modal('show');
                 }
             });
@@ -312,12 +177,12 @@
             $('.modal-delete').modal('hide');
 
             var formData = {
-                id: $('#delete_category_id').val(),
+                id: $('#delete_invoice_id').val(),
                 _token: CSRF_TOKEN
             }
 
             $.ajax({
-                url: '{{ URL::route('product_category.delete') }}',
+                url: '{{ URL::route('sales.delete') }}',
                 type: 'POST',
                 data: formData,
                 success: function(response) {
