@@ -6,6 +6,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ReceiveProductController;
 use App\Http\Controllers\SalesController;
 use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\Route;
@@ -83,4 +84,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('sales/{id}/show', [SalesController::class, 'show'])->name('sales.show');
     Route::get('sales/{id}/delete_btn', [SalesController::class, 'deleteBtn'])->name('sales.delete_btn');
     Route::post('sales/delete', [SalesController::class, 'delete'])->name('sales.delete');
+
+    // receive product
+    Route::get('received_product', [ReceiveProductController::class, 'index'])->name('received_product.index');
+    Route::get('received_product/create', [ReceiveProductController::class, 'create'])->name('received_product.create');
+    Route::post('received_product/store', [ReceiveProductController::class, 'store'])->name('received_product.store');
+    Route::post('received_product/update', [ReceiveProductController::class, 'update'])->name('received_product.update');
+    Route::get('received_product/{id}/edit', [ReceiveProductController::class, 'edit'])->name('received_product.edit');
+    Route::get('received_product/{id}/delete_btn', [ReceiveProductController::class, 'deleteBtn'])->name('received_product.delete_btn');
+    Route::post('received_product/delete', [ReceiveProductController::class, 'delete'])->name('received_product.delete');
 });

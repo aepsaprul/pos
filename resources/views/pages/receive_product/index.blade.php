@@ -22,7 +22,7 @@
 <div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <h6 class="text-uppercase text-center">Data Produk</h6>
+            <h6 class="text-uppercase text-center">Data Produk Masuk</h6>
             @if (session('status'))
                 <div class="alert alert-success">
                     {{ session('status') }}
@@ -49,23 +49,37 @@
                 <thead style="background-color: #32a893;">
                     <tr>
                         <th class="text-white text-center fw-bold">No</th>
-                        <th class="text-white text-center fw-bold">Kode</th>
-                        <th class="text-white text-center fw-bold">Nama</th>
-                        <th class="text-white text-center fw-bold">Kategori</th>
-                        <th class="text-white text-center fw-bold">Harga</th>
-                        <th class="text-white text-center fw-bold">Stok</th>
+                        <th class="text-white text-center fw-bold">Pengguna</th>
+                        <th class="text-white text-center fw-bold">Nama Product</th>
+                        <th class="text-white text-center fw-bold">Supplier</th>
+                        <th class="text-white text-center fw-bold">Qty</th>
+                        <th class="text-white text-center fw-bold">Sub Total</th>
+                        <th class="text-white text-center fw-bold">Tanggal</th>
                         <th class="text-white text-center fw-bold">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($products as $key => $item)
+                    @foreach ($receive_products as $key => $item)
                         <tr>
                             <td class="text-center">{{ $key + 1 }}</td>
-                            <td>{{ $item->product_code }}</td>
-                            <td>{{ $item->product_name }}</td>
-                            <td>{{ $item->category->category_name }}</td>
-                            <td>{{ rupiah($item->product_price) }}</td>
-                            <td>{{ rupiah($item->stock) }}</td>
+                            <td>{{ $item->user->name }}</td>
+                            <td>
+                                @if ($item->product == null)
+                                    <span class="text-danger">Product Tidak Ada</span>
+                                @else
+                                    {{ $item->product->product_name }}
+                                @endif
+                            </td>
+                            <td>
+                                @if ($item->supplier == null)
+                                    <span class="text-danger">Supplier Tidak Ada</span>
+                                @else
+                                    {{ $item->supplier->supplier_name }}
+                                @endif
+                            </td>
+                            <td class="text-center">{{ $item->quantity }}</td>
+                            <td class="text-end">{{ rupiah($item->sub_total) }}</td>
+                            <td class="text-center">{{ date('d-m-Y', strtotime($item->received_date)) }}</td>
                             <td class="text-center">
                                 <div class="btn-group">
                                     <button
@@ -117,31 +131,25 @@
         <div class="modal-content">
             <form id="form_create">
                 <div class="modal-header" style="background-color: #32a893;">
-                    <h5 class="modal-title text-white">Tambah Produk</h5>
+                    <h5 class="modal-title text-white">Tambah Produk Masuk</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="create_product_code" class="form-label">Kode Produk</label>
-                        <input type="text" class="form-control form-control-sm" id="create_product_code" name="create_product_code" readonly>
+                        <label for="create_product_id" class="form-label">Nama Produk</label>
+                        <select name="create_product_id" id="create_product_id" class="form-control" name="create_product_id" required>
+
+                        </select>
                     </div>
                     <div class="mb-3">
-                        <label for="create_product_name" class="form-label">Nama Produk</label>
-                        <input type="text" class="form-control form-control-sm" id="create_product_name" name="create_product_name">
+                        <label for="create_supplier_id" class="form-label">Supplier</label>
+                        <select name="create_supplier_id" id="create_supplier_id" class="form-control" name="create_supplier_id" required>
+
+                        </select>
                     </div>
                     <div class="mb-3">
-                        <label for="create_product_category_id" class="form-label">Kategori</label>
-                        <div class="create_product_category_id">
-                            {{-- value in jquery  --}}
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="create_product_price" class="form-label">Harga</label>
-                        <input type="text" class="form-control form-control-sm" id="create_product_price" name="create_product_price">
-                    </div>
-                    <div class="mb-3">
-                        <label for="create_stock" class="form-label">Stok</label>
-                        <input type="text" class="form-control form-control-sm" id="create_stock" name="create_stock">
+                        <label for="create_quantity" class="form-label">Quantity</label>
+                        <input type="text" class="form-control form-control-sm" id="create_quantity" name="create_quantity" required>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -159,34 +167,24 @@
             <form id="form_edit">
 
                 {{-- id  --}}
-                <input type="hidden" id="edit_product_id" name="edit_product_id">
+                <input type="hidden" id="edit_received_product_id" name="edit_received_product_id">
 
                 <div class="modal-header" style="background-color: #32a893;">
-                    <h5 class="modal-title text-white">Ubah Produk</h5>
+                    <h5 class="modal-title text-white">Ubah Produk Masuk</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="edit_product_code" class="form-label">Kode Produk</label>
-                        <input type="text" class="form-control form-control-sm" id="edit_product_code" name="edit_product_code" readonly>
+                        <label for="edit_product_id" class="form-label">Nama Produk</label>
+                        <select name="edit_product_id" id="edit_product_id" class="form-control" name="edit_product_id" required>
+
+                        </select>
                     </div>
                     <div class="mb-3">
-                        <label for="edit_product_name" class="form-label">Nama Produk</label>
-                        <input type="text" class="form-control form-control-sm" id="edit_product_name" name="edit_product_name">
-                    </div>
-                    <div class="mb-3">
-                        <label for="edit_product_category_id" class="form-label">Kategori</label>
-                        <div class="edit_product_category_id">
-                            {{-- value in jquery  --}}
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="edit_product_price" class="form-label">Harga</label>
-                        <input type="text" class="form-control form-control-sm" id="edit_product_price" name="edit_product_price">
-                    </div>
-                    <div class="mb-3">
-                        <label for="edit_stock" class="form-label">Stok</label>
-                        <input type="text" class="form-control form-control-sm" id="edit_stock" name="edit_stock">
+                        <label for="edit_supplier_id" class="form-label">Supplier</label>
+                        <select name="edit_supplier_id" id="edit_supplier_id" class="form-control" name="edit_supplier_id" required>
+
+                        </select>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -204,7 +202,7 @@
             <form id="form_delete">
 
                 {{-- id  --}}
-                <input type="hidden" id="delete_product_id" name="delete_product_id">
+                <input type="hidden" id="delete_received_product_id" name="delete_received_product_id">
 
                 <div class="modal-header">
                     <h5 class="modal-title">Yakin akan dihapus <span class="delete_title text-decoration-underline"></span> ?</h5>
@@ -248,25 +246,32 @@
         });
 
         $('#button-create').on('click', function() {
-            $('.create_product_category_id').empty();
+            $('#create_product_id').empty();
+            $('#create_supplier_id').empty();
 
             var formData = {
                 _token: CSRF_TOKEN
             }
 
             $.ajax({
-                url: '{{ URL::route('product.create') }}',
+                url: '{{ URL::route('received_product.create') }}',
                 type: 'GET',
                 data: formData,
                 success: function(response) {
-                    $('#create_product_code').val(response.product_code);
-
-                    var value = "<select name=\"create_product_category_id\" id=\"create_product_category_id\" class=\"form-control select_category_create\">";
-                    $.each(response.categories, function(index, item) {
-                        value += "<option value=\"" + item.id + "\">" + item.category_name + "</option>";
+                    // product query
+                    var value = "<option value=\"\">--Pilih Produk--</option>";
+                    $.each(response.product, function(index, item) {
+                        value += "<option value=\"" + item.id + "\">" + item.product_name + "</option>";
                     });
-                    value += "</select>";
-                    $('.create_product_category_id').append(value);
+                    $('#create_product_id').append(value);
+
+                    // supplier query
+                    var value = "<option value=\"\">--Pilih Supplier--</option>";
+                    $.each(response.supplier, function(index, item) {
+                        value += "<option value=\"" + item.id + "\">" + item.supplier_name + "</option>";
+                    });
+                    $('#create_supplier_id').append(value);
+
                     $('.modal-create').modal('show');
                 }
             });
@@ -275,18 +280,12 @@
         $(document).on('shown.bs.modal', '.modal-create', function() {
             $('#create_product_name').focus();
 
-            $('.select_category_create').select2({
+            $('#create_product_id').select2({
                 dropdownParent: $('.modal-create')
             });
 
-            var price = document.getElementById("create_product_price");
-            price.addEventListener("keyup", function(e) {
-                price.value = formatRupiah(this.value, "");
-            });
-
-            var stock = document.getElementById("create_stock");
-            stock.addEventListener("keyup", function(e) {
-                stock.value = formatRupiah(this.value, "");
+            $('#create_supplier_id').select2({
+                dropdownParent: $('.modal-create')
             });
         });
 
@@ -296,16 +295,14 @@
             $('.modal-create').modal('hide');
 
             var formData = {
-                product_code: $('#create_product_code').val(),
-                product_name: $('#create_product_name').val(),
-                product_category_id: $('#create_product_category_id').val(),
-                product_price: $('#create_product_price').val().replace(/\./g,''),
-                stock: $('#create_stock').val().replace(/\./g,''),
+                product_id: $('#create_product_id').val(),
+                supplier_id: $('#create_supplier_id').val(),
+                quantity: $('#create_quantity').val(),
                 _token: CSRF_TOKEN
             }
 
             $.ajax({
-                url: '{{ URL::route('product.store') }} ',
+                url: '{{ URL::route('received_product.store') }} ',
                 type: 'POST',
                 data: formData,
                 success: function(response) {
@@ -319,10 +316,12 @@
 
         $('body').on('click', '.btn-edit', function(e) {
             e.preventDefault();
-            $('.edit_product_category_id').empty();
+
+            $('#edit_product_id').empty();
+            $('#edit_supplier_id').empty();
 
             var id = $(this).attr('data-id');
-            var url = '{{ route("product.edit", ":id") }}';
+            var url = '{{ route("received_product.edit", ":id") }}';
             url = url.replace(':id', id );
 
             var formData = {
@@ -335,24 +334,30 @@
                 type: 'GET',
                 data: formData,
                 success: function(response) {
+                    $('#edit_received_product_id').val(response.received_product_id);
                     $('#edit_product_id').val(response.product_id);
-                    $('#edit_product_code').val(response.product_code);
-                    $('#edit_product_name').val(response.product_name);
-                    $('#edit_product_category_id').val(response.product_category_id);
-                    $('#edit_product_price').val(format_rupiah(response.product_price));
-                    $('#edit_stock').val(format_rupiah(response.stock));
 
-                    var value = "<select name=\"edit_product_category_id\" id=\"edit_product_category_id\" class=\"form-control select_category_edit\">";
-                    $.each(response.categories, function(index, item) {
+                    // product query
+                    var value = "<option value=\"\">--Pilih Produk--</option>";
+                    $.each(response.products, function(index, item) {
                         value += "<option value=\"" + item.id + "\"";
-                        // sesuai kategori yg terpilih
-                        if (item.id === response.product_category_id) {
-                            value += "selected";
-                        }
-                        value += ">" + item.category_name + "</option>";
+                            if (item.id == response.product_id) {
+                                value += "selected";
+                            }
+                        value += ">" + item.product_name + "</option>";
                     });
-                    value += "</select>";
-                    $('.edit_product_category_id').append(value);
+                    $('#edit_product_id').append(value);
+
+                    // supplier query
+                    var value = "<option value=\"\">--Pilih Supplier--</option>";
+                    $.each(response.suppliers, function(index, item) {
+                        value += "<option value=\"" + item.id + "\"";
+                            if (item.id == response.supplier_id) {
+                                value += "selected";
+                            }
+                        value += ">" + item.supplier_name + "</option>";
+                    });
+                    $('#edit_supplier_id').append(value);
 
                     $('.modal-edit').modal('show');
                 }
@@ -362,18 +367,12 @@
         $(document).on('shown.bs.modal', '.modal-edit', function() {
             $('#edit_product_name').focus();
 
-            $('.select_category_edit').select2({
+            $('#edit_product_id').select2({
                 dropdownParent: $('.modal-edit')
             });
 
-            var price = document.getElementById("edit_product_price");
-            price.addEventListener("keyup", function(e) {
-                price.value = formatRupiah(this.value, "");
-            });
-
-            var stock = document.getElementById("edit_stock");
-            stock.addEventListener("keyup", function(e) {
-                stock.value = formatRupiah(this.value, "");
+            $('#edit_supplier_id').select2({
+                dropdownParent: $('.modal-edit')
             });
         });
 
@@ -383,17 +382,14 @@
             $('.modal-edit').modal('hide');
 
             var formData = {
-                id: $('#edit_product_id').val(),
-                product_code: $('#edit_product_code').val(),
-                product_name: $('#edit_product_name').val(),
-                product_category_id: $('#edit_product_category_id').val(),
-                product_price: $('#edit_product_price').val().replace(/\./g,''),
-                stock: $('#edit_stock').val().replace(/\./g,''),
+                id: $('#edit_received_product_id').val(),
+                product_id: $('#edit_product_id').val(),
+                supplier_id: $('#edit_supplier_id').val(),
                 _token: CSRF_TOKEN
             }
 
             $.ajax({
-                url: '{{ URL::route('product.update') }}',
+                url: '{{ URL::route('received_product.update') }}',
                 type: 'POST',
                 data: formData,
                 success: function(response) {
@@ -406,12 +402,11 @@
         });
 
         $('body').on('click', '.btn-delete', function(e) {
-            e.preventDefault();
-
+            e.preventDefault()
             $('.delete_title').empty();
 
             var id = $(this).attr('data-id');
-            var url = '{{ route("product.delete_btn", ":id") }}';
+            var url = '{{ route("received_product.delete_btn", ":id") }}';
             url = url.replace(':id', id );
 
             var formData = {
@@ -425,7 +420,7 @@
                 data: formData,
                 success: function(response) {
                     $('.delete_title').append(response.product_name);
-                    $('#delete_product_id').val(response.id);
+                    $('#delete_received_product_id').val(response.id);
                     $('.modal-delete').modal('show');
                 }
             });
@@ -442,7 +437,7 @@
             }
 
             $.ajax({
-                url: '{{ URL::route('product.delete') }}',
+                url: '{{ URL::route('received_product.delete') }}',
                 type: 'POST',
                 data: formData,
                 success: function(response) {
