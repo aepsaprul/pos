@@ -88,48 +88,52 @@
                     </div>
                 </div>
             </div>
-            <table class="table table-bordered">
-                <thead style="background-color: #32a893;">
-                    <tr>
-                        <th class="text-center text-white">No</th>
-                        <th class="text-center text-white">Kode Produk</th>
-                        <th class="text-center text-white">Nama Produk</th>
-                        <th class="text-center text-white">Harga Satuan</th>
-                        <th class="text-center text-white">Qty</th>
-                        <th class="text-center text-white">Harga Akhir</th>
-                        <th class="text-center text-white">Opsi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($sales as $key => $item)
-                        <tr>
-                            <td class="text-center">{{ $key + 1 }}</td>
-                            <td>{{ $item->product->product_code }}</td>
-                            <td>{{ $item->product->product_name }}</td>
-                            <td class="text-end">{{ rupiah($item->product->product_price) }}</td>
-                            <td class="text-center">{{ rupiah($item->quantity) }}</td>
-                            <td class="text-end">{{ rupiah($item->product->product_price * $item->quantity) }}</td>
-                            <td class="text-center">
-                                <div class="btn-group">
-                                    <form
-                                        action="{{ route('cashier.delete', [$item->id]) }}"
-                                        method="POST"
-                                        class="d-inline">
-                                            @method('delete')
-                                            @csrf
-                                                <button
-                                                    class="border-0 bg-white"
-                                                    onclick="return confirm('Yakin akan dihapus?')"
-                                                    title="Hapus">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
+            <div class="card">
+                <div class="card-body">
+                    <table class="table table-bordered">
+                        <thead style="background-color: #32a893;">
+                            <tr>
+                                <th class="text-center text-white">No</th>
+                                <th class="text-center text-white">Kode Produk</th>
+                                <th class="text-center text-white">Nama Produk</th>
+                                <th class="text-center text-white">Harga Satuan</th>
+                                <th class="text-center text-white">Qty</th>
+                                <th class="text-center text-white">Harga Akhir</th>
+                                <th class="text-center text-white">Opsi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($sales as $key => $item)
+                                <tr>
+                                    <td class="text-center">{{ $key + 1 }}</td>
+                                    <td>{{ $item->product->product_code }}</td>
+                                    <td>{{ $item->product->product_name }}</td>
+                                    <td class="text-end">{{ rupiah($item->product->product_price) }}</td>
+                                    <td class="text-center">{{ rupiah($item->quantity) }}</td>
+                                    <td class="text-end">{{ rupiah($item->product->product_price * $item->quantity) }}</td>
+                                    <td class="text-center">
+                                        <div class="btn-group">
+                                            <form
+                                                action="{{ route('cashier.delete', [$item->id]) }}"
+                                                method="POST"
+                                                class="d-inline">
+                                                    @method('delete')
+                                                    @csrf
+                                                        <button
+                                                            class="border-0 bg-white"
+                                                            onclick="return confirm('Yakin akan dihapus?')"
+                                                            title="Hapus">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>

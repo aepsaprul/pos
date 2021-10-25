@@ -29,9 +29,9 @@
 
     @yield('style')
 </head>
-<body>
+<body style="background-color: #e0e0e0;">
     <div id="app">
-        <nav class="navbar navbar-expand-lg navbar-light">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
                 <a class="navbar-brand text-uppercase" href="#"><img src="{{ asset('assets/store.png') }}" alt="icon" style="max-width: 30px;"></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">

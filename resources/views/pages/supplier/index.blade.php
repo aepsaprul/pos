@@ -4,8 +4,8 @@
 <link href="{{ asset('lib/datatables/css/dataTables.bootstrap5.min.css') }}" rel="stylesheet">
 
 <style>
-    .col-md-12,
-    .col-md-12 button {
+    .col-md-11,
+    .col-md-11 button {
         font-size: 12px;
     }
     .fas {
@@ -20,7 +20,7 @@
 @section('content')
 <div class="container-fluid">
     <div class="row justify-content-center">
-        <div class="col-md-12">
+        <div class="col-md-11">
             <h6 class="text-uppercase text-center">Data Supplier</h6>
             @if (session('status'))
                 <div class="alert alert-success">
@@ -29,7 +29,7 @@
             @endif
 
 
-            <div class="row mb-5 mt-3">
+            <div class="row mb-2 mt-1">
                 <div class="col-md-4">
                     <button
                         id="button-create"
@@ -44,69 +44,74 @@
                 </div>
             </div>
 
-            <table id="table_one" class="table table-bordered">
-                <thead style="background-color: #32a893;">
-                    <tr>
-                        <th class="text-white text-center fw-bold">No</th>
-                        <th class="text-white text-center fw-bold">Kode</th>
-                        <th class="text-white text-center fw-bold">Nama</th>
-                        <th class="text-white text-center fw-bold">Telepon</th>
-                        <th class="text-white text-center fw-bold">Email</th>
-                        <th class="text-white text-center fw-bold">Alamat</th>
-                        <th class="text-white text-center fw-bold">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($suppliers as $key => $item)
-                        <tr>
-                            <td class="text-center">{{ $key + 1 }}</td>
-                            <td>{{ $item->supplier_code }}</td>
-                            <td>{{ $item->supplier_name }}</td>
-                            <td>{{ $item->supplier_contact }}</td>
-                            <td>{{ $item->supplier_email }}</td>
-                            <td>{{ $item->supplier_address }}</td>
-                            <td class="text-center">
-                                <div class="btn-group">
-                                    <button
-                                        type="button"
-                                        class="dropdown-toggle text-white border border-0 py-1"
-                                        data-bs-toggle="dropdown"
-                                        aria-expanded="false"
-                                        style="background-color: #32a893;">
-                                            <i class="fas fa-cog"></i>
-                                    </button>
-                                    <ul class="dropdown-menu dropdown-menu-end">
-                                        <li>
+            <div class="card">
+                <div class="card-body">
+                    <table id="table_one" class="table table-bordered">
+                        <thead style="background-color: #32a893;">
+                            <tr>
+                                <th class="text-white text-center fw-bold">No</th>
+                                <th class="text-white text-center fw-bold">Kode</th>
+                                <th class="text-white text-center fw-bold">Nama</th>
+                                <th class="text-white text-center fw-bold">Telepon</th>
+                                <th class="text-white text-center fw-bold">Email</th>
+                                <th class="text-white text-center fw-bold">Alamat</th>
+                                <th class="text-white text-center fw-bold">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($suppliers as $key => $item)
+                                <tr>
+                                    <td class="text-center">{{ $key + 1 }}</td>
+                                    <td>{{ $item->supplier_code }}</td>
+                                    <td>{{ $item->supplier_name }}</td>
+                                    <td>{{ $item->supplier_contact }}</td>
+                                    <td>{{ $item->supplier_email }}</td>
+                                    <td>{{ $item->supplier_address }}</td>
+                                    <td class="text-center">
+                                        <div class="btn-group">
                                             <button
-                                                class="dropdown-item py-1 btn-edit"
-                                                data-id="{{ $item->id }}"
-                                                type="button">
-                                                    <i
-                                                        class="fas fa-pencil-alt border border-1 px-2 py-2 me-2 text-white"
-                                                        style="background-color: #32a893;">
-                                                    </i> Ubah
+                                                type="button"
+                                                class="dropdown-toggle text-white border border-0 py-1"
+                                                data-bs-toggle="dropdown"
+                                                aria-expanded="false"
+                                                style="background-color: #32a893;">
+                                                    <i class="fas fa-cog"></i>
                                             </button>
-                                        </li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li>
-                                            <button
-                                                class="dropdown-item py-1 btn-delete"
-                                                data-id="{{ $item->id }}"
-                                                type="button">
-                                                    <i
-                                                        class="fas fa-trash-alt border border-1 px-2 py-2 me-2 text-white"
-                                                        style="background-color: #32a893;">
-                                                    </i> Hapus
-                                            </button>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                                            <ul class="dropdown-menu dropdown-menu-end">
+                                                <li>
+                                                    <button
+                                                        class="dropdown-item py-1 btn-edit"
+                                                        data-id="{{ $item->id }}"
+                                                        type="button">
+                                                            <i
+                                                                class="fas fa-pencil-alt border border-1 px-2 py-2 me-2 text-white"
+                                                                style="background-color: #32a893;">
+                                                            </i> Ubah
+                                                    </button>
+                                                </li>
+                                                <li><hr class="dropdown-divider"></li>
+                                                <li>
+                                                    <button
+                                                        class="dropdown-item py-1 btn-delete"
+                                                        data-id="{{ $item->id }}"
+                                                        type="button">
+                                                            <i
+                                                                class="fas fa-trash-alt border border-1 px-2 py-2 me-2 text-white"
+                                                                style="background-color: #32a893;">
+                                                            </i> Hapus
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
+        <div class="mb-5"></div>
     </div>
 </div>
 
