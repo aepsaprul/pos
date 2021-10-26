@@ -35,6 +35,7 @@ class ProductController extends Controller
         $product->product_name = $request->product_name;
         $product->product_category_id = $request->product_category_id;
         $product->product_price = $request->product_price;
+        $product->product_price_selling = $request->product_price_selling;
         $product->stock = $request->stock;
         $product->save();
 
@@ -48,12 +49,25 @@ class ProductController extends Controller
         $product = Product::find($id);
         $category = ProductCategory::get();
 
+        if ($product->product_price == null) {
+            $product_price = 0;
+        } else {
+            $product_price = $product->product_price;
+        }
+
+        if ($product->product_price_selling == null) {
+            $product_price_selling = 0;
+        } else {
+            $product_price_selling = $product->product_price_selling;
+        }
+
         return response()->json([
             'product_id' => $product->id,
             'product_code' => $product->product_code,
             'product_name' => $product->product_name,
             'product_category_id' => $product->product_category_id,
-            'product_price' => $product->product_price,
+            'product_price' => $product_price,
+            'product_price_selling' => $product_price_selling,
             'stock' => $product->stock,
             'categories' => $category
         ]);
@@ -66,6 +80,7 @@ class ProductController extends Controller
         $product->product_name = $request->product_name;
         $product->product_category_id = $request->product_category_id;
         $product->product_price = $request->product_price;
+        $product->product_price_selling = $request->product_price_selling;
         $product->stock = $request->stock;
         $product->save();
 

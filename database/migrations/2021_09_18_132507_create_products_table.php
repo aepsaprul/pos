@@ -18,7 +18,8 @@ class CreateProductsTable extends Migration
             $table->string('product_code', 25)->nullable();
             $table->string('product_name', 50)->nullable();
             $table->integer('product_category_id')->nullable();
-            $table->float('product_price', 8, 2)->nullable();
+            $table->double('product_price')->nullable();
+            $table->double('product_price_selling')->nullable();
             $table->integer('stock')->nullable();
             $table->timestamps();
         });

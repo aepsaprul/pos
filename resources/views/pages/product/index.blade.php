@@ -54,7 +54,8 @@
                                 <th class="text-white text-center fw-bold">Kode</th>
                                 <th class="text-white text-center fw-bold">Nama</th>
                                 <th class="text-white text-center fw-bold">Kategori</th>
-                                <th class="text-white text-center fw-bold">Harga</th>
+                                <th class="text-white text-center fw-bold">HPP</th>
+                                <th class="text-white text-center fw-bold">Harga Jual</th>
                                 <th class="text-white text-center fw-bold">Stok</th>
                                 <th class="text-white text-center fw-bold">Aksi</th>
                             </tr>
@@ -67,6 +68,7 @@
                                     <td>{{ $item->product_name }}</td>
                                     <td>{{ $item->category->category_name }}</td>
                                     <td>{{ rupiah($item->product_price) }}</td>
+                                    <td>{{ rupiah($item->product_price_selling) }}</td>
                                     <td>{{ rupiah($item->stock) }}</td>
                                     <td class="text-center">
                                         <div class="btn-group">
@@ -141,8 +143,12 @@
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="create_product_price" class="form-label">Harga</label>
+                        <label for="create_product_price" class="form-label">HPP</label>
                         <input type="text" class="form-control form-control-sm" id="create_product_price" name="create_product_price">
+                    </div>
+                    <div class="mb-3">
+                        <label for="create_product_price_selling" class="form-label">Harga Jual</label>
+                        <input type="text" class="form-control form-control-sm" id="create_product_price_selling" name="create_product_price_selling">
                     </div>
                     <div class="mb-3">
                         <label for="create_stock" class="form-label">Stok</label>
@@ -186,8 +192,12 @@
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="edit_product_price" class="form-label">Harga</label>
+                        <label for="edit_product_price" class="form-label">HPP</label>
                         <input type="text" class="form-control form-control-sm" id="edit_product_price" name="edit_product_price">
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_product_price_selling" class="form-label">Harga Jual</label>
+                        <input type="text" class="form-control form-control-sm" id="edit_product_price_selling" name="edit_product_price_selling">
                     </div>
                     <div class="mb-3">
                         <label for="edit_stock" class="form-label">Stok</label>
@@ -289,6 +299,11 @@
                 price.value = formatRupiah(this.value, "");
             });
 
+            var price_selling = document.getElementById("create_product_price_selling");
+            price_selling.addEventListener("keyup", function(e) {
+                price_selling.value = formatRupiah(this.value, "");
+            });
+
             var stock = document.getElementById("create_stock");
             stock.addEventListener("keyup", function(e) {
                 stock.value = formatRupiah(this.value, "");
@@ -305,6 +320,7 @@
                 product_name: $('#create_product_name').val(),
                 product_category_id: $('#create_product_category_id').val(),
                 product_price: $('#create_product_price').val().replace(/\./g,''),
+                product_price_selling: $('#create_product_price_selling').val().replace(/\./g,''),
                 stock: $('#create_stock').val().replace(/\./g,''),
                 _token: CSRF_TOKEN
             }
@@ -345,6 +361,7 @@
                     $('#edit_product_name').val(response.product_name);
                     $('#edit_product_category_id').val(response.product_category_id);
                     $('#edit_product_price').val(format_rupiah(response.product_price));
+                    $('#edit_product_price_selling').val(format_rupiah(response.product_price_selling));
                     $('#edit_stock').val(format_rupiah(response.stock));
 
                     var value = "<select name=\"edit_product_category_id\" id=\"edit_product_category_id\" class=\"form-control select_category_edit\">";
@@ -376,6 +393,11 @@
                 price.value = formatRupiah(this.value, "");
             });
 
+            var price_selling = document.getElementById("edit_product_price_selling");
+            price_selling.addEventListener("keyup", function(e) {
+                price_selling.value = formatRupiah(this.value, "");
+            });
+
             var stock = document.getElementById("edit_stock");
             stock.addEventListener("keyup", function(e) {
                 stock.value = formatRupiah(this.value, "");
@@ -393,6 +415,7 @@
                 product_name: $('#edit_product_name').val(),
                 product_category_id: $('#edit_product_category_id').val(),
                 product_price: $('#edit_product_price').val().replace(/\./g,''),
+                product_price_selling: $('#edit_product_price_selling').val().replace(/\./g,''),
                 stock: $('#edit_stock').val().replace(/\./g,''),
                 _token: CSRF_TOKEN
             }
