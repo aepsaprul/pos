@@ -103,6 +103,7 @@ class CashierController extends Controller
             $invoice->customer_id = $request->customer_id;
         }
 
+        $invoice->bid = $request->bid;
         $invoice->total_amount = $request->total_amount;
         $invoice->date_recorded = date('Y-m-d H:i:s');
         $invoice->user_id = Auth::user()->id;

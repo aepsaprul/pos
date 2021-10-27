@@ -42,10 +42,18 @@
                     </div>
                 </div>
                 <div class="col-sm-3">
+                    <div class="mb-1 row">
+                        <label for="bid" class="col-sm-3 col-form-label"><strong>Nego</strong></label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control form-control-sm" id="bid" name="bid">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
                     <div class="row">
                         <div class="col-sm-12">
                             <input type="hidden" name="total_price" id="total_price" value="{{ $total_price }}">
-                            <div class="p-3 text-center"><span class="h3">Rp. {{ rupiah($total_price) }}</span></div>
+                            <div class="p-3 text-center h3">Rp. <span class="total_price_show">{{ rupiah($total_price) }}</span></div>
                         </div>
                     </div>
                 </div>
@@ -163,10 +171,13 @@
                             <td class="text-end">{{ rupiah($item->product->product_price * $item->quantity) }}</td>
                         </tr>
                         @endforeach
+                        <tr class="nego_layout">
+                            {{-- content in jquery --}}
+                        </tr>
                         <tr>
                             <td class="text-end">Total</td>
                             <td>:</td>
-                            <td class="text-end" style="border-top: 2px dashed #000;">{{ rupiah($total_price) }}</td>
+                            <td class="text-end print_total_price" style="border-top: 1px dashed #000;">{{ rupiah($total_price) }}</td>
                         </tr>
                     </table>
                 </div>
@@ -303,13 +314,39 @@
             }
         });
 
+        var bidRupiah = document.getElementById("bid");
+        bidRupiah.addEventListener("keyup", function(e) {
+            bidRupiah.value = formatRupiah(this.value, "");
+        });
+
+        $('#bid').on('keypress', function(event) {
+            if (event.keyCode === 13) {
+                var bid = $('#bid').val().replace(/\./g,'');
+                var total_price = $('#total_price').val();
+                var nego = total_price - bid;
+                var negoRp = format_rupiah(nego);
+
+                var nego_val = "" +
+                        "<td class=\"text-end\">Nego</td>" +
+                        "<td>:</td>" +
+                        "<td class=\"text-end print_harga_nego\" style=\"border-top: 1px dashed #000;\">" + $('#bid').val() + "</td>";
+
+                $('.nego_layout').append(nego_val);
+                $('.print_total_price').text(negoRp);
+                $('.total_price_show').text(negoRp);
+                $('#total_price').val(nego);
+            }
+        })
+
         $('.invoice').hide();
 
         $('.btn-print').on('click', function() {
             if ($('#total_price').val() == 0) {
                 alert('Data Pembelian Kosong');
             } else {
+
                 var formData = {
+                    bid: $('#bid').val().replace(/\./g,''),
                     total_amount: $('#total_price').val(),
                     _token: CSRF_TOKEN
                 }

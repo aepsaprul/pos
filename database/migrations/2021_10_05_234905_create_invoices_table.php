@@ -17,6 +17,7 @@ class CreateInvoicesTable extends Migration
             $table->id();
             $table->integer('customer_id')->nullable();
             $table->double('total_amount')->nullable();
+            $table->double('bid')->nullable();
             $table->date('date_recorded')->nullable();
             $table->integer('user_id')->nullable();
             $table->string('code', 25)->nullable();
