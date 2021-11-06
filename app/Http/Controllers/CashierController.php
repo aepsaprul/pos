@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
 use App\Models\Invoice;
 use App\Models\Product;
 use App\Models\Sales;
@@ -119,6 +120,23 @@ class CashierController extends Controller
             'invoice_date' => date('d-m-Y', strtotime($invoice->date_recorded)),
             'invoice_time' => date('H:i:s', strtotime($invoice->date_recorded)),
             'sales' => $sales_query
+        ]);
+    }
+
+    public function credit()
+    {
+        $invoice_number = Str::random(10);
+
+        $sales = Sales::with('product')->where('user_id', Auth::user()->id)->where('invoice_id', null)->get();
+        $total_price = $sales->sum('sub_total');
+
+        $customer = Customer::get();
+
+        return view('pages.cashier.credit', [
+            'sales' => $sales,
+            'total_price' => $total_price,
+            'invoice_number' => $invoice_number,
+            'customers' => $customer
         ]);
     }
 }

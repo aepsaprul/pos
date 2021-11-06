@@ -21,7 +21,7 @@
 <div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col-md-11">
-            <h6 class="text-uppercase text-center">Data Customer</h6>
+            <h6 class="text-uppercase text-center">Data Toko</h6>
             @if (session('status'))
                 <div class="alert alert-success">
                     {{ session('status') }}
@@ -30,7 +30,7 @@
 
 
             <div class="row mb-2 mt-1">
-                <div class="col-md-2">
+                <div class="col-md-4">
                     <button
                         id="button-create"
                         type="button"
@@ -51,17 +51,17 @@
                             <tr>
                                 <th class="text-white text-center fw-bold">No</th>
                                 <th class="text-white text-center fw-bold">Nama</th>
-                                <th class="text-white text-center fw-bold">Telepon</th>
+                                <th class="text-white text-center fw-bold">Kontak</th>
                                 <th class="text-white text-center fw-bold">Email</th>
                                 <th class="text-white text-center fw-bold">Alamat</th>
                                 <th class="text-white text-center fw-bold">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($customers as $key => $item)
+                            @foreach ($shops as $key => $item)
                                 <tr>
                                     <td class="text-center">{{ $key + 1 }}</td>
-                                    <td>{{ $item->customer_name }}</td>
+                                    <td>{{ $item->name }}</td>
                                     <td>{{ $item->contact }}</td>
                                     <td>{{ $item->email }}</td>
                                     <td>{{ $item->address }}</td>
@@ -119,16 +119,16 @@
         <div class="modal-content">
             <form id="form_create">
                 <div class="modal-header" style="background-color: #32a893;">
-                    <h5 class="modal-title text-white">Tambah Customer</h5>
+                    <h5 class="modal-title text-white">Tambah Toko</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="create_customer_name" class="form-label">Nama Customer</label>
-                        <input type="text" class="form-control form-control-sm" id="create_customer_name" name="create_customer_name">
+                        <label for="create_name" class="form-label">Nama Toko</label>
+                        <input type="text" class="form-control form-control-sm" id="create_name" name="create_name">
                     </div>
                     <div class="mb-3">
-                        <label for="create_contact" class="form-label">Telepon</label>
+                        <label for="create_contact" class="form-label">Kontak</label>
                         <input type="text" class="form-control form-control-sm" id="create_contact" name="create_contact">
                     </div>
                     <div class="mb-3">
@@ -157,19 +157,19 @@
             <form id="form_edit">
 
                 {{-- id  --}}
-                <input type="hidden" id="edit_customer_id" name="edit_customer_id">
+                <input type="hidden" id="edit_id" name="edit_id">
 
                 <div class="modal-header" style="background-color: #32a893;">
-                    <h5 class="modal-title text-white">Ubah Customer</h5>
+                    <h5 class="modal-title text-white">Ubah Data Toko</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="edit_customer_name" class="form-label">Nama Customer</label>
-                        <input type="text" class="form-control form-control-sm" id="edit_customer_name" name="edit_customer_name">
+                        <label for="edit_name" class="form-label">Nama Toko</label>
+                        <input type="text" class="form-control form-control-sm" id="edit_name" name="edit_name">
                     </div>
                     <div class="mb-3">
-                        <label for="edit_contact" class="form-label">Telepon</label>
+                        <label for="edit_contact" class="form-label">Kontak</label>
                         <input type="text" class="form-control form-control-sm" id="edit_contact" name="edit_contact">
                     </div>
                     <div class="mb-3">
@@ -198,7 +198,7 @@
             <form id="form_delete">
 
                 {{-- id  --}}
-                <input type="hidden" id="delete_customer_id" name="delete_customer_id">
+                <input type="hidden" id="delete_id" name="delete_id">
 
                 <div class="modal-header">
                     <h5 class="modal-title">Yakin akan dihapus <span class="delete_title text-decoration-underline"></span> ?</h5>
@@ -245,7 +245,7 @@
         });
 
         $(document).on('shown.bs.modal', '.modal-create', function() {
-            $('#create_customer_name').focus();
+            $('#create_name').focus();
         });
 
         $('#form_create').submit(function(e) {
@@ -254,15 +254,15 @@
             $('.modal-create').modal('hide');
 
             var formData = {
-                customer_name: $('#create_customer_name').val(),
-                email: $('#create_email').val(),
+                name: $('#create_name').val(),
                 contact: $('#create_contact').val(),
+                email: $('#create_email').val(),
                 address: $('#create_address').val(),
                 _token: CSRF_TOKEN
             }
 
             $.ajax({
-                url: '{{ URL::route('customer.store') }} ',
+                url: '{{ URL::route('shop.store') }} ',
                 type: 'POST',
                 data: formData,
                 success: function(response) {
@@ -278,7 +278,7 @@
             e.preventDefault();
 
             var id = $(this).attr('data-id');
-            var url = '{{ route("customer.edit", ":id") }}';
+            var url = '{{ route("shop.edit", ":id") }}';
             url = url.replace(':id', id );
 
             var formData = {
@@ -291,18 +291,19 @@
                 type: 'GET',
                 data: formData,
                 success: function(response) {
-                    $('#edit_customer_id').val(response.customer_id);
-                    $('#edit_customer_name').val(response.customer_name);
-                    $('#edit_email').val(response.email);
+                    $('#edit_id').val(response.id);
+                    $('#edit_name').val(response.name);
                     $('#edit_contact').val(response.contact);
+                    $('#edit_email').val(response.email);
                     $('#edit_address').val(response.address);
+
                     $('.modal-edit').modal('show');
                 }
             })
         });
 
         $(document).on('shown.bs.modal', '.modal-edit', function() {
-            $('#edit_customer_name').focus();
+            $('#edit_name').focus();
         });
 
         $('#form_edit').submit(function(e) {
@@ -311,16 +312,16 @@
             $('.modal-edit').modal('hide');
 
             var formData = {
-                id: $('#edit_customer_id').val(),
-                customer_name: $('#edit_customer_name').val(),
-                email: $('#edit_email').val(),
+                id: $('#edit_id').val(),
+                name: $('#edit_name').val(),
                 contact: $('#edit_contact').val(),
+                email: $('#edit_email').val(),
                 address: $('#edit_address').val(),
                 _token: CSRF_TOKEN
             }
 
             $.ajax({
-                url: '{{ URL::route('customer.update') }}',
+                url: '{{ URL::route('shop.update') }}',
                 type: 'POST',
                 data: formData,
                 success: function(response) {
@@ -336,7 +337,7 @@
             e.preventDefault()
 
             var id = $(this).attr('data-id');
-            var url = '{{ route("customer.delete_btn", ":id") }}';
+            var url = '{{ route("shop.delete_btn", ":id") }}';
             url = url.replace(':id', id );
 
             var formData = {
@@ -349,8 +350,8 @@
                 type: 'GET',
                 data: formData,
                 success: function(response) {
-                    $('.delete_title').append(response.customer_name);
-                    $('#delete_customer_id').val(response.id);
+                    $('.delete_title').append(response.name);
+                    $('#delete_id').val(response.id);
                     $('.modal-delete').modal('show');
                 }
             });
@@ -362,12 +363,12 @@
             $('.modal-delete').modal('hide');
 
             var formData = {
-                id: $('#delete_customer_id').val(),
+                id: $('#delete_id').val(),
                 _token: CSRF_TOKEN
             }
 
             $.ajax({
-                url: '{{ URL::route('customer.delete') }}',
+                url: '{{ URL::route('shop.delete') }}',
                 type: 'POST',
                 data: formData,
                 success: function(response) {

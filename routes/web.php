@@ -8,7 +8,9 @@ use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReceiveProductController;
 use App\Http\Controllers\SalesController;
+use App\Http\Controllers\ShopController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -34,6 +36,11 @@ Route::middleware(['auth'])->group(function () {
     // ubah password
     Route::get('change-password', [ChangePasswordController::class, 'index'])->name('change.password.index');
     Route::post('change-password', [ChangePasswordController::class, 'store'])->name('change.password');
+
+    // user
+    Route::get('user', [UserController::class, 'index'])->name('user.index');
+    Route::get('user/{id}/akses', [UserController::class, 'akses'])->name('user.akses');
+    Route::put('user/{id}/akses_simpan', [UserController::class, 'aksesSimpan'])->name('user.akses_simpan');
 
     // customer
     Route::get('customer', [CustomerController::class, 'index'])->name('customer.index');
@@ -79,6 +86,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('cashier/print', [CashierController::class, 'print'])->name('cashier.print');
     Route::delete('cashier/{id}/delete', [CashierController::class, 'delete'])->name('cashier.delete');
 
+    Route::get('cashier/credit', [CashierController::class, 'credit'])->name('cashier.credit');
+
     // sales
     Route::get('sales', [SalesController::class, 'index'])->name('sales.index');
     Route::get('sales/{id}/show', [SalesController::class, 'show'])->name('sales.show');
@@ -93,4 +102,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('received_product/{id}/edit', [ReceiveProductController::class, 'edit'])->name('received_product.edit');
     Route::get('received_product/{id}/delete_btn', [ReceiveProductController::class, 'deleteBtn'])->name('received_product.delete_btn');
     Route::post('received_product/delete', [ReceiveProductController::class, 'delete'])->name('received_product.delete');
+
+    // shop
+    Route::get('shop', [ShopController::class, 'index'])->name('shop.index');
+    Route::post('shop/store', [ShopController::class, 'store'])->name('shop.store');
+    Route::post('shop/update', [ShopController::class, 'update'])->name('shop.update');
+    Route::get('shop/{id}/edit', [ShopController::class, 'edit'])->name('shop.edit');
+    Route::get('shop/{id}/delete_btn', [ShopController::class, 'deleteBtn'])->name('shop.delete_btn');
+    Route::post('shop/delete', [ShopController::class, 'delete'])->name('shop.delete');
 });

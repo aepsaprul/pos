@@ -39,37 +39,76 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 text-uppercase">
-                        <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="{{ route('home') }}">Dashboard</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="{{ route('product_category.index') }}">Kategori</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="{{ route('product.index') }}">Produk</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Transaksi
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li>
-                                    <a class="dropdown-item border-bottom" href="{{ route('received_product.index') }}"><i class="fas fa-chevron-right"></i> Produk Masuk</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="{{ route('sales.index') }}"><i class="fas fa-chevron-right"></i> Penjualan</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="{{ route('customer.index') }}">Customer</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="{{ route('supplier.index') }}">Supplier</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="{{ route('cashier.index') }}">Kasir</a>
-                        </li>
+                        @if (Auth::user()->roles == "administrator")
+                            <li class="nav-item">
+                                <a class="nav-link" aria-current="page" href="{{ route('home') }}">Dashboard</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" aria-current="page" href="{{ route('user.index') }}">User</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" aria-current="page" href="{{ route('product_category.index') }}">Kategori</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" aria-current="page" href="{{ route('product.index') }}">Produk</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Transaksi
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <li>
+                                        <a class="dropdown-item border-bottom" href="{{ route('received_product.index') }}"><i class="fas fa-chevron-right"></i> Produk Masuk</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('sales.index') }}"><i class="fas fa-chevron-right"></i> Penjualan</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" aria-current="page" href="{{ route('customer.index') }}">Customer</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" aria-current="page" href="{{ route('supplier.index') }}">Supplier</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" aria-current="page" href="{{ route('shop.index') }}">Shop</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Kasir
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <li>
+                                        <a class="dropdown-item border-bottom" href="{{ route('cashier.index') }}"><i class="fas fa-chevron-right"></i> Cash</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('cashier.credit') }}"><i class="fas fa-chevron-right"></i> Tempo</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        @else
+                            @foreach (Auth::user()->navMainUser as $item)
+                                @if ($item->navMain->navSub->isEmpty())
+                                    <li class="nav-item">
+                                        <a class="nav-link" aria-current="page" href="{{ url($item->navMain->link) }}">{{ $item->navMain->title }}</a>
+                                    </li>
+                                @else
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            {{ $item->navMain->title }}
+                                        </a>
+                                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                            @foreach (Auth::user()->navSubUser as $nav_sub)
+                                                @if ($item->nav_main_id == $nav_sub->navSub->nav_main_id)
+                                                    <li><a class="dropdown-item" href="{{ url($nav_sub->navSub->link) }}">- {{ $nav_sub->navSub->title }}</a></li>
+                                                @endif
+                                            @endforeach
+                                        </ul>
+                                    </li>
+                                @endif
+                            @endforeach
+                        @endif
                     </ul>
                     <div class="btn-group d-flex">
                         <button type="button" class="btn dropdown-toggle text-uppercase" data-bs-toggle="dropdown" aria-expanded="false">
