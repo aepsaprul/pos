@@ -25,6 +25,9 @@
             -webkit-box-shadow: 0px -2px 9px 0px rgba(136,128,128,0.79);
             -moz-box-shadow: 0px -2px 9px 0px rgba(136,128,128,0.79);
         }
+        .active {
+            border-bottom: 2px solid rgb(99, 56, 219);
+        }
     </style>
 
     @yield('style')
@@ -41,19 +44,29 @@
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 text-uppercase">
                         @if (Auth::user()->roles == "administrator")
                             <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="{{ route('home') }}">Dashboard</a>
+                                <a
+                                    class="nav-link {{ set_active(['home', 'home/*']) }}"
+                                    aria-current="page"
+                                    href="{{ route('home') }}">
+                                        Dashboard
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="{{ route('user.index') }}">User</a>
+                                <a
+                                    class="nav-link {{ set_active(['user', 'user/*']) }}"
+                                    aria-current="page"
+                                    href="{{ route('user.index') }}">
+                                        User
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="{{ route('product_category.index') }}">Kategori</a>
+                                <a class="nav-link {{ set_active(['product_category', 'product_category/*']) }}" aria-current="page" href="{{ route('product_category.index') }}">Kategori</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="{{ route('product.index') }}">Produk</a>
+                                <a class="nav-link {{ set_active(['product', 'product/*']) }}" aria-current="page" href="{{ route('product.index') }}">Produk</a>
                             </li>
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <a class="nav-link {{ set_active(['received_product', 'received_product/*']) }} dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Transaksi
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -66,16 +79,16 @@
                                 </ul>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="{{ route('customer.index') }}">Customer</a>
+                                <a class="nav-link {{ set_active(['customer', 'customer/*']) }}" aria-current="page" href="{{ route('customer.index') }}">Customer</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="{{ route('supplier.index') }}">Supplier</a>
+                                <a class="nav-link {{ set_active(['supplier', 'supplier/*']) }}" aria-current="page" href="{{ route('supplier.index') }}">Supplier</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="{{ route('shop.index') }}">Shop</a>
+                                <a class="nav-link {{ set_active(['shop', 'shop/*']) }}" aria-current="page" href="{{ route('shop.index') }}">Shop</a>
                             </li>
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <a class="nav-link {{ set_active(['cashier', 'cashier/*']) }} dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Kasir
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
