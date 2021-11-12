@@ -22,6 +22,13 @@
 <div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col-md-11">
+            <div class="row mb-3">
+                <div class="col">
+                    <span><a href="{{ route('home') }}" class="text-decoration-none">Home</a></span> /
+                    <span><a href="{{ route('user.index') }}" class="text-decoration-none">User</a></span> /
+                    <span>Hak Akses</span>
+                </div>
+            </div>
             <form action="{{ route('user.akses_simpan', [$user->id]) }}" method="POST">
                 @method('PUT')
                 @csrf

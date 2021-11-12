@@ -7,6 +7,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReceiveProductController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SalesController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\SupplierController;
@@ -80,28 +81,31 @@ Route::middleware(['auth'])->group(function () {
     Route::post('supplier/delete', [SupplierController::class, 'delete'])->name('supplier.delete');
 
     // cashier
-    Route::get('cashier', [CashierController::class, 'index'])->name('cashier.index');
-    Route::post('cashier/product', [CashierController::class, 'getProduct'])->name('cashier.product');
-    Route::post('cashier/sales-save', [CashierController::class, 'salesSave'])->name('cashier.sales_save');
-    Route::post('cashier/print', [CashierController::class, 'print'])->name('cashier.print');
-    Route::delete('cashier/{id}/delete', [CashierController::class, 'delete'])->name('cashier.delete');
+        // cash
+        Route::get('cashier', [CashierController::class, 'index'])->name('cashier.index');
+        Route::post('cashier/product', [CashierController::class, 'getProduct'])->name('cashier.product');
+        Route::post('cashier/sales-save', [CashierController::class, 'salesSave'])->name('cashier.sales_save');
+        Route::post('cashier/print', [CashierController::class, 'print'])->name('cashier.print');
+        Route::delete('cashier/{id}/delete', [CashierController::class, 'delete'])->name('cashier.delete');
 
-    Route::get('cashier/credit', [CashierController::class, 'credit'])->name('cashier.credit');
+        // credit
+        Route::get('cashier/credit', [CashierController::class, 'credit'])->name('cashier.credit');
 
-    // sales
-    Route::get('sales', [SalesController::class, 'index'])->name('sales.index');
-    Route::get('sales/{id}/show', [SalesController::class, 'show'])->name('sales.show');
-    Route::get('sales/{id}/delete_btn', [SalesController::class, 'deleteBtn'])->name('sales.delete_btn');
-    Route::post('sales/delete', [SalesController::class, 'delete'])->name('sales.delete');
+    // transaction
+        // sales
+        Route::get('transaction/sales', [SalesController::class, 'index'])->name('sales.index');
+        Route::get('transaction/sales/{id}/show', [SalesController::class, 'show'])->name('sales.show');
+        Route::get('transaction/sales/{id}/delete_btn', [SalesController::class, 'deleteBtn'])->name('sales.delete_btn');
+        Route::post('transaction/sales/delete', [SalesController::class, 'delete'])->name('sales.delete');
 
-    // receive product
-    Route::get('received_product', [ReceiveProductController::class, 'index'])->name('received_product.index');
-    Route::get('received_product/create', [ReceiveProductController::class, 'create'])->name('received_product.create');
-    Route::post('received_product/store', [ReceiveProductController::class, 'store'])->name('received_product.store');
-    Route::post('received_product/update', [ReceiveProductController::class, 'update'])->name('received_product.update');
-    Route::get('received_product/{id}/edit', [ReceiveProductController::class, 'edit'])->name('received_product.edit');
-    Route::get('received_product/{id}/delete_btn', [ReceiveProductController::class, 'deleteBtn'])->name('received_product.delete_btn');
-    Route::post('received_product/delete', [ReceiveProductController::class, 'delete'])->name('received_product.delete');
+        // receive product
+        Route::get('transaction/received_product', [ReceiveProductController::class, 'index'])->name('received_product.index');
+        Route::get('transaction/received_product/create', [ReceiveProductController::class, 'create'])->name('received_product.create');
+        Route::post('transaction/received_product/store', [ReceiveProductController::class, 'store'])->name('received_product.store');
+        Route::post('transaction/received_product/update', [ReceiveProductController::class, 'update'])->name('received_product.update');
+        Route::get('transaction/received_product/{id}/edit', [ReceiveProductController::class, 'edit'])->name('received_product.edit');
+        Route::get('transaction/received_product/{id}/delete_btn', [ReceiveProductController::class, 'deleteBtn'])->name('received_product.delete_btn');
+        Route::post('transaction/received_product/delete', [ReceiveProductController::class, 'delete'])->name('received_product.delete');
 
     // shop
     Route::get('shop', [ShopController::class, 'index'])->name('shop.index');
@@ -110,4 +114,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('shop/{id}/edit', [ShopController::class, 'edit'])->name('shop.edit');
     Route::get('shop/{id}/delete_btn', [ShopController::class, 'deleteBtn'])->name('shop.delete_btn');
     Route::post('shop/delete', [ShopController::class, 'delete'])->name('shop.delete');
+
+    // report
+    Route::get('report', [ReportController::class, 'index'])->name('report.index');
 });

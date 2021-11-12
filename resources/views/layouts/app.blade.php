@@ -63,45 +63,114 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link {{ set_active(['product_category', 'product_category/*']) }}" aria-current="page" href="{{ route('product_category.index') }}">Kategori</a>
+                                <a
+                                    class="nav-link {{ set_active(['product_category', 'product_category/*']) }}"
+                                    aria-current="page"
+                                    href="{{ route('product_category.index') }}">
+                                        Kategori
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link {{ set_active(['product', 'product/*']) }}" aria-current="page" href="{{ route('product.index') }}">Produk</a>
+                                <a
+                                    class="nav-link {{ set_active(['product', 'product/*']) }}"
+                                    aria-current="page"
+                                    href="{{ route('product.index') }}">
+                                        Produk
+                                </a>
                             </li>
                             <li class="nav-item dropdown">
-                                <a class="nav-link {{ set_active(['received_product', 'received_product/*']) }} dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Transaksi
+                                <a
+                                    class="nav-link {{ set_active(['transaction', 'transaction/*']) }}
+                                    dropdown-toggle"
+                                    href="#"
+                                    id="navbarDropdown"
+                                    role="button"
+                                    data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                        Transaksi
                                 </a>
-                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <ul
+                                    class="dropdown-menu"
+                                    aria-labelledby="navbarDropdown">
                                     <li>
-                                        <a class="dropdown-item border-bottom" href="{{ route('received_product.index') }}"><i class="fas fa-chevron-right"></i> Produk Masuk</a>
+                                        <a
+                                            class="dropdown-item border-bottom"
+                                            href="{{ route('received_product.index') }}">
+                                                <i class="fas fa-chevron-right"></i>
+                                                    Produk Masuk
+                                        </a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="{{ route('sales.index') }}"><i class="fas fa-chevron-right"></i> Penjualan</a>
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ route('sales.index') }}">
+                                                <i class="fas fa-chevron-right"></i>
+                                                    Penjualan
+                                        </a>
                                     </li>
                                 </ul>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link {{ set_active(['customer', 'customer/*']) }}" aria-current="page" href="{{ route('customer.index') }}">Customer</a>
+                                <a
+                                    class="nav-link {{ set_active(['customer', 'customer/*']) }}"
+                                    aria-current="page"
+                                    href="{{ route('customer.index') }}">
+                                        Customer
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link {{ set_active(['supplier', 'supplier/*']) }}" aria-current="page" href="{{ route('supplier.index') }}">Supplier</a>
+                                <a
+                                    class="nav-link {{ set_active(['supplier', 'supplier/*']) }}"
+                                    ria-current="page"
+                                    href="{{ route('supplier.index') }}">
+                                        Supplier
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link {{ set_active(['shop', 'shop/*']) }}" aria-current="page" href="{{ route('shop.index') }}">Shop</a>
+                                <a
+                                    class="nav-link {{ set_active(['shop', 'shop/*']) }}"
+                                    aria-current="page"
+                                    href="{{ route('shop.index') }}">
+                                        Shop
+                                </a>
                             </li>
                             <li class="nav-item dropdown">
-                                <a class="nav-link {{ set_active(['cashier', 'cashier/*']) }} dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Kasir
+                                <a
+                                    class="nav-link {{ set_active(['cashier', 'cashier/*']) }}
+                                    dropdown-toggle"
+                                    href="#"
+                                    id="navbarDropdown"
+                                    role="button"
+                                    data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                        Kasir
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                     <li>
-                                        <a class="dropdown-item border-bottom" href="{{ route('cashier.index') }}"><i class="fas fa-chevron-right"></i> Cash</a>
+                                        <a
+                                            class="dropdown-item border-bottom"
+                                            href="{{ route('cashier.index') }}">
+                                                <i class="fas fa-chevron-right"></i>
+                                                    Cash
+                                        </a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="{{ route('cashier.credit') }}"><i class="fas fa-chevron-right"></i> Tempo</a>
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ route('cashier.credit') }}">
+                                                <i class="fas fa-chevron-right"></i>
+                                                    Tempo
+                                        </a>
                                     </li>
                                 </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a
+                                    class="nav-link {{ set_active(['report', 'report/*']) }}"
+                                    aria-current="page"
+                                    href="{{ route('report.index') }}">
+                                        Laporan
+                                </a>
                             </li>
                         @else
                             @foreach (Auth::user()->navMainUser as $item)
