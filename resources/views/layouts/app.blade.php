@@ -19,6 +19,9 @@
     <!-- Styles -->
     <link href="{{ asset('lib/bootstrap-5/bootstrap.min.css') }}" rel="stylesheet">
 
+    <!-- custom Styles -->
+    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+
     <style>
         nav {
             box-shadow: 0px -2px 9px 0px rgba(136,128,128,0.79);

@@ -53,7 +53,11 @@
                         </thead>
                         <tbody>
                             @foreach ($users as $key => $item)
-                                <tr>
+                                <tr
+                                    @if ($key % 2 == 1)
+                                        echo class="tabel_active";
+                                    @endif
+                                >
                                     <td class="text-center">{{ $key + 1 }}</td>
                                     <td>{{ $item->name }}</td>
                                     <td>{{ $item->email }}</td>

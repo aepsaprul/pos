@@ -62,7 +62,11 @@
                         </thead>
                         <tbody>
                             @foreach ($receive_products as $key => $item)
-                                <tr>
+                                <tr
+                                    @if ($key % 2 == 1)
+                                        echo class="tabel_active";
+                                    @endif
+                                >
                                     <td class="text-center">{{ $key + 1 }}</td>
                                     <td>{{ $item->user->name }}</td>
                                     <td>
