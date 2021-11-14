@@ -9,6 +9,8 @@
 
     <title>{{ config('app.name', 'POS') }}</title>
 
+    <link href="{{ asset('assets/favicon.ico') }}" rel="icon" type="image/x-icon">
+
     <!-- Fonts -->
     <link href="{{ asset('lib/fontawesome-5/css/all.min.css') }}" rel="stylesheet">
 

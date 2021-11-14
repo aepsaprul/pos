@@ -10,8 +10,10 @@
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link href="{{ asset('assets/favicon.ico') }}" rel="icon" type="image/x-icon">
 
     <title>{{ config('app.name', 'POS') }}</title>
+
 
     <!-- Fonts -->
     <link href="{{ asset('lib/fontawesome-5/css/all.min.css') }}" rel="stylesheet">
@@ -39,9 +41,20 @@
     <div id="app">
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
-                <a class="navbar-brand text-uppercase" href="#"><img src="{{ asset('assets/store.png') }}" alt="icon" style="max-width: 30px;"></a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+                <a
+                    class="navbar-brand text-uppercase"
+                    href="#">
+                        <img src="{{ asset('assets/store.png') }}" alt="icon" style="max-width: 30px;">
+                </a>
+                <button
+                    class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 text-uppercase">

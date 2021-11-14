@@ -7,6 +7,7 @@ use App\Models\NavMainUser;
 use App\Models\NavSubUser;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -15,6 +16,30 @@ class UserController extends Controller
         $user = User::where('roles', '!=', 'administrator')->get();
 
         return view('pages.user.index', ['users' => $user]);
+    }
+
+    public function store(Request $request)
+    {
+        $user = new User;
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
+        $user->roles = $request->roles;
+        $user->save();
+
+        return response()->json([
+            'status' => 'Data berhasil disimpan'
+        ]);
+    }
+
+    public function edit($id)
+    {
+
+    }
+
+    public function update(Request $request, $id)
+    {
+
     }
 
     public function akses($id)

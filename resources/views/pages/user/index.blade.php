@@ -128,20 +128,47 @@
             <form id="form_create">
                 <div class="modal-header" style="background-color: #32a893;">
                     <h5 class="modal-title text-white">Tambah User</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close">
+                    </button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="create_name" class="form-label">Nama</label>
-                        <input type="text" class="form-control form-control-sm" id="create_name" name="create_name" onkeyup="this.value = this.value.toUpperCase()">
+                        <input
+                            type="text"
+                            class="form-control form-control-sm"
+                            id="create_name"
+                            name="create_name">
                     </div>
                     <div class="mb-3">
                         <label for="create_email" class="form-label">Email</label>
-                        <input type="text" class="form-control form-control-sm" id="create_email" name="create_email">
+                        <input
+                            type="text"
+                            class="form-control form-control-sm"
+                            id="create_email"
+                            name="create_email">
+                    </div>
+                    <div class="mb-3">
+                        <label for="create_password" class="form-label">Password</label>
+                        <input
+                            type="password"
+                            class="form-control form-control-sm"
+                            id="create_password"
+                            name="create_password">
+                        <div class="form-check mt-2">
+                            <input class="form-check-input" type="checkbox" value="" id="view_password">
+                            <label class="form-check-label" for="view_password" style="font-size: 12px;">
+                                Lihat Password
+                            </label>
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label for="create_roles" class="form-label">Roles</label>
-                        <select id="" name="" class="form-control form-control-sm">
+                        <select id="create_roles" name="create_roles" class="form-control form-control-sm">
                             <option value="">--Pilih Roles--</option>
                             <option value="admin">Admin</option>
                             <option value="inventory">Gudang</option>
@@ -212,8 +239,42 @@
 
         $(document).on('shown.bs.modal', '.modal-create', function() {
             $('#create_supplier_code').focus();
+
         });
 
+        $('#view_password').on('change', function() {
+            if ($('#view_password').is(":checked")) {
+                $('#create_password').attr('type', 'text');
+            } else {
+                $('#create_password').attr('type', 'password');
+            }
+        });
+
+        $('#form_create').submit(function(e) {
+            e.preventDefault();
+
+            $('.modal-create').modal('hide');
+
+            var formData = {
+                name: $('#create_name').val(),
+                email: $('#create_email').val(),
+                password: $('#create_password').val(),
+                roles: $('#create_roles').val(),
+                _token: CSRF_TOKEN
+            }
+
+            $.ajax({
+                url: '{{ URL::route('user.store') }} ',
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+                    $('.modal-proses').modal('show');
+                    setTimeout(() => {
+                        window.location.reload(1);
+                    }, 1000);
+                }
+            });
+        });
     } );
 </script>
 @endsection

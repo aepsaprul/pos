@@ -40,6 +40,9 @@ Route::middleware(['auth'])->group(function () {
 
     // user
     Route::get('user', [UserController::class, 'index'])->name('user.index');
+    Route::post('user/store', [UserController::class, 'store'])->name('user.store');
+    Route::get('user/{id}/edit', [UserController::class, 'edit'])->name('user.edit');
+    Route::post('user/update', [UserController::class, 'update'])->name('customer.update');
     Route::get('user/{id}/akses', [UserController::class, 'akses'])->name('user.akses');
     Route::put('user/{id}/akses_simpan', [UserController::class, 'aksesSimpan'])->name('user.akses_simpan');
 
