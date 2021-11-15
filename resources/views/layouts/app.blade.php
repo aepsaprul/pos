@@ -30,6 +30,11 @@
             -webkit-box-shadow: 0px -2px 9px 0px rgba(136,128,128,0.79);
             -moz-box-shadow: 0px -2px 9px 0px rgba(136,128,128,0.79);
         }
+        nav,
+        nav a,
+        nav .btn {
+            font-size: 14px;
+        }
         .active {
             border-bottom: 2px solid rgb(99, 56, 219);
         }
@@ -67,13 +72,53 @@
                                         Dashboard
                                 </a>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item dropdown">
                                 <a
-                                    class="nav-link {{ set_active(['user', 'user/*']) }}"
-                                    aria-current="page"
-                                    href="{{ route('user.index') }}">
-                                        User
+                                    class="nav-link {{ set_active(['master', 'master/*']) }}
+                                    dropdown-toggle"
+                                    href="#"
+                                    id="navbarDropdown"
+                                    role="button"
+                                    data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                        Master
                                 </a>
+                                <ul
+                                    class="dropdown-menu"
+                                    aria-labelledby="navbarDropdown">
+                                    <li>
+                                        <a
+                                            class="dropdown-item border-bottom"
+                                            href="#">
+                                                <i class="fas fa-chevron-right"></i>
+                                                    Karyawan
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a
+                                            class="dropdown-item border-bottom"
+                                            href="#">
+                                                <i class="fas fa-chevron-right"></i>
+                                                    Navigasi
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a
+                                            class="dropdown-item border-bottom"
+                                            href="#">
+                                                <i class="fas fa-chevron-right"></i>
+                                                    Roles
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ route('user.index') }}">
+                                                <i class="fas fa-chevron-right"></i>
+                                                    User
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
                             <li class="nav-item">
                                 <a

@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('style')
+<link rel="stylesheet" href="{{ asset('lib/select2/css/select2.min.css') }}">
+
 <style>
     .justify-content-center {
         font-size: 12px;
@@ -17,7 +19,7 @@
                     <div class="mb-1 row">
                         <label for="product_code" class="col-sm-4 col-form-label"><strong>Customer</strong></label>
                         <div class="col-sm-8">
-                            <select name="customer_id" id="customer_id" class="form-control form-control-sm">
+                            <select name="customer_id" id="customer_id" class="form-control form-control-sm select_customer" autofocus>
                                 <option value="">--Pilih Customer--</option>
                                 @foreach ($customers as $item)
                                     <option value="{{ $item->id }}">{{ $item->customer_name }}</option>
@@ -40,7 +42,7 @@
                     <div class="mb-1 row">
                         <label for="product_code" class="col-sm-4 col-form-label"><strong>Kode Produk</strong></label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control form-control-sm" id="product_code" name="product_code" autofocus>
+                            <input type="text" class="form-control form-control-sm" id="product_code" name="product_code">
                         </div>
                     </div>
                     <div class="mb-1 row">
@@ -223,9 +225,13 @@
 @endsection
 
 @section('script')
+<script src="{{ asset('lib/select2/js/select2.min.js') }}"></script>
+
 <script>
     $(document).ready(function() {
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
+        $('.select_customer').select2();
 
         $('#product_code').on('keyup change', function() {
             var product_code = $('#product_code').val();

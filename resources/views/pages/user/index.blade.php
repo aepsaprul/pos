@@ -4,9 +4,9 @@
 <link href="{{ asset('lib/datatables/css/dataTables.bootstrap5.min.css') }}" rel="stylesheet">
 
 <style>
-    .col-md-11,
-    .col-md-11 button,
-    .col-md-11 a {
+    .col-md-12,
+    .col-md-12 button,
+    .col-md-12 a {
         font-size: 12px;
     }
     .fas {
@@ -21,7 +21,7 @@
 @section('content')
 <div class="container-fluid">
     <div class="row justify-content-center">
-        <div class="col-md-11">
+        <div class="col-md-12">
             <h6 class="text-uppercase text-center">Data User</h6>
 
             <div class="row mb-2 mt-1">
@@ -61,7 +61,7 @@
                                     <td class="text-center">{{ $key + 1 }}</td>
                                     <td>{{ $item->name }}</td>
                                     <td>{{ $item->email }}</td>
-                                    <td class="text-center">{{ $item->roles }}</td>
+                                    <td>{{ $item->roles }}</td>
                                     <td class="text-center">
                                         <div class="btn-group">
                                             <button

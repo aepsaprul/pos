@@ -4,8 +4,9 @@
 <link href="{{ asset('lib/datatables/css/dataTables.bootstrap5.min.css') }}" rel="stylesheet">
 
 <style>
-    .col-md-11,
-    .col-md-11 button {
+    .col-md-12,
+    .col-md-12 button,
+    .col-md-12 a {
         font-size: 12px;
     }
     .fas {
@@ -20,7 +21,7 @@
 @section('content')
 <div class="container-fluid">
     <div class="row justify-content-center">
-        <div class="col-md-11">
+        <div class="col-md-12">
             <h6 class="text-uppercase text-center">Data Customer</h6>
             @if (session('status'))
                 <div class="alert alert-success">
