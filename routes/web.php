@@ -42,7 +42,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('user', [UserController::class, 'index'])->name('user.index');
     Route::post('user/store', [UserController::class, 'store'])->name('user.store');
     Route::get('user/{id}/edit', [UserController::class, 'edit'])->name('user.edit');
-    Route::post('user/update', [UserController::class, 'update'])->name('customer.update');
+    Route::post('user/update', [UserController::class, 'update'])->name('user.update');
+    Route::get('user/{id}/delete_btn', [UserController::class, 'deleteBtn'])->name('user.delete_btn');
+    Route::post('user/delete', [UserController::class, 'delete'])->name('user.delete');
     Route::get('user/{id}/akses', [UserController::class, 'akses'])->name('user.akses');
     Route::put('user/{id}/akses_simpan', [UserController::class, 'aksesSimpan'])->name('user.akses_simpan');
 

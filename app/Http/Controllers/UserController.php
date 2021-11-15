@@ -34,12 +34,47 @@ class UserController extends Controller
 
     public function edit($id)
     {
+        $user = User::find($id);
 
+        return response()->json([
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'roles' => $user->roles
+        ]);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
+        $user = User::find($request->id);
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->roles = $request->roles;
+        $user->save();
 
+        return response()->json([
+            'status' => 'Data berhasil diperbaharui'
+        ]);
+    }
+
+    public function deleteBtn($id)
+    {
+        $user = User::find($id);
+
+        return response()->json([
+            'id' => $user->id,
+            'name' => $user->name
+        ]);
+    }
+
+    public function delete(Request $request)
+    {
+        $user = User::find($request->id);
+        $user->delete();
+
+        return response()->json([
+            'status' => 'Data berhasil dihapus'
+        ]);
     }
 
     public function akses($id)
