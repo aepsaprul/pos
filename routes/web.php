@@ -3,6 +3,7 @@
 use App\Http\Controllers\CashierController;
 use App\Http\Controllers\ChangePasswordController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
@@ -38,15 +39,25 @@ Route::middleware(['auth'])->group(function () {
     Route::get('change-password', [ChangePasswordController::class, 'index'])->name('change.password.index');
     Route::post('change-password', [ChangePasswordController::class, 'store'])->name('change.password');
 
-    // user
-    Route::get('user', [UserController::class, 'index'])->name('user.index');
-    Route::post('user/store', [UserController::class, 'store'])->name('user.store');
-    Route::get('user/{id}/edit', [UserController::class, 'edit'])->name('user.edit');
-    Route::post('user/update', [UserController::class, 'update'])->name('user.update');
-    Route::get('user/{id}/delete_btn', [UserController::class, 'deleteBtn'])->name('user.delete_btn');
-    Route::post('user/delete', [UserController::class, 'delete'])->name('user.delete');
-    Route::get('user/{id}/akses', [UserController::class, 'akses'])->name('user.akses');
-    Route::put('user/{id}/akses_simpan', [UserController::class, 'aksesSimpan'])->name('user.akses_simpan');
+    // master
+
+        // customer
+        Route::get('master/employee', [EmployeeController::class, 'index'])->name('employee.index');
+        Route::post('master/employee/store', [EmployeeController::class, 'store'])->name('employee.store');
+        Route::get('master/employee/{id}/edit', [EmployeeController::class, 'edit'])->name('employee.edit');
+        Route::post('master/employee/update', [EmployeeController::class, 'update'])->name('employee.update');
+        Route::get('master/employee/{id}/delete_btn', [EmployeeController::class, 'deleteBtn'])->name('employee.delete_btn');
+        Route::post('master/employee/delete', [EmployeeController::class, 'delete'])->name('employee.delete');
+
+        // user
+        Route::get('master/user', [UserController::class, 'index'])->name('user.index');
+        Route::post('master/user/store', [UserController::class, 'store'])->name('user.store');
+        Route::get('master/user/{id}/edit', [UserController::class, 'edit'])->name('user.edit');
+        Route::post('master/user/update', [UserController::class, 'update'])->name('user.update');
+        Route::get('master/user/{id}/delete_btn', [UserController::class, 'deleteBtn'])->name('user.delete_btn');
+        Route::post('master/user/delete', [UserController::class, 'delete'])->name('user.delete');
+        Route::get('master/user/{id}/akses', [UserController::class, 'akses'])->name('user.akses');
+        Route::put('master/user/{id}/akses_simpan', [UserController::class, 'aksesSimpan'])->name('user.akses_simpan');
 
     // customer
     Route::get('customer', [CustomerController::class, 'index'])->name('customer.index');

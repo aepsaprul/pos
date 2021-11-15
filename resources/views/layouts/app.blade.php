@@ -89,7 +89,7 @@
                                     <li>
                                         <a
                                             class="dropdown-item border-bottom"
-                                            href="#">
+                                            href="{{ route('employee.index') }}">
                                                 <i class="fas fa-chevron-right"></i>
                                                     Karyawan
                                         </a>
