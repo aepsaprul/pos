@@ -56,9 +56,9 @@
                                     @endif
                                 >
                                     <td class="text-center">{{ $key + 1 }}</td>
-                                    <td>{{ $item->full_name }}</td>
-                                    <td>{{ $item->email }}</td>
-                                    <td>{{ $item->contact }}</td>
+                                    <td><span class="full_name_{{ $item->id }}">{{ $item->full_name }}</span></td>
+                                    <td><span class="email_{{ $item->id }}">{{ $item->email }}</span></td>
+                                    <td><span class="contact_{{ $item->id }}">{{ $item->contact }}</span></td>
                                     <td class="text-center">
                                         <div class="btn-group">
                                             <button
@@ -70,6 +70,17 @@
                                                     <i class="fas fa-cog"></i>
                                             </button>
                                             <ul class="dropdown-menu dropdown-menu-end">
+                                                <li>
+                                                    <button
+                                                        class="dropdown-item btn-view border-bottom"
+                                                        data-id="{{ $item->id }}"
+                                                        type="button">
+                                                            <i
+                                                                class="fas fa-eye border border-1 px-2 py-2 me-2 text-white"
+                                                                style="background-color: #32a893;">
+                                                            </i> Lihat
+                                                    </button>
+                                                </li>
                                                 <li>
                                                     <button
                                                         class="dropdown-item btn-edit border-bottom"
@@ -164,6 +175,78 @@
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="border-0 text-white" style="background-color: #32a893; padding: 5px 10px;">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{{-- modal view  --}}
+<div class="modal fade modal-view" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form id="form_view">
+
+                {{-- id  --}}
+                <input
+                    type="hidden"
+                    id="view_id"
+                    name="view_id">
+
+                <div class="modal-header" style="background-color: #32a893;">
+                    <h5 class="modal-title text-white">Ubah Karyawan</h5>
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close">
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="view_full_name" class="form-label">Nama Lengkap</label>
+                        <input
+                            type="text"
+                            class="form-control form-control-sm"
+                            id="view_full_name"
+                            name="view_full_name"
+                            maxlength="50"
+                            readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="view_nickname" class="form-label">Nama Panggilan</label>
+                        <input
+                            type="text"
+                            class="form-control form-control-sm"
+                            id="view_nickname"
+                            name="view_nickname"
+                            maxlength="30"
+                            readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="view_email" class="form-label">Email</label>
+                        <input
+                            type="email"
+                            class="form-control form-control-sm"
+                            id="view_email"
+                            name="view_email"
+                            maxlength="50"
+                            readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="view_contact" class="form-label">Telepon</label>
+                        <input
+                            type="text"
+                            class="form-control form-control-sm"
+                            id="view_contact"
+                            name="view_contact"
+                            maxlength="15"
+                            readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="view_address" class="form-label">Alamat</label>
+                        <textarea class="form-control" name="view_address" id="view_address" rows="3" readonly></textarea>
+                    </div>
                 </div>
             </form>
         </div>
@@ -338,6 +421,35 @@
             });
         });
 
+        $('body').on('click', '.btn-view', function(e) {
+            e.preventDefault();
+
+            var id = $(this).attr('data-id');
+            var url = '{{ route("employee.show", ":id") }}';
+            url = url.replace(':id', id );
+
+            var formData = {
+                id: id,
+                _token: CSRF_TOKEN
+            }
+
+            $.ajax({
+                url: url,
+                type: 'GET',
+                data: formData,
+                success: function(response) {
+                    $('#view_id').val(response.id);
+                    $('#view_full_name').val(response.full_name);
+                    $('#view_nickname').val(response.nickname);
+                    $('#view_email').val(response.email);
+                    $('#view_contact').val(response.contact);
+                    $('#view_address').val(response.address);
+
+                    $('.modal-view').modal('show');
+                }
+            })
+        });
+
         $('body').on('click', '.btn-edit', function(e) {
             e.preventDefault();
 
@@ -371,6 +483,9 @@
             e.preventDefault();
 
             $('.modal-edit').modal('hide');
+            $('.full_name_' + $('#edit_id').val()).empty();
+            $('.email_' + $('#edit_id').val()).empty();
+            $('.contact_' + $('#edit_id').val()).empty();
 
             var formData = {
                 id: $('#edit_id').val(),
@@ -387,10 +502,9 @@
                 type: 'POST',
                 data: formData,
                 success: function(response) {
-                    $('.modal-proses').modal('show');
-                    setTimeout(() => {
-                        window.location.reload(1);
-                    }, 1000);
+                    $('.full_name_' + response.id).append(response.full_name);
+                    $('.email_' + response.id).append(response.email);
+                    $('.contact_' + response.id).append(response.contact);
                 }
             });
         });
@@ -399,7 +513,7 @@
             e.preventDefault()
 
             var id = $(this).attr('data-id');
-            var url = '{{ route("user.delete_btn", ":id") }}';
+            var url = '{{ route("employee.delete_btn", ":id") }}';
             url = url.replace(':id', id );
 
             var formData = {
@@ -412,7 +526,7 @@
                 type: 'GET',
                 data: formData,
                 success: function(response) {
-                    $('.delete_title').append(response.name);
+                    $('.delete_title').append(response.full_name);
                     $('#delete_id').val(response.id);
                     $('.modal-delete').modal('show');
                 }
@@ -430,7 +544,7 @@
             }
 
             $.ajax({
-                url: '{{ URL::route('user.delete') }}',
+                url: '{{ URL::route('employee.delete') }}',
                 type: 'POST',
                 data: formData,
                 success: function(response) {

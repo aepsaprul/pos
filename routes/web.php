@@ -41,9 +41,10 @@ Route::middleware(['auth'])->group(function () {
 
     // master
 
-        // customer
+        // employee
         Route::get('master/employee', [EmployeeController::class, 'index'])->name('employee.index');
         Route::post('master/employee/store', [EmployeeController::class, 'store'])->name('employee.store');
+        Route::get('master/employee/{id}/show', [EmployeeController::class, 'show'])->name('employee.show');
         Route::get('master/employee/{id}/edit', [EmployeeController::class, 'edit'])->name('employee.edit');
         Route::post('master/employee/update', [EmployeeController::class, 'update'])->name('employee.update');
         Route::get('master/employee/{id}/delete_btn', [EmployeeController::class, 'deleteBtn'])->name('employee.delete_btn');

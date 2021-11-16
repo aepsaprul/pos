@@ -29,6 +29,20 @@ class EmployeeController extends Controller
         ]);
     }
 
+    public function show($id)
+    {
+        $employee = Employee::find($id);
+
+        return response()->json([
+            'id' => $employee->id,
+            'full_name' => $employee->full_name,
+            'nickname' => $employee->nickname,
+            'email' => $employee->email,
+            'contact' => $employee->contact,
+            'address' => $employee->address
+        ]);
+    }
+
     public function edit($id)
     {
         $employee = Employee::find($id);
@@ -54,7 +68,11 @@ class EmployeeController extends Controller
         $employee->save();
 
         return response()->json([
-            'status' => 'Data berhasil diperbaharui'
+            'status' => 'Data berhasil diperbaharui',
+            'id' => $request->id,
+            'full_name' => $request->full_name,
+            'email' => $request->email,
+            'contact' => $request->contact
         ]);
     }
 
@@ -70,11 +88,14 @@ class EmployeeController extends Controller
 
     public function delete(Request $request)
     {
-        $employee = Employee::find($request->id);
-        $employee->delete();
+        // $employee = Employee::find($request->id);
+        // $employee->delete();
+
+        $employees = Employee::get();
 
         return response()->json([
-            'status' => 'Data berhasil dihapus'
+            'status' => 'Data berhasil dihapus',
+            'employees' => $employees
         ]);
     }
 }
