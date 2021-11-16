@@ -97,7 +97,7 @@
                                     <li>
                                         <a
                                             class="dropdown-item border-bottom"
-                                            href="#">
+                                            href="{{ route('nav.index') }}">
                                                 <i class="fas fa-chevron-right"></i>
                                                     Navigasi
                                         </a>

@@ -502,9 +502,15 @@
                 type: 'POST',
                 data: formData,
                 success: function(response) {
+                    $('.modal-proses').modal('show');
+
                     $('.full_name_' + response.id).append(response.full_name);
                     $('.email_' + response.id).append(response.email);
                     $('.contact_' + response.id).append(response.contact);
+
+                    setTimeout(() => {
+                        $('.modal-proses').modal('hide');
+                    }, 1000);
                 }
             });
         });

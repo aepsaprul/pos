@@ -88,14 +88,11 @@ class EmployeeController extends Controller
 
     public function delete(Request $request)
     {
-        // $employee = Employee::find($request->id);
-        // $employee->delete();
-
-        $employees = Employee::get();
+        $employee = Employee::find($request->id);
+        $employee->delete();
 
         return response()->json([
-            'status' => 'Data berhasil dihapus',
-            'employees' => $employees
+            'status' => 'Data berhasil dihapus'
         ]);
     }
 }

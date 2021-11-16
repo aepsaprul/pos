@@ -5,6 +5,7 @@ use App\Http\Controllers\ChangePasswordController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\NavController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReceiveProductController;
@@ -49,6 +50,24 @@ Route::middleware(['auth'])->group(function () {
         Route::post('master/employee/update', [EmployeeController::class, 'update'])->name('employee.update');
         Route::get('master/employee/{id}/delete_btn', [EmployeeController::class, 'deleteBtn'])->name('employee.delete_btn');
         Route::post('master/employee/delete', [EmployeeController::class, 'delete'])->name('employee.delete');
+
+        // navigasi
+        Route::get('master/nav', [NavController::class, 'index'])->name('nav.index');
+
+            // navigasi main
+            Route::post('master/nav/main_store', [NavController::class, 'mainStore'])->name('nav.main_store');
+            Route::get('master/nav/{id}/main_edit', [NavController::class, 'mainEdit'])->name('nav.main_edit');
+            Route::post('master/nav/main_update', [NavController::class, 'mainUpdate'])->name('nav.main_update');
+            Route::get('master/nav/{id}/main_delete_btn', [NavController::class, 'mainDeleteBtn'])->name('nav.main_delete_btn');
+            Route::post('master/nav/main_delete', [NavController::class, 'mainDelete'])->name('nav.main_delete');
+
+            // navigasi sub
+            Route::get('master/nav/sub_create', [NavController::class, 'subCreate'])->name('nav.sub_create');
+            Route::post('master/nav/sub_store', [NavController::class, 'subStore'])->name('nav.sub_store');
+            Route::get('master/nav/{id}/sub_edit', [NavController::class, 'subEdit'])->name('nav.sub_edit');
+            Route::post('master/nav/sub_update', [NavController::class, 'subUpdate'])->name('nav.sub_update');
+            Route::get('master/nav/{id}/sub_delete_btn', [NavController::class, 'subDeleteBtn'])->name('nav.sub_delete_btn');
+            Route::post('master/nav/sub_delete', [NavController::class, 'subDelete'])->name('nav.sub_delete');
 
         // user
         Route::get('master/user', [UserController::class, 'index'])->name('user.index');
