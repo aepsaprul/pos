@@ -22,7 +22,7 @@
 <div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <h6 class="text-uppercase text-center">Data User</h6>
+            <h6 class="text-uppercase text-center">Data Roles</h6>
 
             <div class="row mb-2 mt-1">
                 <div class="col-md-4">
@@ -45,14 +45,12 @@
                         <thead style="background-color: #32a893;">
                             <tr>
                                 <th class="text-white text-center fw-bold">No</th>
-                                <th class="text-white text-center fw-bold">Nama</th>
-                                <th class="text-white text-center fw-bold">Email</th>
-                                <th class="text-white text-center fw-bold">Roles</th>
+                                <th class="text-white text-center fw-bold">Nama Roles</th>
                                 <th class="text-white text-center fw-bold">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($users as $key => $item)
+                            @foreach ($roles as $key => $item)
                                 <tr
                                     @if ($key % 2 == 1)
                                         echo class="tabel_active";
@@ -60,14 +58,6 @@
                                 >
                                     <td class="text-center">{{ $key + 1 }}</td>
                                     <td>{{ $item->name }}</td>
-                                    <td>{{ $item->email }}</td>
-                                    <td>
-                                        @if ($item->roles)
-                                            {{ $item->roles->name }}
-                                        @else
-                                            roles tidak ada
-                                        @endif
-                                    </td>
                                     <td class="text-center">
                                         <div class="btn-group">
                                             <button
@@ -81,7 +71,7 @@
                                             <ul class="dropdown-menu dropdown-menu-end">
                                                 <li>
                                                     <button
-                                                        class="dropdown-item border-bottom py-1 btn-edit"
+                                                        class="dropdown-item py-1 border-bottom btn-edit"
                                                         data-id="{{ $item->id }}"
                                                         type="button">
                                                             <i
@@ -92,13 +82,24 @@
                                                 </li>
                                                 <li>
                                                     <button
-                                                        class="dropdown-item py-1 btn-delete"
+                                                        class="dropdown-item py-1 border-bottom btn-delete"
                                                         data-id="{{ $item->id }}"
                                                         type="button">
                                                             <i
                                                                 class="fas fa-trash-alt border border-1 px-2 py-2 me-2 text-white"
                                                                 style="background-color: #32a893;">
                                                             </i> Hapus
+                                                    </button>
+                                                </li>
+                                                <li>
+                                                    <button
+                                                        class="dropdown-item py-1 btn-access"
+                                                        data-id="{{ $item->id }}"
+                                                        type="button">
+                                                            <i
+                                                                class="fas fa-lock border border-1 px-2 py-2 me-2 text-white"
+                                                                style="background-color: #32a893;">
+                                                            </i> Akses
                                                     </button>
                                                 </li>
                                             </ul>
@@ -121,7 +122,7 @@
         <div class="modal-content">
             <form id="form_create">
                 <div class="modal-header" style="background-color: #32a893;">
-                    <h5 class="modal-title text-white">Tambah User</h5>
+                    <h5 class="modal-title text-white">Tambah Roles</h5>
                     <button
                         type="button"
                         class="btn-close"
@@ -136,41 +137,7 @@
                             type="text"
                             class="form-control form-control-sm"
                             id="create_name"
-                            name="create_name"
-                            maxlength="50"
-                            required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="create_email" class="form-label">Email</label>
-                        <input
-                            type="email"
-                            class="form-control form-control-sm"
-                            id="create_email"
-                            name="create_email"
-                            maxlength="50"
-                            required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="create_password" class="form-label">Password</label>
-                        <input
-                            type="password"
-                            class="form-control form-control-sm"
-                            id="create_password"
-                            name="create_password"
-                            maxlength="100"
-                            required>
-                        <div class="form-check mt-2">
-                            <input class="form-check-input" type="checkbox" value="" id="view_password">
-                            <label class="form-check-label" for="view_password" style="font-size: 12px;">
-                                Lihat Password
-                            </label>
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="create_roles" class="form-label">Roles</label>
-                        <select id="create_roles" name="create_roles" class="form-control form-control-sm" required>
-
-                        </select>
+                            name="create_name">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -194,7 +161,7 @@
                     name="edit_id">
 
                 <div class="modal-header" style="background-color: #32a893;">
-                    <h5 class="modal-title text-white">Ubah User</h5>
+                    <h5 class="modal-title text-white">Ubah Roles</h5>
                     <button
                         type="button"
                         class="btn-close"
@@ -209,25 +176,7 @@
                             type="text"
                             class="form-control form-control-sm"
                             id="edit_name"
-                            name="edit_name"
-                            maxlength="50"
-                            required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="edit_email" class="form-label">Email</label>
-                        <input
-                            type="email"
-                            class="form-control form-control-sm"
-                            id="edit_email"
-                            name="edit_email"
-                            maxlength="50"
-                            required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="edit_roles" class="form-label">Roles</label>
-                        <select id="edit_roles" name="edit_roles" class="form-control form-control-sm" required>
-
-                        </select>
+                            name="edit_name">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -253,6 +202,40 @@
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-secondary text-center" data-bs-dismiss="modal" style="width: 100px;">Tidak</button>
                     <button type="submit" class="btn btn-primary text-center" style="width: 100px;">Ya</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{{-- modal access  --}}
+<div class="modal fade modal-access" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form id="form_access">
+
+                {{-- id  --}}
+                <input
+                    type="hidden"
+                    id="access_id"
+                    name="access_id">
+
+                <div class="modal-header" style="background-color: #32a893;">
+                    <h5 class="modal-title text-white">Hak Akses Roles</h5>
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close">
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <div id="navigation"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="border-0 text-white" style="background-color: #32a893; padding: 5px 10px;">Simpan</button>
                 </div>
             </form>
         </div>
@@ -288,35 +271,12 @@
         });
 
         $('#button-create').on('click', function() {
-            $('#create_roles').empty();
-
-            $.ajax({
-                url: '{{ URL::route('user.create') }}',
-                type: 'GET',
-                success: function(response) {
-                    var roles_val = "<option value=\"\">--Pilih Roles--</option>";
-
-                    $.each(response.roles, function(index, value) {
-                        roles_val += "<option value=\"" + value.id + "\">" + value.name + "</option>";
-                    });
-
-                    $('#create_roles').append(roles_val);
-                    $('.modal-create').modal('show');
-                }
-            });
+            $('.modal-create').modal('show');
         });
 
         $(document).on('shown.bs.modal', '.modal-create', function() {
-            $('#create_supplier_code').focus();
+            $('#create_name').focus();
 
-        });
-
-        $('#view_password').on('change', function() {
-            if ($('#view_password').is(":checked")) {
-                $('#create_password').attr('type', 'text');
-            } else {
-                $('#create_password').attr('type', 'password');
-            }
         });
 
         $('#form_create').submit(function(e) {
@@ -326,14 +286,11 @@
 
             var formData = {
                 name: $('#create_name').val(),
-                email: $('#create_email').val(),
-                password: $('#create_password').val(),
-                roles: $('#create_roles').val(),
                 _token: CSRF_TOKEN
             }
 
             $.ajax({
-                url: '{{ URL::route('user.store') }} ',
+                url: '{{ URL::route('roles.store') }} ',
                 type: 'POST',
                 data: formData,
                 success: function(response) {
@@ -349,7 +306,7 @@
             e.preventDefault();
 
             var id = $(this).attr('data-id');
-            var url = '{{ route("user.edit", ":id") }}';
+            var url = '{{ route("roles.edit", ":id") }}';
             url = url.replace(':id', id );
 
             var formData = {
@@ -364,21 +321,6 @@
                 success: function(response) {
                     $('#edit_id').val(response.id);
                     $('#edit_name').val(response.name);
-                    $('#edit_email').val(response.email);
-
-                    var roles_val = "<option value=\"\">--Pilih Roles--</option>";
-
-                    $.each(response.roles, function(index, value) {
-                        roles_val += "<option value=\"" + value.id + "\"";
-
-                        if (value.id == response.roles_id) {
-                            roles_val += " selected";
-                        }
-
-                        roles_val += ">" + value.name + "</option>";
-                    });
-
-                    $('#edit_roles').append(roles_val);
 
                     $('.modal-edit').modal('show');
                 }
@@ -393,13 +335,11 @@
             var formData = {
                 id: $('#edit_id').val(),
                 name: $('#edit_name').val(),
-                email: $('#edit_email').val(),
-                roles: $('#edit_roles').val(),
                 _token: CSRF_TOKEN
             }
 
             $.ajax({
-                url: '{{ URL::route('user.update') }}',
+                url: '{{ URL::route('roles.update') }}',
                 type: 'POST',
                 data: formData,
                 success: function(response) {
@@ -415,7 +355,7 @@
             e.preventDefault()
 
             var id = $(this).attr('data-id');
-            var url = '{{ route("user.delete_btn", ":id") }}';
+            var url = '{{ route("roles.delete_btn", ":id") }}';
             url = url.replace(':id', id );
 
             var formData = {
@@ -446,7 +386,7 @@
             }
 
             $.ajax({
-                url: '{{ URL::route('user.delete') }}',
+                url: '{{ URL::route('roles.delete') }}',
                 type: 'POST',
                 data: formData,
                 success: function(response) {
@@ -454,6 +394,127 @@
                     setTimeout(() => {
                         window.location.reload(1);
                     }, 1000);
+                }
+            });
+        });
+
+        $('body').on('click', '.btn-access', function(e) {
+            e.preventDefault();
+            $('#navigation').empty();
+
+            var id = $(this).attr('data-id');
+            var url = '{{ route("roles.access", ":id") }}';
+            url = url.replace(':id', id );
+
+            var formData = {
+                id: id,
+                _token: CSRF_TOKEN
+            }
+
+            $.ajax({
+                url: url,
+                type: 'GET',
+                data: formData,
+                success: function(response) {
+                    $('#access_id').val(response.id);
+
+                    $.each(response.nav_mains, function(index, value) {
+                        if (value.nav_sub.length == 0) {
+                            var nav_main_value = "" +
+                                "<div class=\"form-check\">" +
+                                    "<input class=\"form-check-input check_nav_main\" type=\"checkbox\" value=\"" + value.id + "\" name=\"check_nav_main[]\" id=\"check_nav_main_" + value.id + "\" data-id=\"" + value.id + "\"";
+
+                                    $.each(response.roles_nav_mains, function(index, val) {
+                                        if (val.nav_main_id == value.id) {
+                                            nav_main_value += " checked";
+                                        }
+                                    });
+
+                                    nav_main_value += ">" +
+                                    "<label class=\"form-check-label\" for=\"check_nav_main_" + value.id + "\">" +
+                                        value.title
+                                    "</label>" +
+                                "</div>";
+                            $('#navigation').append(nav_main_value);
+                        } else {
+                            var nav_main_value = "" +
+                                "<div class=\"form-check\">" +
+                                    "<input class=\"form-check-input check_nav_main\" type=\"checkbox\" value=\"" + value.id + "\" name=\"check_nav_main[]\" id=\"check_nav_main_" + value.id + "\" data-id=\"" + value.id + "\"";
+
+                                    $.each(response.roles_nav_mains, function(index, val) {
+                                        if (val.nav_main_id == value.id) {
+                                            nav_main_value += " checked";
+                                        }
+                                    });
+
+                                    nav_main_value += ">" +
+                                    "<label class=\"form-check-label\" for=\"check_nav_main_" + value.id + "\">" +
+                                        value.title
+                                    "</label>" +
+                                "</div>" +
+                                "<ul class=\"list-group\">";
+                                $.each(value.nav_sub, function(index, value) {
+                                    nav_main_value += "" +
+                                        "<li class=\"list-group-item p-0 border-0\">" +
+                                            "<div class=\"form-check\">" +
+                                                "<input class=\"form-check-input check_nav_sub\" type=\"checkbox\" value=\"" + value.id + "\" name=\"check_nav_sub[]\" id=\"check_nav_sub_" + value.id + "\" data-main=\"" + value.nav_main_id + "\"";
+
+                                                $.each(response.roles_nav_subs, function(index, val) {
+                                                    if (val.nav_sub_id == value.id) {
+                                                        nav_main_value += " checked";
+                                                    }
+                                                });
+
+                                                nav_main_value += ">" +
+                                                "<label class=\"form-check-label\" for=\"check_nav_sub_" + value.id + "\">" +
+                                                    value.title
+                                                "</label>" +
+                                            "</div>" +
+                                        "</li>";
+                                });
+                                nav_main_value += "</ul>";
+                            $('#navigation').append(nav_main_value);
+                        }
+                    });
+
+                    $('.modal-access').modal('show');
+                }
+            });
+        });
+
+        $('#form_access').submit(function(e) {
+            e.preventDefault();
+
+            $('.modal-access').modal('hide');
+
+            const check_nav_main = [];
+            const check_nav_sub = [];
+
+            $('.check_nav_main').each(function() {
+                if ($(this).is(":checked")) {
+                    check_nav_main.push($(this).val());
+                }
+            });
+
+            $('.check_nav_sub').each(function() {
+                if ($(this).is(":checked")) {
+                    check_nav_sub.push($(this).val());
+                }
+            });
+
+            var formData = {
+                id: $('#access_id').val(),
+                nav_main: check_nav_main,
+                nav_sub: check_nav_sub,
+                _token: CSRF_TOKEN
+            }
+
+            $.ajax({
+                url: '{{ URL::route('roles.access_save') }}',
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+
                 }
             });
         });

@@ -508,6 +508,8 @@
         // sub create
 
         $('#sub-button-create').on('click', function() {
+            $('#sub_create_nav_main').empty();
+
             $.ajax({
                 url: '{{ URL::route('nav.sub_create') }}',
                 type: 'GET',

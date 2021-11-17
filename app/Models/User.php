@@ -47,13 +47,8 @@ class User extends Authenticatable
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function navMainUser()
-    {
-        return $this->hasMany(NavMainUser::class, 'user_id', 'id');
-    }
-    
-    public function navSubUser()
-    {
-        return $this->hasMany(NavSubUser::class, 'user_id', 'id');
+
+    public function roles() {
+        return $this->belongsTo(Roles::class, 'roles_id', 'id');
     }
 }

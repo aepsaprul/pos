@@ -12,7 +12,7 @@ class NavController extends Controller
     public function index()
     {
         $nav_main = NavMain::get();
-        $nav_sub = NavSub::get();
+        $nav_sub = NavSub::orderBy('nav_main_id', 'asc')->get();
 
         return view('pages.navigasi.index', ['nav_mains' => $nav_main, 'nav_subs' => $nav_sub]);
     }

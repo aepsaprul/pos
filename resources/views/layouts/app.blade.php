@@ -63,7 +63,7 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 text-uppercase">
-                        @if (Auth::user()->roles == "administrator")
+                        @if (Auth::user()->roles_id == "0")
                             <li class="nav-item">
                                 <a
                                     class="nav-link {{ set_active(['home', 'home/*']) }}"
@@ -105,7 +105,7 @@
                                     <li>
                                         <a
                                             class="dropdown-item border-bottom"
-                                            href="#">
+                                            href="{{ route('roles.index') }}">
                                                 <i class="fas fa-chevron-right"></i>
                                                     Roles
                                         </a>
@@ -231,7 +231,7 @@
                                 </a>
                             </li>
                         @else
-                            @foreach (Auth::user()->navMainUser as $item)
+                            @foreach (Auth::user()->roles->rolesNavMain as $item)
                                 @if ($item->navMain->navSub->isEmpty())
                                     <li class="nav-item">
                                         <a class="nav-link" aria-current="page" href="{{ url($item->navMain->link) }}">{{ $item->navMain->title }}</a>
@@ -242,7 +242,7 @@
                                             {{ $item->navMain->title }}
                                         </a>
                                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                            @foreach (Auth::user()->navSubUser as $nav_sub)
+                                            @foreach (Auth::user()->roles->rolesNavSub as $nav_sub)
                                                 @if ($item->nav_main_id == $nav_sub->navSub->nav_main_id)
                                                     <li><a class="dropdown-item" href="{{ url($nav_sub->navSub->link) }}">- {{ $nav_sub->navSub->title }}</a></li>
                                                 @endif

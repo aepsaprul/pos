@@ -10,6 +10,7 @@ use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReceiveProductController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\RolesController;
 use App\Http\Controllers\SalesController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\SupplierController;
@@ -69,8 +70,19 @@ Route::middleware(['auth'])->group(function () {
             Route::get('master/nav/{id}/sub_delete_btn', [NavController::class, 'subDeleteBtn'])->name('nav.sub_delete_btn');
             Route::post('master/nav/sub_delete', [NavController::class, 'subDelete'])->name('nav.sub_delete');
 
+        // roles
+        Route::get('master/roles', [RolesController::class, 'index'])->name('roles.index');
+        Route::post('master/roles/store', [RolesController::class, 'store'])->name('roles.store');
+        Route::get('master/roles/{id}/edit', [RolesController::class, 'edit'])->name('roles.edit');
+        Route::post('master/roles/update', [RolesController::class, 'update'])->name('roles.update');
+        Route::get('master/roles/{id}/delete_btn', [RolesController::class, 'deleteBtn'])->name('roles.delete_btn');
+        Route::post('master/roles/delete', [RolesController::class, 'delete'])->name('roles.delete');
+        Route::get('master/roles/{id}/access', [RolesController::class, 'access'])->name('roles.access');
+        Route::post('master/roles/access_save', [RolesController::class, 'accessSave'])->name('roles.access_save');
+
         // user
         Route::get('master/user', [UserController::class, 'index'])->name('user.index');
+        Route::get('master/user/create', [UserController::class, 'create'])->name('user.create');
         Route::post('master/user/store', [UserController::class, 'store'])->name('user.store');
         Route::get('master/user/{id}/edit', [UserController::class, 'edit'])->name('user.edit');
         Route::post('master/user/update', [UserController::class, 'update'])->name('user.update');
