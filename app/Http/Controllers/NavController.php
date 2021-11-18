@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\NavMain;
 use App\Models\NavSub;
 use App\Models\NavSubUser;
+use App\Models\RolesNavMain;
+use App\Models\RolesNavSub;
 use Illuminate\Http\Request;
 
 class NavController extends Controller
@@ -124,10 +126,23 @@ class NavController extends Controller
     public function mainDelete(Request $request)
     {
         $nav_main = NavMain::find($request->id);
-        $nav_main->delete();
+
+        $nav_sub = NavSub::where('nav_main_id', $request->id)->first();
+
+        if ($nav_sub) {
+            $status = "false";
+        } else {
+            $nav_main->delete();
+
+            $roles_nav_main = RolesNavMain::where('nav_main_id', $nav_main->id);
+            $roles_nav_main->delete();
+
+            $status = "true";
+        }
 
         return response()->json([
-            'status' => 'Data berhasil dihapus'
+            'status' => $status,
+            'title' => $nav_main->title
         ]);
     }
 
@@ -145,6 +160,9 @@ class NavController extends Controller
     {
         $nav_sub = NavSub::find($request->id);
         $nav_sub->delete();
+
+        $roles_nav_sub = RolesNavSub::where('nav_sub_id', $nav_sub->id);
+        $roles_nav_sub->delete();
 
         return response()->json([
             'status' => 'Data berhasil dihapus'

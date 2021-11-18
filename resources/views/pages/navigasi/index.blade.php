@@ -692,7 +692,8 @@
         // main delete
 
         $('body').on('click', '.main-btn-delete', function(e) {
-            e.preventDefault()
+            e.preventDefault();
+            $('.main_delete_title').empty();
 
             var id = $(this).attr('data-id');
             var url = '{{ route("nav.main_delete_btn", ":id") }}';
@@ -730,10 +731,14 @@
                 type: 'POST',
                 data: formData,
                 success: function(response) {
-                    $('.modal-proses').modal('show');
-                    setTimeout(() => {
-                        window.location.reload(1);
-                    }, 1000);
+                    if (response.status == "false") {
+                        alert('Menu utama \"' + response.title + '\" terdapat di menu sub, hapus menu sub yg terdapat menu utama \"' + response.title + '\" terlebih dahulu ');
+                    } else {
+                        $('.modal-proses').modal('show');
+                        setTimeout(() => {
+                            window.location.reload(1);
+                        }, 1000);
+                    }
                 }
             });
         });
@@ -741,7 +746,8 @@
         // sub delete
 
         $('body').on('click', '.sub-btn-delete', function(e) {
-            e.preventDefault()
+            e.preventDefault();
+            $('.sub_delete_title').empty();
 
             var id = $(this).attr('data-id');
             var url = '{{ route("nav.sub_delete_btn", ":id") }}';

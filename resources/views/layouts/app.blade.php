@@ -38,6 +38,18 @@
         .active {
             border-bottom: 2px solid rgb(99, 56, 219);
         }
+        .dropdown ul li {
+            border-bottom: 1px solid rgb(209, 209, 209);
+        }
+        .dropdown ul li:last-child {
+            border-bottom: none;
+        }
+        .list-navigation {
+            border-bottom: 1px solid rgb(209, 209, 209);
+        }
+        .list-navigation:last-child {
+            border-bottom: none;
+        }
     </style>
 
     @yield('style')
@@ -88,7 +100,7 @@
                                     aria-labelledby="navbarDropdown">
                                     <li>
                                         <a
-                                            class="dropdown-item border-bottom"
+                                            class="dropdown-item"
                                             href="{{ route('employee.index') }}">
                                                 <i class="fas fa-chevron-right"></i>
                                                     Karyawan
@@ -96,7 +108,7 @@
                                     </li>
                                     <li>
                                         <a
-                                            class="dropdown-item border-bottom"
+                                            class="dropdown-item"
                                             href="{{ route('nav.index') }}">
                                                 <i class="fas fa-chevron-right"></i>
                                                     Navigasi
@@ -104,7 +116,7 @@
                                     </li>
                                     <li>
                                         <a
-                                            class="dropdown-item border-bottom"
+                                            class="dropdown-item"
                                             href="{{ route('roles.index') }}">
                                                 <i class="fas fa-chevron-right"></i>
                                                     Roles
@@ -118,21 +130,29 @@
                                                     User
                                         </a>
                                     </li>
+                                    <li>
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ route('product_category.index') }}">
+                                                <i class="fas fa-chevron-right"></i>
+                                                    Kategori Produk
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ route('product.index') }}">
+                                                <i class="fas fa-chevron-right"></i>
+                                                    Produk
+                                        </a>
+                                    </li>
                                 </ul>
                             </li>
                             <li class="nav-item">
                                 <a
-                                    class="nav-link {{ set_active(['product_category', 'product_category/*']) }}"
+                                    class="nav-link {{ set_active(['product_shop', 'product_shop/*']) }}"
                                     aria-current="page"
-                                    href="{{ route('product_category.index') }}">
-                                        Kategori
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a
-                                    class="nav-link {{ set_active(['product', 'product/*']) }}"
-                                    aria-current="page"
-                                    href="{{ route('product.index') }}">
+                                    href="{{ route('product_shop.index') }}">
                                         Produk
                                 </a>
                             </li>
@@ -152,7 +172,7 @@
                                     aria-labelledby="navbarDropdown">
                                     <li>
                                         <a
-                                            class="dropdown-item border-bottom"
+                                            class="dropdown-item"
                                             href="{{ route('received_product.index') }}">
                                                 <i class="fas fa-chevron-right"></i>
                                                     Produk Masuk
@@ -189,7 +209,7 @@
                                     class="nav-link {{ set_active(['shop', 'shop/*']) }}"
                                     aria-current="page"
                                     href="{{ route('shop.index') }}">
-                                        Shop
+                                        Toko
                                 </a>
                             </li>
                             <li class="nav-item dropdown">
@@ -206,7 +226,7 @@
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                     <li>
                                         <a
-                                            class="dropdown-item border-bottom"
+                                            class="dropdown-item"
                                             href="{{ route('cashier.index') }}">
                                                 <i class="fas fa-chevron-right"></i>
                                                     Cash
@@ -234,17 +254,35 @@
                             @foreach (Auth::user()->roles->rolesNavMain as $item)
                                 @if ($item->navMain->navSub->isEmpty())
                                     <li class="nav-item">
-                                        <a class="nav-link" aria-current="page" href="{{ url($item->navMain->link) }}">{{ $item->navMain->title }}</a>
+                                        <a
+                                            class="nav-link"
+                                            aria-current="page"
+                                            href="{{ url($item->navMain->link) }}">
+                                                {{ $item->navMain->title }}
+                                        </a>
                                     </li>
                                 @else
                                     <li class="nav-item dropdown">
-                                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            {{ $item->navMain->title }}
+                                        <a
+                                            class="nav-link dropdown-toggle"
+                                            href="#"
+                                            id="navbarDropdown"
+                                            role="button"
+                                            data-bs-toggle="dropdown"
+                                            aria-expanded="false">
+                                                {{ $item->navMain->title }}
                                         </a>
                                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                             @foreach (Auth::user()->roles->rolesNavSub as $nav_sub)
                                                 @if ($item->nav_main_id == $nav_sub->navSub->nav_main_id)
-                                                    <li><a class="dropdown-item" href="{{ url($nav_sub->navSub->link) }}">- {{ $nav_sub->navSub->title }}</a></li>
+                                                    <li class="list-navigation">
+                                                        <a
+                                                            class="dropdown-item"
+                                                            href="{{ url($nav_sub->navSub->link) }}">
+                                                                <i class="fas fa-chevron-right"></i>
+                                                                    {{ $nav_sub->navSub->title }}
+                                                        </a>
+                                                    </li>
                                                 @endif
                                             @endforeach
                                         </ul>

@@ -8,6 +8,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NavController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductShopController;
 use App\Http\Controllers\ReceiveProductController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RolesController;
@@ -91,6 +92,24 @@ Route::middleware(['auth'])->group(function () {
         Route::get('master/user/{id}/akses', [UserController::class, 'akses'])->name('user.akses');
         Route::put('master/user/{id}/akses_simpan', [UserController::class, 'aksesSimpan'])->name('user.akses_simpan');
 
+        // product category
+        Route::get('master/product_category', [ProductCategoryController::class, 'index'])->name('product_category.index');
+        Route::post('master/product_category/store', [ProductCategoryController::class, 'store'])->name('product_category.store');
+        Route::post('master/product_category/update', [ProductCategoryController::class, 'update'])->name('product_category.update');
+        Route::get('master/product_category/{id}/edit', [ProductCategoryController::class, 'edit'])->name('product_category.edit');
+        Route::get('master/product_category/{id}/delete_btn', [ProductCategoryController::class, 'deleteBtn'])->name('product_category.delete_btn');
+        Route::post('master/product_category/delete', [ProductCategoryController::class, 'delete'])->name('product_category.delete');
+
+        // product
+        Route::get('master/product', [ProductController::class, 'index'])->name('product.index');
+        Route::get('master/product/create', [ProductController::class, 'create'])->name('product.create');
+        Route::post('master/product/store', [ProductController::class, 'store'])->name('product.store');
+        Route::post('master/product/update', [ProductController::class, 'update'])->name('product.update');
+        Route::get('master/product/{id}/edit', [ProductController::class, 'edit'])->name('product.edit');
+        Route::get('master/product/{id}/delete_btn', [ProductController::class, 'deleteBtn'])->name('product.delete_btn');
+        Route::post('master/product/delete', [ProductController::class, 'delete'])->name('product.delete');
+
+
     // customer
     Route::get('customer', [CustomerController::class, 'index'])->name('customer.index');
     Route::post('customer/store', [CustomerController::class, 'store'])->name('customer.store');
@@ -98,23 +117,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('customer/{id}/edit', [CustomerController::class, 'edit'])->name('customer.edit');
     Route::get('customer/{id}/delete_btn', [CustomerController::class, 'deleteBtn'])->name('customer.delete_btn');
     Route::post('customer/delete', [CustomerController::class, 'delete'])->name('customer.delete');
-
-    // product category
-    Route::get('product_category', [ProductCategoryController::class, 'index'])->name('product_category.index');
-    Route::post('product_category/store', [ProductCategoryController::class, 'store'])->name('product_category.store');
-    Route::post('product_category/update', [ProductCategoryController::class, 'update'])->name('product_category.update');
-    Route::get('product_category/{id}/edit', [ProductCategoryController::class, 'edit'])->name('product_category.edit');
-    Route::get('product_category/{id}/delete_btn', [ProductCategoryController::class, 'deleteBtn'])->name('product_category.delete_btn');
-    Route::post('product_category/delete', [ProductCategoryController::class, 'delete'])->name('product_category.delete');
-
-    // product
-    Route::get('product', [ProductController::class, 'index'])->name('product.index');
-    Route::get('product/create', [ProductController::class, 'create'])->name('product.create');
-    Route::post('product/store', [ProductController::class, 'store'])->name('product.store');
-    Route::post('product/update', [ProductController::class, 'update'])->name('product.update');
-    Route::get('product/{id}/edit', [ProductController::class, 'edit'])->name('product.edit');
-    Route::get('product/{id}/delete_btn', [ProductController::class, 'deleteBtn'])->name('product.delete_btn');
-    Route::post('product/delete', [ProductController::class, 'delete'])->name('product.delete');
 
     // home
     Route::post('home/product', [HomeController::class, 'getProduct'])->name('home.product');
@@ -162,6 +164,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('shop/{id}/edit', [ShopController::class, 'edit'])->name('shop.edit');
     Route::get('shop/{id}/delete_btn', [ShopController::class, 'deleteBtn'])->name('shop.delete_btn');
     Route::post('shop/delete', [ShopController::class, 'delete'])->name('shop.delete');
+
+    // product shop
+    Route::get('product_shop', [ProductShopController::class, 'index'])->name('product_shop.index');
+    Route::get('product_shop/create', [ProductShopController::class, 'create'])->name('product_shop.create');
+    Route::post('product_shop/store', [ProductShopController::class, 'store'])->name('product_shop.store');
+    Route::post('product_shop/update', [ProductShopController::class, 'update'])->name('product_shop.update');
+    Route::get('product_shop/{id}/edit', [ProductShopController::class, 'edit'])->name('product_shop.edit');
+    Route::get('product_shop/{id}/delete_btn', [ProductShopController::class, 'deleteBtn'])->name('product_shop.delete_btn');
+    Route::post('product_shop/delete', [ProductShopController::class, 'delete'])->name('product_shop.delete');
 
     // report
     Route::get('report', [ReportController::class, 'index'])->name('report.index');

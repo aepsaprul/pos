@@ -26,16 +26,18 @@
 
             <div class="row mb-2 mt-1">
                 <div class="col-md-4">
-                    <button
-                        id="button-create"
-                        type="button"
-                        class="btn"
-                        title="Tambah">
-                            <i
-                                class="fas fa-plus border border-0 py-2 me-2 text-white"
-                                style="background-color: #32a893; margin-left: -10px; padding-right: 10px; padding-left: 10px;">
-                            </i> Tambah
-                    </button>
+                    @if (Auth::user()->roles_id == 0)
+                        <button
+                            id="button-create"
+                            type="button"
+                            class="btn"
+                            title="Tambah">
+                                <i
+                                    class="fas fa-plus border border-0 py-2 me-2 text-white"
+                                    style="background-color: #32a893; margin-left: -10px; padding-right: 10px; padding-left: 10px;">
+                                </i> Tambah
+                        </button>
+                    @endif
                 </div>
             </div>
 
@@ -514,7 +516,10 @@
                 type: 'POST',
                 data: formData,
                 success: function(response) {
-
+                    $('.modal-proses').modal('show');
+                    setTimeout(() => {
+                        window.location.reload(1);
+                    }, 1000);
                 }
             });
         });

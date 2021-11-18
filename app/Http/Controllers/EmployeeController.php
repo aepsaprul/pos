@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Employee;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class EmployeeController extends Controller
 {
@@ -17,6 +18,11 @@ class EmployeeController extends Controller
     public function store(Request $request)
     {
         $employee = new Employee;
+
+        if (Auth::user()->employee->shop) {
+            $employee->shop_id = Auth::user()->employee->shop->id;
+        }
+
         $employee->full_name = $request->full_name;
         $employee->nickname = $request->nickname;
         $employee->email = $request->email;

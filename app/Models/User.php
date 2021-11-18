@@ -48,6 +48,10 @@ class User extends Authenticatable
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
 
+    public function employee() {
+        return $this->belongsTo(Employee::class, 'employee_id', 'id');
+    }
+
     public function roles() {
         return $this->belongsTo(Roles::class, 'roles_id', 'id');
     }
