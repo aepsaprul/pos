@@ -6,6 +6,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NavController;
+use App\Http\Controllers\PositionController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductShopController;
@@ -52,6 +53,14 @@ Route::middleware(['auth'])->group(function () {
         Route::post('master/employee/update', [EmployeeController::class, 'update'])->name('employee.update');
         Route::get('master/employee/{id}/delete_btn', [EmployeeController::class, 'deleteBtn'])->name('employee.delete_btn');
         Route::post('master/employee/delete', [EmployeeController::class, 'delete'])->name('employee.delete');
+
+        // position
+        Route::get('master/position', [PositionController::class, 'index'])->name('position.index');
+        Route::post('master/position/store', [PositionController::class, 'store'])->name('position.store');
+        Route::get('master/position/{id}/edit', [PositionController::class, 'edit'])->name('position.edit');
+        Route::post('master/position/update', [PositionController::class, 'update'])->name('position.update');
+        Route::get('master/position/{id}/delete_btn', [PositionController::class, 'deleteBtn'])->name('position.delete_btn');
+        Route::post('master/position/delete', [PositionController::class, 'delete'])->name('position.delete');
 
         // navigasi
         Route::get('master/nav', [NavController::class, 'index'])->name('nav.index');
@@ -109,6 +118,14 @@ Route::middleware(['auth'])->group(function () {
         Route::get('master/product/{id}/delete_btn', [ProductController::class, 'deleteBtn'])->name('product.delete_btn');
         Route::post('master/product/delete', [ProductController::class, 'delete'])->name('product.delete');
 
+        // shop
+        Route::get('master/shop', [ShopController::class, 'index'])->name('shop.index');
+        Route::post('master/shop/store', [ShopController::class, 'store'])->name('shop.store');
+        Route::post('master/shop/update', [ShopController::class, 'update'])->name('shop.update');
+        Route::get('master/shop/{id}/edit', [ShopController::class, 'edit'])->name('shop.edit');
+        Route::get('master/shop/{id}/delete_btn', [ShopController::class, 'deleteBtn'])->name('shop.delete_btn');
+        Route::post('master/shop/delete', [ShopController::class, 'delete'])->name('shop.delete');
+
 
     // customer
     Route::get('customer', [CustomerController::class, 'index'])->name('customer.index');
@@ -156,14 +173,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('transaction/received_product/{id}/edit', [ReceiveProductController::class, 'edit'])->name('received_product.edit');
         Route::get('transaction/received_product/{id}/delete_btn', [ReceiveProductController::class, 'deleteBtn'])->name('received_product.delete_btn');
         Route::post('transaction/received_product/delete', [ReceiveProductController::class, 'delete'])->name('received_product.delete');
-
-    // shop
-    Route::get('shop', [ShopController::class, 'index'])->name('shop.index');
-    Route::post('shop/store', [ShopController::class, 'store'])->name('shop.store');
-    Route::post('shop/update', [ShopController::class, 'update'])->name('shop.update');
-    Route::get('shop/{id}/edit', [ShopController::class, 'edit'])->name('shop.edit');
-    Route::get('shop/{id}/delete_btn', [ShopController::class, 'deleteBtn'])->name('shop.delete_btn');
-    Route::post('shop/delete', [ShopController::class, 'delete'])->name('shop.delete');
 
     // product shop
     Route::get('product_shop', [ProductShopController::class, 'index'])->name('product_shop.index');

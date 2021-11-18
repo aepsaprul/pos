@@ -109,6 +109,14 @@
                                     <li>
                                         <a
                                             class="dropdown-item"
+                                            href="{{ route('position.index') }}">
+                                                <i class="fas fa-chevron-right"></i>
+                                                    Jabatan
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a
+                                            class="dropdown-item"
                                             href="{{ route('nav.index') }}">
                                                 <i class="fas fa-chevron-right"></i>
                                                     Navigasi
@@ -144,6 +152,14 @@
                                             href="{{ route('product.index') }}">
                                                 <i class="fas fa-chevron-right"></i>
                                                     Produk
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ route('shop.index') }}">
+                                                <i class="fas fa-chevron-right"></i>
+                                                    Toko
                                         </a>
                                     </li>
                                 </ul>
@@ -202,14 +218,6 @@
                                     ria-current="page"
                                     href="{{ route('supplier.index') }}">
                                         Supplier
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a
-                                    class="nav-link {{ set_active(['shop', 'shop/*']) }}"
-                                    aria-current="page"
-                                    href="{{ route('shop.index') }}">
-                                        Toko
                                 </a>
                             </li>
                             <li class="nav-item dropdown">
