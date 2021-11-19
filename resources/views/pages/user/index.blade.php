@@ -2,6 +2,7 @@
 
 @section('style')
 <link href="{{ asset('lib/datatables/css/dataTables.bootstrap5.min.css') }}" rel="stylesheet">
+<link rel="stylesheet" href="{{ asset('lib/select2/css/select2.min.css') }}">
 
 <style>
     .col-md-12,
@@ -60,12 +61,18 @@
                                 >
                                     <td class="text-center">{{ $key + 1 }}</td>
                                     <td>{{ $item->name }}</td>
-                                    <td>{{ $item->email }}</td>
+                                    <td>
+                                        @if ($item->employee)
+                                            {{ $item->employee->email }}
+                                        @else
+                                            Email tidak ada
+                                        @endif
+                                    </td>
                                     <td>
                                         @if ($item->roles)
                                             {{ $item->roles->name }}
                                         @else
-                                            roles tidak ada
+                                            Roles tidak ada
                                         @endif
                                     </td>
                                     <td class="text-center">
@@ -79,17 +86,6 @@
                                                     <i class="fas fa-cog"></i>
                                             </button>
                                             <ul class="dropdown-menu dropdown-menu-end">
-                                                <li>
-                                                    <button
-                                                        class="dropdown-item border-bottom py-1 btn-edit"
-                                                        data-id="{{ $item->id }}"
-                                                        type="button">
-                                                            <i
-                                                                class="fas fa-pencil-alt border border-1 px-2 py-2 me-2 text-white"
-                                                                style="background-color: #32a893;">
-                                                            </i> Ubah
-                                                    </button>
-                                                </li>
                                                 <li>
                                                     <button
                                                         class="dropdown-item py-1 btn-delete"
@@ -131,24 +127,10 @@
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="create_name" class="form-label">Nama</label>
-                        <input
-                            type="text"
-                            class="form-control form-control-sm"
-                            id="create_name"
-                            name="create_name"
-                            maxlength="50"
-                            required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="create_email" class="form-label">Email</label>
-                        <input
-                            type="email"
-                            class="form-control form-control-sm"
-                            id="create_email"
-                            name="create_email"
-                            maxlength="50"
-                            required>
+                        <label for="create_employee_id" class="form-label">Nama Karyawan</label>
+                        <select name="create_employee_id" id="create_employee_id" class="form-control form-control-sm select2_employee">
+
+                        </select>
                     </div>
                     <div class="mb-3">
                         <label for="create_password" class="form-label">Password</label>
@@ -214,16 +196,6 @@
                             required>
                     </div>
                     <div class="mb-3">
-                        <label for="edit_email" class="form-label">Email</label>
-                        <input
-                            type="email"
-                            class="form-control form-control-sm"
-                            id="edit_email"
-                            name="edit_email"
-                            maxlength="50"
-                            required>
-                    </div>
-                    <div class="mb-3">
                         <label for="edit_roles" class="form-label">Roles</label>
                         <select id="edit_roles" name="edit_roles" class="form-control form-control-sm" required>
 
@@ -278,6 +250,7 @@
 <script src="{{ asset('lib/datatables/js/dataTables.buttons.min.js') }}"></script>
 <script src="{{ asset('lib/datatables/js/jszip.min.js') }}"></script>
 <script src="{{ asset('lib/datatables/js/buttons.html5.min.js') }}"></script>
+<script src="{{ asset('lib/select2/js/select2.min.js') }}"></script>
 
 <script>
     $(document).ready(function() {
@@ -289,17 +262,25 @@
 
         $('#button-create').on('click', function() {
             $('#create_roles').empty();
+            $('#create_employee_id').empty();
 
             $.ajax({
                 url: '{{ URL::route('user.create') }}',
                 type: 'GET',
                 success: function(response) {
+                    var employee_val = "<option value=\"\">--Pilih Karyawan--</option>";
+
+                    $.each(response.employees, function(index, value) {
+                        employee_val += "<option value=\"" + value.id + "\">" + value.full_name + "</option>";
+                    });
+
                     var roles_val = "<option value=\"\">--Pilih Roles--</option>";
 
                     $.each(response.roles, function(index, value) {
                         roles_val += "<option value=\"" + value.id + "\">" + value.name + "</option>";
                     });
 
+                    $('#create_employee_id').append(employee_val);
                     $('#create_roles').append(roles_val);
                     $('.modal-create').modal('show');
                 }
@@ -307,8 +288,11 @@
         });
 
         $(document).on('shown.bs.modal', '.modal-create', function() {
-            $('#create_supplier_code').focus();
+            $('#create_employee_id').focus();
 
+            $('.select2_employee').select2({
+                dropdownParent: $('.modal-create')
+            });
         });
 
         $('#view_password').on('change', function() {
@@ -325,7 +309,7 @@
             $('.modal-create').modal('hide');
 
             var formData = {
-                name: $('#create_name').val(),
+                employee_id: $('#create_employee_id').val(),
                 email: $('#create_email').val(),
                 password: $('#create_password').val(),
                 roles: $('#create_roles').val(),
@@ -334,72 +318,6 @@
 
             $.ajax({
                 url: '{{ URL::route('user.store') }} ',
-                type: 'POST',
-                data: formData,
-                success: function(response) {
-                    $('.modal-proses').modal('show');
-                    setTimeout(() => {
-                        window.location.reload(1);
-                    }, 1000);
-                }
-            });
-        });
-
-        $('body').on('click', '.btn-edit', function(e) {
-            e.preventDefault();
-
-            var id = $(this).attr('data-id');
-            var url = '{{ route("user.edit", ":id") }}';
-            url = url.replace(':id', id );
-
-            var formData = {
-                id: id,
-                _token: CSRF_TOKEN
-            }
-
-            $.ajax({
-                url: url,
-                type: 'GET',
-                data: formData,
-                success: function(response) {
-                    $('#edit_id').val(response.id);
-                    $('#edit_name').val(response.name);
-                    $('#edit_email').val(response.email);
-
-                    var roles_val = "<option value=\"\">--Pilih Roles--</option>";
-
-                    $.each(response.roles, function(index, value) {
-                        roles_val += "<option value=\"" + value.id + "\"";
-
-                        if (value.id == response.roles_id) {
-                            roles_val += " selected";
-                        }
-
-                        roles_val += ">" + value.name + "</option>";
-                    });
-
-                    $('#edit_roles').append(roles_val);
-
-                    $('.modal-edit').modal('show');
-                }
-            })
-        });
-
-        $('#form_edit').submit(function(e) {
-            e.preventDefault();
-
-            $('.modal-edit').modal('hide');
-
-            var formData = {
-                id: $('#edit_id').val(),
-                name: $('#edit_name').val(),
-                email: $('#edit_email').val(),
-                roles: $('#edit_roles').val(),
-                _token: CSRF_TOKEN
-            }
-
-            $.ajax({
-                url: '{{ URL::route('user.update') }}',
                 type: 'POST',
                 data: formData,
                 success: function(response) {

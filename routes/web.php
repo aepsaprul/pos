@@ -47,6 +47,7 @@ Route::middleware(['auth'])->group(function () {
 
         // employee
         Route::get('master/employee', [EmployeeController::class, 'index'])->name('employee.index');
+        Route::get('master/employee/create', [EmployeeController::class, 'create'])->name('employee.create');
         Route::post('master/employee/store', [EmployeeController::class, 'store'])->name('employee.store');
         Route::get('master/employee/{id}/show', [EmployeeController::class, 'show'])->name('employee.show');
         Route::get('master/employee/{id}/edit', [EmployeeController::class, 'edit'])->name('employee.edit');

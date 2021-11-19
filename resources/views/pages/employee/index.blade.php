@@ -45,6 +45,7 @@
                                 <th class="text-white text-center fw-bold">Nama</th>
                                 <th class="text-white text-center fw-bold">Email</th>
                                 <th class="text-white text-center fw-bold">Telepon</th>
+                                <th class="text-white text-center fw-bold">Jabatan</th>
                                 <th class="text-white text-center fw-bold">Aksi</th>
                             </tr>
                         </thead>
@@ -59,6 +60,15 @@
                                     <td><span class="full_name_{{ $item->id }}">{{ $item->full_name }}</span></td>
                                     <td><span class="email_{{ $item->id }}">{{ $item->email }}</span></td>
                                     <td><span class="contact_{{ $item->id }}">{{ $item->contact }}</span></td>
+                                    <td>
+                                        <span class="position_{{ $item->id }}">
+                                            @if ($item->position)
+                                                {{ $item->position->name }}
+                                            @else
+                                                Jabatan tidak ada
+                                            @endif
+                                        </span>
+                                    </td>
                                     <td class="text-center">
                                         <div class="btn-group">
                                             <button
@@ -172,6 +182,12 @@
                         <label for="create_address" class="form-label">Alamat</label>
                         <textarea class="form-control" name="create_address" id="create_address" rows="3" required></textarea>
                     </div>
+                    <div class="mb-3">
+                        <label for="create_position_id" class="form-label">Jabatan</label>
+                        <select name="create_position_id" id="create_position_id" class="form-control form-control-sm">
+
+                        </select>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="border-0 text-white" style="background-color: #32a893; padding: 5px 10px;">Simpan</button>
@@ -247,6 +263,16 @@
                         <label for="view_address" class="form-label">Alamat</label>
                         <textarea class="form-control" name="view_address" id="view_address" rows="3" readonly></textarea>
                     </div>
+                    <div class="mb-3">
+                        <label for="view_position" class="form-label">Jabatan</label>
+                        <input
+                            type="text"
+                            class="form-control form-control-sm"
+                            id="view_position"
+                            name="view_position"
+                            maxlength="15"
+                            readonly>
+                    </div>
                 </div>
             </form>
         </div>
@@ -319,6 +345,12 @@
                         <label for="edit_address" class="form-label">Alamat</label>
                         <textarea class="form-control" name="edit_address" id="edit_address" rows="3" required></textarea>
                     </div>
+                    <div class="mb-3">
+                        <label for="edit_position_id" class="form-label">Jabatan</label>
+                        <select name="edit_position_id" id="edit_position_id" class="form-control form-control-sm">
+
+                        </select>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="border-0 text-white" style="background-color: #32a893; padding: 5px 10px;">Simpan</button>
@@ -378,7 +410,22 @@
         });
 
         $('#button-create').on('click', function() {
-            $('.modal-create').modal('show');
+            $('#create_position_id').empty();
+
+            $.ajax({
+                url: '{{ URL::route('employee.create') }}',
+                type: 'GET',
+                success: function(response) {
+                    var position_value = "<option value=\"\">--Pilih Jabatan--</option>";
+
+                    $.each(response.positions, function(index, value) {
+                        position_value += "<option value=\"" + value.id + "\">" + value.name + "</option>";
+                    });
+
+                    $('#create_position_id').append(position_value);
+                    $('.modal-create').modal('show');
+                }
+            });
         });
 
         $(document).on('shown.bs.modal', '.modal-create', function() {
@@ -444,6 +491,7 @@
                     $('#view_email').val(response.email);
                     $('#view_contact').val(response.contact);
                     $('#view_address').val(response.address);
+                    $('#view_position').val(response.position);
 
                     $('.modal-view').modal('show');
                 }
@@ -452,6 +500,7 @@
 
         $('body').on('click', '.btn-edit', function(e) {
             e.preventDefault();
+            $('#edit_position_id').empty();
 
             var id = $(this).attr('data-id');
             var url = '{{ route("employee.edit", ":id") }}';
@@ -474,6 +523,20 @@
                     $('#edit_contact').val(response.contact);
                     $('#edit_address').val(response.address);
 
+                    var position_value = "<option value=\"\">--Pilih Jabatan--</option>";
+
+                    $.each(response.positions, function(index, item) {
+                        position_value += "<option value=\"" + item.id + "\"";
+
+                        if (item.id == response.position_id) {
+                            position_value += "selected";
+                        }
+
+                        position_value += ">" + item.name + "</option>";
+                    });
+
+                    $('#edit_position_id').append(position_value);
+
                     $('.modal-edit').modal('show');
                 }
             })
@@ -486,6 +549,7 @@
             $('.full_name_' + $('#edit_id').val()).empty();
             $('.email_' + $('#edit_id').val()).empty();
             $('.contact_' + $('#edit_id').val()).empty();
+            $('.position_' + $('#edit_id').val()).empty();
 
             var formData = {
                 id: $('#edit_id').val(),
@@ -494,6 +558,7 @@
                 email: $('#edit_email').val(),
                 contact: $('#edit_contact').val(),
                 address: $('#edit_address').val(),
+                position_id: $('#edit_position_id').val(),
                 _token: CSRF_TOKEN
             }
 
@@ -507,6 +572,7 @@
                     $('.full_name_' + response.id).append(response.full_name);
                     $('.email_' + response.id).append(response.email);
                     $('.contact_' + response.id).append(response.contact);
+                    $('.position_' + response.id).append(response.position);
 
                     setTimeout(() => {
                         $('.modal-proses').modal('hide');
