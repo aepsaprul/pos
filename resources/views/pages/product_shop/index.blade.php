@@ -147,6 +147,12 @@
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
+                        <label for="create_product_id" class="form-label">Nama Produk</label>
+                        <select name="create_product_id" id="create_product_id" class="form-control form-control-sm select_product_create" required>
+
+                        </select>
+                    </div>
+                    <div class="mb-3">
                         <label for="create_code" class="form-label">Kode Produk</label>
                         <input
                             type="text"
@@ -155,12 +161,6 @@
                             name="create_code"
                             maxlength="50"
                             required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="create_product_id" class="form-label">Nama Produk</label>
-                        <select name="create_product_id" id="create_product_id" class="form-control form-control-sm select_product_create" required>
-
-                        </select>
                     </div>
                     <div class="mb-3">
                         <label for="create_price" class="form-label">HPP</label>
@@ -206,6 +206,12 @@
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
+                        <label for="edit_product_id" class="form-label">Nama Produk</label>
+                        <select name="edit_product_id" id="edit_product_id" class="form-control form-control-sm select_product_edit" required>
+
+                        </select>
+                    </div>
+                    <div class="mb-3">
                         <label for="edit_code" class="form-label">Kode Produk</label>
                         <input
                             type="text"
@@ -214,12 +220,6 @@
                             name="edit_code"
                             maxlength="50"
                             required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="edit_product_id" class="form-label">Nama Produk</label>
-                        <select name="edit_product_id" id="edit_product_id" class="form-control form-control-sm select_product_edit" required>
-
-                        </select>
                     </div>
                     <div class="mb-3">
                         <label for="edit_price" class="form-label">HPP</label>

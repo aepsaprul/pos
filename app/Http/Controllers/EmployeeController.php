@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Employee;
 use App\Models\Position;
+use App\Models\Shop;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,9 +19,11 @@ class EmployeeController extends Controller
 
     public function create()
     {
+        $shop = Shop::get();
         $position = Position::get();
 
         return response()->json([
+            'shops' => $shop,
             'positions' => $position
         ]);
     }
@@ -28,11 +31,7 @@ class EmployeeController extends Controller
     public function store(Request $request)
     {
         $employee = new Employee;
-
-        if (Auth::user()->employee->shop) {
-            $employee->shop_id = Auth::user()->employee->shop->id;
-        }
-
+        $employee->shop_id = $request->shop_id;
         $employee->full_name = $request->full_name;
         $employee->nickname = $request->nickname;
         $employee->email = $request->email;
@@ -50,6 +49,7 @@ class EmployeeController extends Controller
     {
         $employee = Employee::find($id);
         $position = Position::find($employee->position_id);
+        $shop = Shop::find($employee->shop_id);
 
         return response()->json([
             'id' => $employee->id,
@@ -58,7 +58,8 @@ class EmployeeController extends Controller
             'email' => $employee->email,
             'contact' => $employee->contact,
             'address' => $employee->address,
-            'position' => $position->name
+            'shop' => $shop ? $shop->name : 'kosong',
+            'position' => $position ? $position->name : 'kosong'
         ]);
     }
 
@@ -66,6 +67,7 @@ class EmployeeController extends Controller
     {
         $employee = Employee::find($id);
         $position = Position::get();
+        $shop = Shop::get();
 
         return response()->json([
             'id' => $employee->id,
@@ -74,6 +76,8 @@ class EmployeeController extends Controller
             'email' => $employee->email,
             'contact' => $employee->contact,
             'address' => $employee->address,
+            'shop_id' => $employee->shop_id,
+            'shops' => $shop,
             'position_id' => $employee->position_id,
             'positions' => $position
         ]);
@@ -82,6 +86,7 @@ class EmployeeController extends Controller
     public function update(Request $request)
     {
         $employee = Employee::find($request->id);
+        $employee->shop_id = $request->shop_id;
         $employee->full_name = $request->full_name;
         $employee->nickname = $request->nickname;
         $employee->email = $request->email;
@@ -91,6 +96,7 @@ class EmployeeController extends Controller
         $employee->save();
 
         $position = Position::find($employee->position_id);
+        $shop = Shop::find($employee->shop_id);
 
         return response()->json([
             'status' => 'Data berhasil diperbaharui',
@@ -98,6 +104,7 @@ class EmployeeController extends Controller
             'full_name' => $request->full_name,
             'email' => $request->email,
             'contact' => $request->contact,
+            'shop' => $shop->name,
             'position' => $position->name
         ]);
     }

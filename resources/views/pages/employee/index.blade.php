@@ -45,6 +45,7 @@
                                 <th class="text-white text-center fw-bold">Nama</th>
                                 <th class="text-white text-center fw-bold">Email</th>
                                 <th class="text-white text-center fw-bold">Telepon</th>
+                                <th class="text-white text-center fw-bold">Kantor</th>
                                 <th class="text-white text-center fw-bold">Jabatan</th>
                                 <th class="text-white text-center fw-bold">Aksi</th>
                             </tr>
@@ -61,11 +62,20 @@
                                     <td><span class="email_{{ $item->id }}">{{ $item->email }}</span></td>
                                     <td><span class="contact_{{ $item->id }}">{{ $item->contact }}</span></td>
                                     <td>
+                                        <span class="shop_{{ $item->id }}">
+                                            @if ($item->shop)
+                                                {{ $item->shop->name }}
+                                            @else
+                                                Kantor kosong
+                                            @endif
+                                        </span>
+                                    </td>
+                                    <td>
                                         <span class="position_{{ $item->id }}">
                                             @if ($item->position)
                                                 {{ $item->position->name }}
                                             @else
-                                                Jabatan tidak ada
+                                                Jabatan kosong
                                             @endif
                                         </span>
                                     </td>
@@ -183,6 +193,12 @@
                         <textarea class="form-control" name="create_address" id="create_address" rows="3" required></textarea>
                     </div>
                     <div class="mb-3">
+                        <label for="create_shop_id" class="form-label">Kantor</label>
+                        <select name="create_shop_id" id="create_shop_id" class="form-control form-control-sm">
+
+                        </select>
+                    </div>
+                    <div class="mb-3">
                         <label for="create_position_id" class="form-label">Jabatan</label>
                         <select name="create_position_id" id="create_position_id" class="form-control form-control-sm">
 
@@ -264,13 +280,21 @@
                         <textarea class="form-control" name="view_address" id="view_address" rows="3" readonly></textarea>
                     </div>
                     <div class="mb-3">
+                        <label for="view_shop" class="form-label">Kantor</label>
+                        <input
+                            type="text"
+                            class="form-control form-control-sm"
+                            id="view_shop"
+                            name="view_shop"
+                            readonly>
+                    </div>
+                    <div class="mb-3">
                         <label for="view_position" class="form-label">Jabatan</label>
                         <input
                             type="text"
                             class="form-control form-control-sm"
                             id="view_position"
                             name="view_position"
-                            maxlength="15"
                             readonly>
                     </div>
                 </div>
@@ -346,6 +370,12 @@
                         <textarea class="form-control" name="edit_address" id="edit_address" rows="3" required></textarea>
                     </div>
                     <div class="mb-3">
+                        <label for="edit_shop_id" class="form-label">Kantor</label>
+                        <select name="edit_shop_id" id="edit_shop_id" class="form-control form-control-sm">
+
+                        </select>
+                    </div>
+                    <div class="mb-3">
                         <label for="edit_position_id" class="form-label">Jabatan</label>
                         <select name="edit_position_id" id="edit_position_id" class="form-control form-control-sm">
 
@@ -410,18 +440,27 @@
         });
 
         $('#button-create').on('click', function() {
+            $('#create_shop_id').empty();
             $('#create_position_id').empty();
 
             $.ajax({
                 url: '{{ URL::route('employee.create') }}',
                 type: 'GET',
                 success: function(response) {
+                    var shop_value = "<option value=\"\">--Pilih Kantor--</option>";
+
+                    $.each(response.shops, function(index, value) {
+                        shop_value += "<option value=\"" + value.id + "\">" + value.name + "</option>";
+                    });
+
+
                     var position_value = "<option value=\"\">--Pilih Jabatan--</option>";
 
                     $.each(response.positions, function(index, value) {
                         position_value += "<option value=\"" + value.id + "\">" + value.name + "</option>";
                     });
 
+                    $('#create_shop_id').append(shop_value);
                     $('#create_position_id').append(position_value);
                     $('.modal-create').modal('show');
                 }
@@ -429,16 +468,7 @@
         });
 
         $(document).on('shown.bs.modal', '.modal-create', function() {
-            $('#create_supplier_code').focus();
-
-        });
-
-        $('#view_password').on('change', function() {
-            if ($('#view_password').is(":checked")) {
-                $('#create_password').attr('type', 'text');
-            } else {
-                $('#create_password').attr('type', 'password');
-            }
+            $('#create_full_name').focus();
         });
 
         $('#form_create').submit(function(e) {
@@ -452,6 +482,8 @@
                 email: $('#create_email').val(),
                 contact: $('#create_contact').val(),
                 address: $('#create_address').val(),
+                shop_id: $('#create_shop_id').val(),
+                position_id: $('#create_position_id').val(),
                 _token: CSRF_TOKEN
             }
 
@@ -491,6 +523,7 @@
                     $('#view_email').val(response.email);
                     $('#view_contact').val(response.contact);
                     $('#view_address').val(response.address);
+                    $('#view_shop').val(response.shop);
                     $('#view_position').val(response.position);
 
                     $('.modal-view').modal('show');
@@ -500,6 +533,7 @@
 
         $('body').on('click', '.btn-edit', function(e) {
             e.preventDefault();
+            $('#edit_shop_id').empty();
             $('#edit_position_id').empty();
 
             var id = $(this).attr('data-id');
@@ -523,6 +557,20 @@
                     $('#edit_contact').val(response.contact);
                     $('#edit_address').val(response.address);
 
+                    // shop
+                    var shop_value = "<option value=\"\">--Pilih Kantor--</option>";
+
+                    $.each(response.shops, function(index, item) {
+                        shop_value += "<option value=\"" + item.id + "\"";
+
+                        if (item.id == response.shop_id) {
+                            shop_value += "selected";
+                        }
+
+                        shop_value += ">" + item.name + "</option>";
+                    });
+
+                    // position
                     var position_value = "<option value=\"\">--Pilih Jabatan--</option>";
 
                     $.each(response.positions, function(index, item) {
@@ -535,8 +583,8 @@
                         position_value += ">" + item.name + "</option>";
                     });
 
+                    $('#edit_shop_id').append(shop_value);
                     $('#edit_position_id').append(position_value);
-
                     $('.modal-edit').modal('show');
                 }
             })
@@ -549,6 +597,7 @@
             $('.full_name_' + $('#edit_id').val()).empty();
             $('.email_' + $('#edit_id').val()).empty();
             $('.contact_' + $('#edit_id').val()).empty();
+            $('.shop_' + $('#edit_id').val()).empty();
             $('.position_' + $('#edit_id').val()).empty();
 
             var formData = {
@@ -558,6 +607,7 @@
                 email: $('#edit_email').val(),
                 contact: $('#edit_contact').val(),
                 address: $('#edit_address').val(),
+                shop_id: $('#edit_shop_id').val(),
                 position_id: $('#edit_position_id').val(),
                 _token: CSRF_TOKEN
             }
@@ -572,6 +622,7 @@
                     $('.full_name_' + response.id).append(response.full_name);
                     $('.email_' + response.id).append(response.email);
                     $('.contact_' + response.id).append(response.contact);
+                    $('.shop_' + response.id).append(response.shop);
                     $('.position_' + response.id).append(response.position);
 
                     setTimeout(() => {
