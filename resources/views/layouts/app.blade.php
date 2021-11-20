@@ -174,14 +174,46 @@
                             </li>
                             <li class="nav-item dropdown">
                                 <a
-                                    class="nav-link {{ set_active(['transaction', 'transaction/*']) }}
+                                    class="nav-link {{ set_active(['inventory_transaction', 'inventory_transaction/*']) }}
                                     dropdown-toggle"
                                     href="#"
                                     id="navbarDropdown"
                                     role="button"
                                     data-bs-toggle="dropdown"
                                     aria-expanded="false">
-                                        Transaksi
+                                        Transaksi Gudang
+                                </a>
+                                <ul
+                                    class="dropdown-menu"
+                                    aria-labelledby="navbarDropdown">
+                                    <li>
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ route('received_product.index') }}">
+                                                <i class="fas fa-chevron-right"></i>
+                                                    Produk Masuk
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ route('sales.index') }}">
+                                                <i class="fas fa-chevron-right"></i>
+                                                    Produk Keluar
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a
+                                    class="nav-link {{ set_active(['shop_transaction', 'shop_transaction/*']) }}
+                                    dropdown-toggle"
+                                    href="#"
+                                    id="navbarDropdown"
+                                    role="button"
+                                    data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                        Transaksi Toko
                                 </a>
                                 <ul
                                     class="dropdown-menu"

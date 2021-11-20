@@ -161,19 +161,19 @@ Route::middleware(['auth'])->group(function () {
 
     // transaction
         // sales
-        Route::get('transaction/sales', [SalesController::class, 'index'])->name('sales.index');
-        Route::get('transaction/sales/{id}/show', [SalesController::class, 'show'])->name('sales.show');
-        Route::get('transaction/sales/{id}/delete_btn', [SalesController::class, 'deleteBtn'])->name('sales.delete_btn');
-        Route::post('transaction/sales/delete', [SalesController::class, 'delete'])->name('sales.delete');
+        Route::get('inventory_transaction/sales', [SalesController::class, 'index'])->name('sales.index');
+        Route::get('inventory_transaction/sales/{id}/show', [SalesController::class, 'show'])->name('sales.show');
+        Route::get('inventory_transaction/sales/{id}/delete_btn', [SalesController::class, 'deleteBtn'])->name('sales.delete_btn');
+        Route::post('inventory_transaction/sales/delete', [SalesController::class, 'delete'])->name('sales.delete');
 
         // receive product
-        Route::get('transaction/received_product', [ReceiveProductController::class, 'index'])->name('received_product.index');
-        Route::get('transaction/received_product/create', [ReceiveProductController::class, 'create'])->name('received_product.create');
-        Route::post('transaction/received_product/store', [ReceiveProductController::class, 'store'])->name('received_product.store');
-        Route::post('transaction/received_product/update', [ReceiveProductController::class, 'update'])->name('received_product.update');
-        Route::get('transaction/received_product/{id}/edit', [ReceiveProductController::class, 'edit'])->name('received_product.edit');
-        Route::get('transaction/received_product/{id}/delete_btn', [ReceiveProductController::class, 'deleteBtn'])->name('received_product.delete_btn');
-        Route::post('transaction/received_product/delete', [ReceiveProductController::class, 'delete'])->name('received_product.delete');
+        Route::get('inventory_transaction/received_product', [ReceiveProductController::class, 'index'])->name('received_product.index');
+        Route::get('inventory_transaction/received_product/create', [ReceiveProductController::class, 'create'])->name('received_product.create');
+        Route::post('inventory_transaction/received_product/store', [ReceiveProductController::class, 'store'])->name('received_product.store');
+        Route::post('inventory_transaction/received_product/update', [ReceiveProductController::class, 'update'])->name('received_product.update');
+        Route::get('inventory_transaction/received_product/{id}/edit', [ReceiveProductController::class, 'edit'])->name('received_product.edit');
+        Route::get('inventory_transaction/received_product/{id}/delete_btn', [ReceiveProductController::class, 'deleteBtn'])->name('received_product.delete_btn');
+        Route::post('inventory_transaction/received_product/delete', [ReceiveProductController::class, 'delete'])->name('received_product.delete');
 
     // product shop
     Route::get('product_shop', [ProductShopController::class, 'index'])->name('product_shop.index');
