@@ -4,12 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CustomerController extends Controller
 {
     public function index()
     {
-        $customer = Customer::get();
+        if (Auth::user()->employee) {
+            $shop_id = Auth::user()->employee->shop->id;
+        } else {
+            $shop_id = null;
+        }
+
+        $customer = Customer::where('shop_id', $shop_id)->get();
 
         return view('pages.customer.index', ['customers' => $customer]);
     }
@@ -17,6 +24,11 @@ class CustomerController extends Controller
     public function store(Request $request)
     {
         $customer = new Customer;
+
+        if (Auth::user()->employee) {
+            $customer->shop_id = Auth::user()->employee->shop->id;
+        }
+
         $customer->customer_name = $request->customer_name;
         $customer->email = $request->email;
         $customer->contact = $request->contact;
