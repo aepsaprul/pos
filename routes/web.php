@@ -5,6 +5,8 @@ use App\Http\Controllers\ChangePasswordController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\InventroryProductInController;
+use App\Http\Controllers\InventroryProductOutController;
 use App\Http\Controllers\NavController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\ProductCategoryController;
@@ -17,6 +19,7 @@ use App\Http\Controllers\SalesController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
+use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -159,21 +162,42 @@ Route::middleware(['auth'])->group(function () {
         // credit
         Route::get('cashier/credit', [CashierController::class, 'credit'])->name('cashier.credit');
 
-    // transaction
-        // sales
-        Route::get('inventory_transaction/sales', [SalesController::class, 'index'])->name('sales.index');
-        Route::get('inventory_transaction/sales/{id}/show', [SalesController::class, 'show'])->name('sales.show');
-        Route::get('inventory_transaction/sales/{id}/delete_btn', [SalesController::class, 'deleteBtn'])->name('sales.delete_btn');
-        Route::post('inventory_transaction/sales/delete', [SalesController::class, 'delete'])->name('sales.delete');
+    // transaction inventory
+
+        // product in
+        Route::get('inventory_transaction/product_in', [InventroryProductInController::class, 'index'])->name('product_in.index');
+        Route::get('inventory_transaction/product_in/create', [InventroryProductInController::class, 'create'])->name('product_in.create');
+        Route::post('inventory_transaction/product_in/store', [InventroryProductInController::class, 'store'])->name('product_in.store');
+        Route::post('inventory_transaction/product_in/update', [InventroryProductInController::class, 'update'])->name('product_in.update');
+        Route::get('inventory_transaction/product_in/{id}/edit', [InventroryProductInController::class, 'edit'])->name('product_in.edit');
+        Route::get('inventory_transaction/product_in/{id}/delete_btn', [InventroryProductInController::class, 'deleteBtn'])->name('product_in.delete_btn');
+        Route::post('inventory_transaction/product_in/delete', [InventroryProductInController::class, 'delete'])->name('product_in.delete');
+
+        // product out
+        Route::get('inventory_transaction/product_out', [InventroryProductOutController::class, 'index'])->name('product_out.index');
+        Route::get('inventory_transaction/product_out/create', [InventroryProductOutController::class, 'create'])->name('product_out.create');
+        Route::post('inventory_transaction/product_out/store', [InventroryProductOutController::class, 'store'])->name('product_out.store');
+        Route::post('inventory_transaction/product_out/update', [InventroryProductOutController::class, 'update'])->name('product_out.update');
+        Route::get('inventory_transaction/product_out/{id}/edit', [InventroryProductOutController::class, 'edit'])->name('product_out.edit');
+        Route::get('inventory_transaction/product_out/{id}/delete_btn', [InventroryProductOutController::class, 'deleteBtn'])->name('product_out.delete_btn');
+        Route::post('inventory_transaction/product_out/delete', [InventroryProductOutController::class, 'delete'])->name('product_out.delete');
+
+    // transaction shop
 
         // receive product
-        Route::get('inventory_transaction/received_product', [ReceiveProductController::class, 'index'])->name('received_product.index');
-        Route::get('inventory_transaction/received_product/create', [ReceiveProductController::class, 'create'])->name('received_product.create');
-        Route::post('inventory_transaction/received_product/store', [ReceiveProductController::class, 'store'])->name('received_product.store');
-        Route::post('inventory_transaction/received_product/update', [ReceiveProductController::class, 'update'])->name('received_product.update');
-        Route::get('inventory_transaction/received_product/{id}/edit', [ReceiveProductController::class, 'edit'])->name('received_product.edit');
-        Route::get('inventory_transaction/received_product/{id}/delete_btn', [ReceiveProductController::class, 'deleteBtn'])->name('received_product.delete_btn');
-        Route::post('inventory_transaction/received_product/delete', [ReceiveProductController::class, 'delete'])->name('received_product.delete');
+        Route::get('shop_transaction/received_product', [ReceiveProductController::class, 'index'])->name('received_product.index');
+        Route::get('shop_transaction/received_product/create', [ReceiveProductController::class, 'create'])->name('received_product.create');
+        Route::post('shop_transaction/received_product/store', [ReceiveProductController::class, 'store'])->name('received_product.store');
+        Route::post('shop_transaction/received_product/update', [ReceiveProductController::class, 'update'])->name('received_product.update');
+        Route::get('shop_transaction/received_product/{id}/edit', [ReceiveProductController::class, 'edit'])->name('received_product.edit');
+        Route::get('shop_transaction/received_product/{id}/delete_btn', [ReceiveProductController::class, 'deleteBtn'])->name('received_product.delete_btn');
+        Route::post('shop_transaction/received_product/delete', [ReceiveProductController::class, 'delete'])->name('received_product.delete');
+
+        // sales
+        Route::get('shop_transaction/sales', [SalesController::class, 'index'])->name('sales.index');
+        Route::get('shop_transaction/sales/{id}/show', [SalesController::class, 'show'])->name('sales.show');
+        Route::get('shop_transaction/sales/{id}/delete_btn', [SalesController::class, 'deleteBtn'])->name('sales.delete_btn');
+        Route::post('shop_transaction/sales/delete', [SalesController::class, 'delete'])->name('sales.delete');
 
     // product shop
     Route::get('product_shop', [ProductShopController::class, 'index'])->name('product_shop.index');

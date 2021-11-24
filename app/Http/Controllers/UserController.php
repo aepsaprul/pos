@@ -24,14 +24,7 @@ class UserController extends Controller
     public function create()
     {
         $roles = Roles::get();
-
-        if (Auth::user()->employee) {
-            $shop_id = Auth::user()->employee->shop->id;
-        } else {
-            $shop_id = null;
-        }
-
-        $employee = Employee::where('shop_id', $shop_id)->get();
+        $employee = Employee::get();
 
         return response()->json([
             'roles' => $roles,

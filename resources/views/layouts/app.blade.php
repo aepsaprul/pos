@@ -189,7 +189,7 @@
                                     <li>
                                         <a
                                             class="dropdown-item"
-                                            href="{{ route('received_product.index') }}">
+                                            href="{{ route('product_in.index') }}">
                                                 <i class="fas fa-chevron-right"></i>
                                                     Produk Masuk
                                         </a>
@@ -197,7 +197,7 @@
                                     <li>
                                         <a
                                             class="dropdown-item"
-                                            href="{{ route('sales.index') }}">
+                                            href="{{ route('product_out.index') }}">
                                                 <i class="fas fa-chevron-right"></i>
                                                     Produk Keluar
                                         </a>
