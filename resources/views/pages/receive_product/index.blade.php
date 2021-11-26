@@ -52,9 +52,9 @@
                         <thead style="background-color: #32a893;">
                             <tr>
                                 <th class="text-white text-center fw-bold">No</th>
-                                <th class="text-white text-center fw-bold">Pengguna</th>
-                                <th class="text-white text-center fw-bold">Nama Product</th>
-                                <th class="text-white text-center fw-bold">Supplier</th>
+                                <th class="text-white text-center fw-bold">User</th>
+                                <th class="text-white text-center fw-bold">Nama Produk</th>
+                                <th class="text-white text-center fw-bold">Harga Produk</th>
                                 <th class="text-white text-center fw-bold">Qty</th>
                                 <th class="text-white text-center fw-bold">Sub Total</th>
                                 <th class="text-white text-center fw-bold">Tanggal</th>
@@ -71,22 +71,22 @@
                                     <td class="text-center">{{ $key + 1 }}</td>
                                     <td>{{ $item->user->name }}</td>
                                     <td>
-                                        @if ($item->product == null)
-                                            <span class="text-danger">Product Tidak Ada</span>
-                                        @else
+                                        @if ($item->product)
                                             {{ $item->product->product_name }}
+                                        @else
+                                            <span class="text-danger">Product Tidak Ada</span>
                                         @endif
                                     </td>
-                                    <td>
-                                        @if ($item->supplier == null)
-                                            <span class="text-danger">Supplier Tidak Ada</span>
+                                    <td class="text-end">
+                                        @if ($item->product)
+                                            {{ $item->product->product_price }}
                                         @else
-                                            {{ $item->supplier->supplier_name }}
+                                            <span class="text-danger">Product Tidak Ada</span>
                                         @endif
                                     </td>
                                     <td class="text-center">{{ $item->quantity }}</td>
                                     <td class="text-end">{{ rupiah($item->sub_total) }}</td>
-                                    <td class="text-center">{{ date('d-m-Y', strtotime($item->received_date)) }}</td>
+                                    <td class="text-center">{{ date('d-m-Y', strtotime($item->date)) }}</td>
                                     <td class="text-center">
                                         <div class="btn-group">
                                             <button
@@ -152,12 +152,6 @@
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="create_supplier_id" class="form-label">Supplier</label>
-                        <select name="create_supplier_id" id="create_supplier_id" class="form-control" name="create_supplier_id" required>
-
-                        </select>
-                    </div>
-                    <div class="mb-3">
                         <label for="create_quantity" class="form-label">Quantity</label>
                         <input type="text" class="form-control form-control-sm" id="create_quantity" name="create_quantity" required>
                     </div>
@@ -191,10 +185,8 @@
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="edit_supplier_id" class="form-label">Supplier</label>
-                        <select name="edit_supplier_id" id="edit_supplier_id" class="form-control" name="edit_supplier_id" required>
-
-                        </select>
+                        <label for="edit_quantity" class="form-label">Quantity</label>
+                        <input type="text" class="form-control form-control-sm" id="edit_quantity" name="edit_quantity" required>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -257,7 +249,6 @@
 
         $('#button-create').on('click', function() {
             $('#create_product_id').empty();
-            $('#create_supplier_id').empty();
 
             var formData = {
                 _token: CSRF_TOKEN
@@ -275,13 +266,6 @@
                     });
                     $('#create_product_id').append(value);
 
-                    // supplier query
-                    var value = "<option value=\"\">--Pilih Supplier--</option>";
-                    $.each(response.supplier, function(index, item) {
-                        value += "<option value=\"" + item.id + "\">" + item.supplier_name + "</option>";
-                    });
-                    $('#create_supplier_id').append(value);
-
                     $('.modal-create').modal('show');
                 }
             });
@@ -293,10 +277,6 @@
             $('#create_product_id').select2({
                 dropdownParent: $('.modal-create')
             });
-
-            $('#create_supplier_id').select2({
-                dropdownParent: $('.modal-create')
-            });
         });
 
 
@@ -306,7 +286,6 @@
 
             var formData = {
                 product_id: $('#create_product_id').val(),
-                supplier_id: $('#create_supplier_id').val(),
                 quantity: $('#create_quantity').val(),
                 _token: CSRF_TOKEN
             }
@@ -328,7 +307,6 @@
             e.preventDefault();
 
             $('#edit_product_id').empty();
-            $('#edit_supplier_id').empty();
 
             var id = $(this).attr('data-id');
             var url = '{{ route("received_product.edit", ":id") }}';
@@ -346,6 +324,7 @@
                 success: function(response) {
                     $('#edit_received_product_id').val(response.received_product_id);
                     $('#edit_product_id').val(response.product_id);
+                    $('#edit_quantity').val(response.quantity);
 
                     // product query
                     var value = "<option value=\"\">--Pilih Produk--</option>";
@@ -358,17 +337,6 @@
                     });
                     $('#edit_product_id').append(value);
 
-                    // supplier query
-                    var value = "<option value=\"\">--Pilih Supplier--</option>";
-                    $.each(response.suppliers, function(index, item) {
-                        value += "<option value=\"" + item.id + "\"";
-                            if (item.id == response.supplier_id) {
-                                value += "selected";
-                            }
-                        value += ">" + item.supplier_name + "</option>";
-                    });
-                    $('#edit_supplier_id').append(value);
-
                     $('.modal-edit').modal('show');
                 }
             })
@@ -378,10 +346,6 @@
             $('#edit_product_name').focus();
 
             $('#edit_product_id').select2({
-                dropdownParent: $('.modal-edit')
-            });
-
-            $('#edit_supplier_id').select2({
                 dropdownParent: $('.modal-edit')
             });
         });
@@ -394,7 +358,7 @@
             var formData = {
                 id: $('#edit_received_product_id').val(),
                 product_id: $('#edit_product_id').val(),
-                supplier_id: $('#edit_supplier_id').val(),
+                quantity: $('#edit_quantity').val(),
                 _token: CSRF_TOKEN
             }
 
@@ -442,7 +406,7 @@
             $('.modal-delete').modal('hide');
 
             var formData = {
-                id: $('#delete_product_id').val(),
+                id: $('#delete_received_product_id').val(),
                 _token: CSRF_TOKEN
             }
 

@@ -19,11 +19,9 @@ class ReceiveProductController extends Controller
     public function create()
     {
         $product = Product::get();
-        $supplier = Supplier::get();
 
         return response()->json([
             'product' => $product,
-            'supplier' => $supplier
         ]);
     }
 
@@ -36,10 +34,10 @@ class ReceiveProductController extends Controller
         $receive_product = new ReceiveProduct;
         $receive_product->user_id = Auth::user()->id;
         $receive_product->product_id = $request->product_id;
+        $receive_product->price = $product->product_price;
         $receive_product->quantity = $request->quantity;
         $receive_product->sub_total = $request->quantity * $product->product_price;
-        $receive_product->supplier_id = $request->supplier_id;
-        $receive_product->received_date = date('Y-m-d H:i:s');
+        $receive_product->date = date('Y-m-d H:i:s');
         $receive_product->save();
 
         return response()->json([
@@ -51,22 +49,26 @@ class ReceiveProductController extends Controller
     {
         $received_product = ReceiveProduct::find($id);
         $product = Product::get();
-        $supplier = Supplier::get();
 
         return response()->json([
             'received_product_id' => $received_product->id,
             'product_id' => $received_product->product_id,
-            'supplier_id' => $received_product->supplier_id,
-            'products' => $product,
-            'suppliers' => $supplier
+            'quantity' => $received_product->quantity,
+            'products' => $product
         ]);
     }
 
     public function update(Request $request)
     {
+        $product = Product::where('id', $request->product_id)->first();
+
         $receive_product = ReceiveProduct::find($request->id);
+        $receive_product->user_id = Auth::user()->id;
         $receive_product->product_id = $request->product_id;
-        $receive_product->supplier_id = $request->supplier_id;
+        $receive_product->price = $product->product_price;
+        $receive_product->quantity = $request->quantity;
+        $receive_product->sub_total = $request->quantity * $product->product_price;
+        $receive_product->date = date('Y-m-d H:i:s');
         $receive_product->save();
 
         return response()->json([

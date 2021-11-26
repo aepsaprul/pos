@@ -16,9 +16,9 @@ class CreateReceiveProductsTable extends Migration
         Schema::create('receive_products', function (Blueprint $table) {
             $table->id();
             $table->integer('product_id')->nullable();
+            $table->double('price')->nullable();
             $table->integer('quantity')->nullable();
             $table->double('sub_total')->nullable();
-            $table->integer('supplier_id')->nullable();
             $table->dateTimeTz('date')->nullable();
             $table->integer('user_id')->nullable();
             $table->timestamps();
