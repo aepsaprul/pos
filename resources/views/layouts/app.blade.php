@@ -229,7 +229,7 @@
                                     <li>
                                         <a
                                             class="dropdown-item"
-                                            href="{{ route('sales.index') }}">
+                                            href="{{ route('invoice.index') }}">
                                                 <i class="fas fa-chevron-right"></i>
                                                     Penjualan
                                         </a>

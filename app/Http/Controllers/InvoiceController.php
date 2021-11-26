@@ -6,20 +6,25 @@ use App\Models\Invoice;
 use App\Models\Sales;
 use Illuminate\Http\Request;
 
-class SalesController extends Controller
+class InvoiceController extends Controller
 {
     public function index()
     {
         $invoice = Invoice::get();
-        return view('pages.sales.index', ['invoices' => $invoice]);
+        return view('pages.invoice.index', ['invoices' => $invoice]);
     }
 
     public function show($id)
     {
         $invoice = Invoice::find($id);
-        $sales = Sales::where('invoice_id', $invoice->id)->get();
+        $sales = Sales::with('product')->where('invoice_id', $invoice->id)->get();
 
-        return view('pages.sales.show', ['invoice' => $invoice, 'sales' => $sales]);
+        return response()->json([
+            'code' => $invoice->code,
+            'date' => date('d-m-Y', strtotime($invoice->date_recorded)),
+            'total_amount' => $invoice->total_amount,
+            'sales' => $sales
+        ]);
     }
 
     public function deleteBtn($id)

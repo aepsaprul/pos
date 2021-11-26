@@ -49,7 +49,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($sales as $key => $item)
+                            @foreach ($invoices as $key => $item)
                                 <tr
                                     @if ($key % 2 == 1)
                                         echo class="tabel_active";
@@ -57,7 +57,13 @@
                                 >
                                     <td class="text-center">{{ $key + 1 }}</td>
                                     <td>{{ $item->date_recorded }}</td>
-                                    <td>{{ $item->user->name }}</td>
+                                    <td>
+                                        @if ($item->user)
+                                            {{ $item->user->name }}
+                                        @else
+                                            User Tidak Ada
+                                        @endif
+                                    </td>
                                     <td>{{ $item->code }}</td>
                                     <td class="text-end">{{ rupiah($item->total_amount) }}</td>
                                     <td class="text-center">
@@ -117,7 +123,7 @@
             <form id="form_delete">
 
                 {{-- id  --}}
-                <input type="hidden" id="delete_invoice_id" name="delete_invoice_id">
+                <input type="hidden" id="delete_id" name="delete_id">
 
                 <div class="modal-header">
                     <h5 class="modal-title">Yakin akan dihapus <span class="delete_title text-decoration-underline"></span> ?</h5>

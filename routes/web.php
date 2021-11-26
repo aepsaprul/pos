@@ -7,6 +7,7 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InventroryProductInController;
 use App\Http\Controllers\InventroryProductOutController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\NavController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\ProductCategoryController;
@@ -198,6 +199,12 @@ Route::middleware(['auth'])->group(function () {
         Route::get('shop_transaction/sales/{id}/show', [SalesController::class, 'show'])->name('sales.show');
         Route::get('shop_transaction/sales/{id}/delete_btn', [SalesController::class, 'deleteBtn'])->name('sales.delete_btn');
         Route::post('shop_transaction/sales/delete', [SalesController::class, 'delete'])->name('sales.delete');
+
+        // invoice
+        Route::get('shop_transaction/invoice', [InvoiceController::class, 'index'])->name('invoice.index');
+        Route::get('shop_transaction/invoice/{id}/show', [InvoiceController::class, 'show'])->name('invoice.show');
+        Route::get('shop_transaction/invoice/{id}/delete_btn', [InvoiceController::class, 'deleteBtn'])->name('invoice.delete_btn');
+        Route::post('shop_transaction/invoice/delete', [InvoiceController::class, 'delete'])->name('invoice.delete');
 
     // product shop
     Route::get('product_shop', [ProductShopController::class, 'index'])->name('product_shop.index');
