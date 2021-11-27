@@ -55,7 +55,6 @@
                                 <th class="text-white text-center fw-bold">Kode</th>
                                 <th class="text-white text-center fw-bold">Nama</th>
                                 <th class="text-white text-center fw-bold">Kategori</th>
-                                <th class="text-white text-center fw-bold">HPP</th>
                                 <th class="text-white text-center fw-bold">Harga Jual</th>
                                 <th class="text-white text-center fw-bold">Aksi</th>
                             </tr>
@@ -68,7 +67,15 @@
                                     @endif
                                 >
                                     <td class="text-center">{{ $key + 1 }}</td>
-                                    <td><span class="code_{{ $item->id }}">{{ $item->code }}</span></td>
+                                    <td>
+                                        <span class="code_{{ $item->id }}">
+                                            @if ($item->product)
+                                                {{ $item->product->product_code }}
+                                            @else
+                                                Kode Produk Kosong
+                                            @endif
+                                        </span>
+                                    </td>
                                     <td>
                                         <span class="product_{{ $item->id }}">
                                             @if ($item->product)
@@ -87,8 +94,15 @@
                                             @endif
                                         </span>
                                     </td>
-                                    <td class="text-end"><span class="price_{{ $item->id }}">{{ rupiah($item->price) }}</span></td>
-                                    <td class="text-end"><span class="price_selling_{{ $item->id }}">{{ rupiah($item->price_selling) }}</span></td>
+                                    <td class="text-end">
+                                        <span class="price_selling_{{ $item->id }}">
+                                            @if ($item->product)
+                                                {{ rupiah($item->product->product_price_selling) }}
+                                            @else
+                                                Harga Jual Produk Kosong
+                                            @endif
+                                        </span>
+                                    </td>
                                     <td class="text-center">
                                         <div class="btn-group">
                                             <button
@@ -151,36 +165,9 @@
                         <select name="create_product_id" id="create_product_id" class="form-control form-control-sm select_product_create" required>
 
                         </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="create_code" class="form-label">Kode Produk</label>
-                        <input
-                            type="text"
-                            class="form-control form-control-sm"
-                            id="create_code"
-                            name="create_code"
-                            maxlength="50"
-                            required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="create_price" class="form-label">HPP</label>
-                        <input
-                            type="text"
-                            class="form-control form-control-sm"
-                            id="create_price"
-                            name="create_price"
-                            maxlength="10"
-                            required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="create_price_selling" class="form-label">Harga Jual</label>
-                        <input
-                            type="text"
-                            class="form-control form-control-sm"
-                            id="create_price_selling"
-                            name="create_price_selling"
-                            maxlength="10"
-                            required>
+                        <div class="mt-2">
+                            <span class="create_product_id_error text-danger"></span>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -210,36 +197,9 @@
                         <select name="edit_product_id" id="edit_product_id" class="form-control form-control-sm select_product_edit" required>
 
                         </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="edit_code" class="form-label">Kode Produk</label>
-                        <input
-                            type="text"
-                            class="form-control form-control-sm"
-                            id="edit_code"
-                            name="edit_code"
-                            maxlength="50"
-                            required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="edit_price" class="form-label">HPP</label>
-                        <input
-                            type="text"
-                            class="form-control form-control-sm"
-                            id="edit_price"
-                            name="edit_price"
-                            maxlength="10"
-                            required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="edit_price_selling" class="form-label">Harga Jual</label>
-                        <input
-                            type="text"
-                            class="form-control form-control-sm"
-                            id="edit_price_selling"
-                            name="edit_price_selling"
-                            maxlength="10"
-                            required>
+                        <div class="mt-2">
+                            <span class="edit_product_id_error text-danger"></span>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -301,7 +261,8 @@
         });
 
         $('#button-create').on('click', function() {
-            $('.create_product_id').empty();
+            $('#create_product_id').empty();
+            $('.create_product_id_error').empty();
 
             var formData = {
                 _token: CSRF_TOKEN
@@ -330,28 +291,15 @@
             $('.select_product_create').select2({
                 dropdownParent: $('.modal-create')
             });
-
-            var price = document.getElementById("create_price");
-            price.addEventListener("keyup", function(e) {
-                price.value = formatRupiah(this.value, "");
-            });
-
-            var price_selling = document.getElementById("create_price_selling");
-            price_selling.addEventListener("keyup", function(e) {
-                price_selling.value = formatRupiah(this.value, "");
-            });
         });
 
 
         $('#form_create').submit(function(e) {
             e.preventDefault();
-            $('.modal-create').modal('hide');
+            $('.create_product_id_error').empty();
 
             var formData = {
-                code: $('#create_code').val(),
                 product_id: $('#create_product_id').val(),
-                price: $('#create_price').val().replace(/\./g,''),
-                price_selling: $('#create_price_selling').val().replace(/\./g,''),
                 _token: CSRF_TOKEN
             }
 
@@ -360,10 +308,16 @@
                 type: 'POST',
                 data: formData,
                 success: function(response) {
-                    $('.modal-proses').modal('show');
-                    setTimeout(() => {
-                        window.location.reload(1);
-                    }, 1000);
+                    if (response.status == "false") {
+                        $('.create_product_id_error').append("Produk sudah tersedia");
+                    } else {
+                        $('.modal-create').modal('hide');
+                        console.log('true');
+                        $('.modal-proses').modal('show');
+                        setTimeout(() => {
+                            window.location.reload(1);
+                        }, 1000);
+                    }
                 }
             });
         });
@@ -371,6 +325,7 @@
         $('body').on('click', '.btn-edit', function(e) {
             e.preventDefault();
             $('#edit_product_id').empty();
+            $('.edit_product_id_error').empty();
 
             var id = $(this).attr('data-id');
             var url = '{{ route("product_shop.edit", ":id") }}';
@@ -387,9 +342,6 @@
                 data: formData,
                 success: function(response) {
                     $('#edit_id').val(response.id);
-                    $('#edit_code').val(response.code);
-                    $('#edit_price').val(format_rupiah(response.price));
-                    $('#edit_price_selling').val(format_rupiah(response.price_selling));
 
                     var value = "<option value=\"\">--Pilih Produk--</option>";
                     $.each(response.products, function(index, item) {
@@ -413,34 +365,15 @@
             $('.select_product_edit').select2({
                 dropdownParent: $('.modal-edit')
             });
-
-            var price = document.getElementById("edit_price");
-            price.addEventListener("keyup", function(e) {
-                price.value = formatRupiah(this.value, "");
-            });
-
-            var price_selling = document.getElementById("edit_price_selling");
-            price_selling.addEventListener("keyup", function(e) {
-                price_selling.value = formatRupiah(this.value, "");
-            });
         });
 
         $('#form_edit').submit(function(e) {
             e.preventDefault();
-
-            $('.modal-edit').modal('hide');
-            $('.code_' + $('#edit_id').val()).empty();
-            $('.product_' + $('#edit_id').val()).empty();
-            $('.category_' + $('#edit_id').val()).empty();
-            $('.price_' + $('#edit_id').val()).empty();
-            $('.price_selling_' + $('#edit_id').val()).empty();
+            $('.edit_product_id_error').empty();
 
             var formData = {
                 id: $('#edit_id').val(),
-                code: $('#edit_code').val(),
                 product_id: $('#edit_product_id').val(),
-                price: $('#edit_price').val().replace(/\./g,''),
-                price_selling: $('#edit_price_selling').val().replace(/\./g,''),
                 _token: CSRF_TOKEN
             }
 
@@ -449,17 +382,28 @@
                 type: 'POST',
                 data: formData,
                 success: function(response) {
-                    $('.modal-proses').modal('show');
+                    if (response.status == "false") {
+                        $('.edit_product_id_error').append("Produk sudah tersedia");
+                    } else {
+                        $('.modal-edit').modal('hide');
+                        $('.code_' + $('#edit_id').val()).empty();
+                        $('.product_' + $('#edit_id').val()).empty();
+                        $('.category_' + $('#edit_id').val()).empty();
+                        $('.price_' + $('#edit_id').val()).empty();
+                        $('.price_selling_' + $('#edit_id').val()).empty();
 
-                    $('.code_' + response.id).append(response.code);
-                    $('.product_' + response.id).append(response.product_name);
-                    $('.category_' + response.id).append(response.category_name);
-                    $('.price_' + response.id).append(format_rupiah(response.price));
-                    $('.price_selling_' + response.id).append(format_rupiah(response.price_selling));
+                        $('.modal-proses').modal('show');
 
-                    setTimeout(() => {
-                        $('.modal-proses').modal('hide');
-                    }, 1000);
+                        $('.code_' + response.id).append(response.code);
+                        $('.product_' + response.id).append(response.product_name);
+                        $('.category_' + response.id).append(response.category_name);
+                        $('.price_' + response.id).append(format_rupiah(response.price));
+                        $('.price_selling_' + response.id).append(format_rupiah(response.price_selling));
+
+                        setTimeout(() => {
+                            $('.modal-proses').modal('hide');
+                        }, 1000);
+                    }
                 }
             });
         });

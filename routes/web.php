@@ -5,6 +5,7 @@ use App\Http\Controllers\ChangePasswordController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\InventoryStockController;
 use App\Http\Controllers\InventroryProductInController;
 use App\Http\Controllers\InventroryProductOutController;
 use App\Http\Controllers\InvoiceController;
@@ -18,6 +19,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\SalesController;
 use App\Http\Controllers\ShopController;
+use App\Http\Controllers\ShopStockController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
 use App\Models\Product;
@@ -152,17 +154,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('supplier/{id}/delete_btn', [SupplierController::class, 'deleteBtn'])->name('supplier.delete_btn');
     Route::post('supplier/delete', [SupplierController::class, 'delete'])->name('supplier.delete');
 
-    // cashier
-        // cash
-        Route::get('cashier', [CashierController::class, 'index'])->name('cashier.index');
-        Route::post('cashier/product', [CashierController::class, 'getProduct'])->name('cashier.product');
-        Route::post('cashier/sales-save', [CashierController::class, 'salesSave'])->name('cashier.sales_save');
-        Route::post('cashier/print', [CashierController::class, 'print'])->name('cashier.print');
-        Route::delete('cashier/{id}/delete', [CashierController::class, 'delete'])->name('cashier.delete');
-
-        // credit
-        Route::get('cashier/credit', [CashierController::class, 'credit'])->name('cashier.credit');
-
     // transaction inventory
 
         // product in
@@ -206,6 +197,17 @@ Route::middleware(['auth'])->group(function () {
         Route::get('shop_transaction/invoice/{id}/delete_btn', [InvoiceController::class, 'deleteBtn'])->name('invoice.delete_btn');
         Route::post('shop_transaction/invoice/delete', [InvoiceController::class, 'delete'])->name('invoice.delete');
 
+    // inventory stock
+    Route::get('inventory_stock', [InventoryStockController::class, 'index'])->name('inventory_stock.index');
+    Route::get('inventory_stock/get_data', [InventoryStockController::class, 'getData'])->name('inventory_stock.get_data');
+    Route::get('inventory_stock/low', [InventoryStockController::class, 'low'])->name('inventory_stock.low');
+    Route::get('inventory_stock/empty', [InventoryStockController::class, 'empty'])->name('inventory_stock.empty');
+
+    // shop stock
+    Route::get('shop_stock', [ShopStockController::class, 'index'])->name('shop_stock.index');
+    Route::get('shop_stock/low', [ShopStockController::class, 'low'])->name('shop_stock.low');
+    Route::get('shop_stock/empty', [ShopStockController::class, 'empty'])->name('shop_stock.empty');
+
     // product shop
     Route::get('product_shop', [ProductShopController::class, 'index'])->name('product_shop.index');
     Route::get('product_shop/create', [ProductShopController::class, 'create'])->name('product_shop.create');
@@ -214,6 +216,17 @@ Route::middleware(['auth'])->group(function () {
     Route::get('product_shop/{id}/edit', [ProductShopController::class, 'edit'])->name('product_shop.edit');
     Route::get('product_shop/{id}/delete_btn', [ProductShopController::class, 'deleteBtn'])->name('product_shop.delete_btn');
     Route::post('product_shop/delete', [ProductShopController::class, 'delete'])->name('product_shop.delete');
+
+    // cashier
+        // cash
+        Route::get('cashier', [CashierController::class, 'index'])->name('cashier.index');
+        Route::post('cashier/product', [CashierController::class, 'getProduct'])->name('cashier.product');
+        Route::post('cashier/sales-save', [CashierController::class, 'salesSave'])->name('cashier.sales_save');
+        Route::post('cashier/print', [CashierController::class, 'print'])->name('cashier.print');
+        Route::delete('cashier/{id}/delete', [CashierController::class, 'delete'])->name('cashier.delete');
+
+        // credit
+        Route::get('cashier/credit', [CashierController::class, 'credit'])->name('cashier.credit');
 
     // report
     Route::get('report', [ReportController::class, 'index'])->name('report.index');

@@ -238,6 +238,22 @@
                             </li>
                             <li class="nav-item">
                                 <a
+                                    class="nav-link {{ set_active(['inventory_stock', 'inventory_stock/*']) }}"
+                                    aria-current="page"
+                                    href="{{ route('inventory_stock.index') }}">
+                                        Stok Gudang
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a
+                                    class="nav-link {{ set_active(['shop_stock', 'shop_stock/*']) }}"
+                                    aria-current="page"
+                                    href="{{ route('shop_stock.index') }}">
+                                        Stok Toko
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a
                                     class="nav-link {{ set_active(['customer', 'customer/*']) }}"
                                     aria-current="page"
                                     href="{{ route('customer.index') }}">

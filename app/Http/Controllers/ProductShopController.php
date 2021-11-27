@@ -12,12 +12,10 @@ class ProductShopController extends Controller
     public function index()
     {
         if (Auth::user()->employee) {
-            $shop_id = Auth::user()->employee->shop->id;
+            $product_shop = ProductShop::where('shop_id', Auth::user()->employee->shop->i)->orderBy('id', 'desc')->get();
         } else {
-            $shop_id = null;
+            $product_shop = ProductShop::orderBy('id', 'desc')->get();
         }
-
-        $product_shop = ProductShop::where('shop_id', $shop_id)->orderBy('id', 'desc')->get();
 
         return view('pages.product_shop.index', ['product_shops' => $product_shop]);
     }
@@ -33,21 +31,26 @@ class ProductShopController extends Controller
 
     public function store(Request $request)
     {
-        $product_shop = new ProductShop;
-        $product_shop->product_id = $request->product_id;
+        $product_shop_check = ProductShop::where('product_id', $request->product_id)->first();
 
-        if (Auth::user()->employee) {
-            $product_shop->shop_id = Auth::user()->employee->shop->id;
+        if ($product_shop_check) {
+            return response()->json([
+                'status' => 'false'
+            ]);
+        } else {
+            $product_shop = new ProductShop;
+            $product_shop->product_id = $request->product_id;
+
+            if (Auth::user()->employee) {
+                $product_shop->shop_id = Auth::user()->employee->shop->id;
+            }
+
+            $product_shop->save();
+
+            return response()->json([
+                'status' => 'true'
+            ]);
         }
-
-        $product_shop->code = $request->code;
-        $product_shop->price = $request->price;
-        $product_shop->price_selling = $request->price_selling;
-        $product_shop->save();
-
-        return response()->json([
-            'status' => 'Data berhasil disimpan'
-        ]);
     }
 
     public function edit($id)
@@ -58,33 +61,35 @@ class ProductShopController extends Controller
         return response()->json([
             'id' => $product_shop->id,
             'product_id' => $product_shop->product_id,
-            'code' => $product_shop->code,
-            'price' => $product_shop->price,
-            'price_selling' => $product_shop->price_selling,
             'products' => $product
         ]);
     }
 
     public function update(Request $request)
     {
-        $product_shop = ProductShop::find($request->id);
-        $product_shop->product_id = $request->product_id;
-        $product_shop->code = $request->code;
-        $product_shop->price = $request->price;
-        $product_shop->price_selling = $request->price_selling;
-        $product_shop->save();
+        $product_shop_check = ProductShop::where('product_id', $request->product_id)->first();
 
-        $product = Product::find($request->product_id);
+        if ($product_shop_check) {
+            return response()->json([
+                'status' => 'false'
+            ]);
+        } else {
+            $product_shop = ProductShop::find($request->id);
+            $product_shop->product_id = $request->product_id;
+            $product_shop->save();
 
-        return response()->json([
-            'status' => 'Data berhasil diperbaharui',
-            'id' => $request->id,
-            'product_name' => $product->product_name,
-            'category_name' => $product->category->category_name,
-            'code' => $request->code,
-            'price' => $request->price,
-            'price_selling' => $request->price_selling
-        ]);
+            $product = Product::find($request->product_id);
+
+            return response()->json([
+                'status' => 'true',
+                'id' => $request->id,
+                'product_name' => $product->product_name,
+                'category_name' => $product->category->category_name,
+                'code' => $product->product_code,
+                'price' => $product->product_price,
+                'price_selling' => $product->product_price_selling
+            ]);
+        }
     }
 
     public function deleteBtn($id)
