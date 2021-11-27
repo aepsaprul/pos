@@ -441,8 +441,8 @@
                 id: $('#edit_id').val(),
                 product_id: $('#edit_product_id').val(),
                 supplier_id: $('#edit_supplier_id').val(),
-                price: $('#create_price').val(),
-                quantity: $('#create_quantity').val(),
+                price: $('#edit_price').val().replace(/\./g,''),
+                quantity: $('#edit_quantity').val(),
                 _token: CSRF_TOKEN
             }
 
