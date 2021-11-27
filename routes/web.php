@@ -205,6 +205,7 @@ Route::middleware(['auth'])->group(function () {
 
     // shop stock
     Route::get('shop_stock', [ShopStockController::class, 'index'])->name('shop_stock.index');
+    Route::get('shop_stock/get_data', [ShopStockController::class, 'getData'])->name('shop_stock.get_data');
     Route::get('shop_stock/low', [ShopStockController::class, 'low'])->name('shop_stock.low');
     Route::get('shop_stock/empty', [ShopStockController::class, 'empty'])->name('shop_stock.empty');
 

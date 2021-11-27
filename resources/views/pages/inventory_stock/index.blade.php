@@ -72,7 +72,6 @@
                 url: '{{ URL::route('inventory_stock.get_data') }}',
                 type: 'GET',
                 success: function(response) {
-                    console.log(response.stocks);
                     var stock_val = "" +
                     "<table id=\"table_one\" class=\"table table-bordered\">" +
                         "<thead style=\"background-color: #32a893;\">" +
@@ -126,7 +125,6 @@
                 url: '{{ URL::route('inventory_stock.low') }}',
                 type: 'GET',
                 success: function(response) {
-                    console.log(response.stocks);
                     var stock_val = "" +
                     "<table id=\"table_one\" class=\"table table-bordered\">" +
                         "<thead style=\"background-color: #32a893;\">" +
@@ -173,7 +171,6 @@
                 url: '{{ URL::route('inventory_stock.empty') }}',
                 type: 'GET',
                 success: function(response) {
-                    console.log(response.stocks);
                     var stock_val = "" +
                     "<table id=\"table_one\" class=\"table table-bordered\">" +
                         "<thead style=\"background-color: #32a893;\">" +
