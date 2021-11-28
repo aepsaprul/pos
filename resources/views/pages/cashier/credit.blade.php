@@ -14,29 +14,6 @@
 <div class="container-fluid">
     <div class="row justify-content-center">
         <div class="container mt-2">
-            <div class="row mt-4">
-                <div class="col-sm-3">
-                    <div class="mb-1 row">
-                        <label for="product_code" class="col-sm-4 col-form-label"><strong>Customer</strong></label>
-                        <div class="col-sm-8">
-                            <select name="customer_id" id="customer_id" class="form-control form-control-sm select_customer" autofocus>
-                                <option value="">--Pilih Customer--</option>
-                                @foreach ($customers as $item)
-                                    <option value="{{ $item->id }}">{{ $item->customer_name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-3">
-                    <div class="mb-1 row">
-                        <label for="up_price" class="col-sm-4 col-form-label"><strong>Jasa</strong></label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control form-control-sm" id="up_price" name="up_price">
-                        </div>
-                    </div>
-                </div>
-            </div>
             <div class="row">
                 <div class="col-sm-3">
                     <div class="mb-1 row">
@@ -68,7 +45,24 @@
                 </div>
                 <div class="col-sm-3">
                     <div class="mb-1 row">
-                        <label for="bid" class="col-sm-3 col-form-label"><strong>Nego</strong></label>
+                        <label for="product_code" class="col-sm-4 col-form-label"><strong>Customer</strong></label>
+                        <div class="col-sm-8">
+                            <select name="customer_id" id="customer_id" class="form-control form-control-sm select_customer" autofocus>
+                                <option value="">--Pilih Customer--</option>
+                                @foreach ($customers as $item)
+                                    <option value="{{ $item->id }}">{{ $item->customer_name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-1 row">
+                        <label for="up_price" class="col-sm-4 col-form-label"><strong>Jasa</strong></label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control form-control-sm" id="up_price" name="up_price">
+                        </div>
+                    </div>
+                    <div class="mb-1 row">
+                        <label for="bid" class="col-sm-4 col-form-label"><strong>Nego</strong></label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control form-control-sm" id="bid" name="bid">
                         </div>

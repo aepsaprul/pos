@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('style')
+<link rel="stylesheet" href="{{ asset('lib/select2/css/select2.min.css') }}">
+
 <style>
     .justify-content-center {
         font-size: 12px;
@@ -43,7 +45,18 @@
                 </div>
                 <div class="col-sm-3">
                     <div class="mb-1 row">
-                        <label for="bid" class="col-sm-3 col-form-label"><strong>Nego</strong></label>
+                        <label for="product_code" class="col-sm-4 col-form-label"><strong>Customer</strong></label>
+                        <div class="col-sm-8">
+                            <select name="customer_id" id="customer_id" class="form-control form-control-sm select_customer" autofocus>
+                                <option value="">--Pilih Customer--</option>
+                                @foreach ($customers as $item)
+                                    <option value="{{ $item->id }}">{{ $item->customer_name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-1 row">
+                        <label for="bid" class="col-sm-4 col-form-label"><strong>Nego</strong></label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control form-control-sm" id="bid" name="bid">
                         </div>
@@ -52,6 +65,8 @@
                 <div class="col-sm-3">
                     <div class="row">
                         <div class="col-sm-12">
+                            <input type="hidden" class="form-control form-control-sm" id="discount" name="discount">
+                            <input type="hidden" class="form-control form-control-sm" id="before_discount" name="before_discount" value="{{ $total_price }}">
                             <input type="hidden" name="total_price" id="total_price" value="{{ $total_price }}">
                             <div class="p-3 text-center h3">Rp. <span class="total_price_show">{{ rupiah($total_price) }}</span></div>
                         </div>
@@ -120,9 +135,9 @@
                                     <td class="text-center">{{ $key + 1 }}</td>
                                     <td>{{ $item->product->product_code }}</td>
                                     <td>{{ $item->product->product_name }}</td>
-                                    <td class="text-end">{{ rupiah($item->product->product_price) }}</td>
+                                    <td class="text-end">{{ rupiah($item->product->product_price_selling) }}</td>
                                     <td class="text-center">{{ rupiah($item->quantity) }}</td>
-                                    <td class="text-end">{{ rupiah($item->product->product_price * $item->quantity) }}</td>
+                                    <td class="text-end">{{ rupiah($item->product->product_price_selling * $item->quantity) }}</td>
                                     <td class="text-center">
                                         <div class="btn-group">
                                             <form
@@ -200,9 +215,13 @@
 @endsection
 
 @section('script')
+<script src="{{ asset('lib/select2/js/select2.min.js') }}"></script>
+
 <script>
     $(document).ready(function() {
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
+        $('.select_customer').select2();
 
         $('#product_code').on('keyup change', function() {
             var product_code = $('#product_code').val();
@@ -340,9 +359,24 @@
                 $('.total_price_show').text(negoRp);
                 $('#total_price').val(nego);
             }
-        })
+        });
 
         $('.invoice').hide();
+
+        $('#customer_id').on('change', function() {
+            if ($(this).val() != "") {
+                var before_discount = $('#before_discount').val();
+                var discount = before_discount * 0.05;
+                var discount_total = before_discount - discount;
+                var discount_total_rp = format_rupiah(discount_total);
+
+                $('.total_price_show').text(discount_total_rp);
+                $('#total_price').val(discount_total);
+                $('#discount').val(discount);
+            } else {
+                alert('kosong');
+            }
+        });
 
         $('.btn-print').on('click', function() {
             if ($('#total_price').val() == 0) {
@@ -352,6 +386,8 @@
                 var formData = {
                     bid: $('#bid').val().replace(/\./g,''),
                     total_amount: $('#total_price').val(),
+                    customer_id: $('#customer_id').val(),
+                    discount: $('#discount').val(),
                     _token: CSRF_TOKEN
                 }
 

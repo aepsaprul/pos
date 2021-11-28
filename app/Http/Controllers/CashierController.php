@@ -20,22 +20,26 @@ class CashierController extends Controller
         $sales = Sales::with('product')->where('user_id', Auth::user()->id)->where('invoice_id', null)->get();
         $total_price = $sales->sum('sub_total');
 
+        $customer = Customer::get();
+
         return view('pages.cashier.index', [
             'sales' => $sales,
             'total_price' => $total_price,
-            'invoice_number' => $invoice_number
+            'invoice_number' => $invoice_number,
+            'customers' => $customer
         ]);
     }
 
     public function getProduct(Request $request)
     {
         $product = Product::where('product_code', $request->product_code)->first();
+        $stock = ShopStock::where('product_id', $product->id)->first();
 
         return response()->json([
             'product_id' => $product->id,
             'product_name' => $product->product_name,
-            'stock' => $product->stock,
-            'product_price' => $product->product_price
+            'stock' => $stock->stock,
+            'product_price' => $product->product_price_selling
         ]);
     }
 
@@ -122,6 +126,7 @@ class CashierController extends Controller
 
         if ($request->customer_id) {
             $invoice->customer_id = $request->customer_id;
+            $invoice->discount = $request->discount;
         }
 
         $invoice->bid = $request->bid;

@@ -231,4 +231,7 @@ Route::middleware(['auth'])->group(function () {
 
     // report
     Route::get('report', [ReportController::class, 'index'])->name('report.index');
+    Route::get('report/get_data', [ReportController::class, 'getData'])->name('report.get_data');
+    Route::get('report/not_customer', [ReportController::class, 'notCustomer'])->name('report.not_customer');
+    Route::get('report/customer', [ReportController::class, 'customer'])->name('report.customer');
 });

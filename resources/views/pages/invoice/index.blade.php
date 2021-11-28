@@ -41,7 +41,7 @@
                         <thead style="background-color: #32a893;">
                             <tr>
                                 <th class="text-white text-center fw-bold">No</th>
-                                <th class="text-white text-center fw-bold">Waktu</th>
+                                <th class="text-white text-center fw-bold">Tanggal</th>
                                 <th class="text-white text-center fw-bold">Nama Kasir</th>
                                 <th class="text-white text-center fw-bold">Kode Nota</th>
                                 <th class="text-white text-center fw-bold">Total</th>
