@@ -83,10 +83,10 @@
                         "</thead>" +
                         "<tbody>";
                             $.each(response.stocks, function(index, item) {
-                                if (item.qty <= 20 && item.qty > 0) {
+                                if (item.stock <= 20 && item.stock > 0) {
                                     var text_color = "style=\"color: #F3950D;\"";
                                 }
-                                if (item.qty == 0) {
+                                if (item.stock == 0) {
                                     var text_color = "class=\"text-danger\"";
                                 }
 
@@ -104,7 +104,7 @@
                                             stock_val += "<span " + text_color + ">Produk Tidak Ada</span>";
                                         }
                                     stock_val += "</td>" +
-                                        "<td class=\"text-center\"><span " + text_color + ">" + item.qty + "</span></td>" +
+                                        "<td class=\"text-center\"><span " + text_color + ">" + item.stock + "</span></td>" +
                                     "</tr>";
                             });
                         stock_val += "</tbody>" +

@@ -160,15 +160,6 @@
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="create_price" class="form-label">Harga</label>
-                        <input
-                            type="text"
-                            class="form-control form-control-sm"
-                            id="create_price"
-                            name="create_price"
-                            required>
-                    </div>
-                    <div class="mb-3">
                         <label for="create_quantity" class="form-label">Quantity</label>
                         <input
                             type="text"
@@ -211,15 +202,6 @@
                         <select name="edit_shop_id" id="edit_shop_id" class="form-control" name="edit_shop_id" required>
 
                         </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="edit_price" class="form-label">Harga</label>
-                        <input
-                            type="text"
-                            class="form-control form-control-sm"
-                            id="edit_price"
-                            name="edit_price"
-                            required>
                     </div>
                     <div class="mb-3">
                         <label for="edit_quantity" class="form-label">Quantity</label>
@@ -331,11 +313,6 @@
             $('#create_shop_id').select2({
                 dropdownParent: $('.modal-create')
             });
-
-            var price = document.getElementById("create_price");
-            price.addEventListener("keyup", function(e) {
-                price.value = formatRupiah(this.value, "");
-            });
         });
 
 
@@ -346,7 +323,6 @@
             var formData = {
                 product_id: $('#create_product_id').val(),
                 shop_id: $('#create_shop_id').val(),
-                price: $('#create_price').val().replace(/\./g,''),
                 quantity: $('#create_quantity').val(),
                 _token: CSRF_TOKEN
             }
@@ -368,10 +344,10 @@
             e.preventDefault();
 
             $('#edit_product_id').empty();
-            $('#edit_supplier_id').empty();
+            $('#edit_shop_id').empty();
 
             var id = $(this).attr('data-id');
-            var url = '{{ route("product_in.edit", ":id") }}';
+            var url = '{{ route("product_out.edit", ":id") }}';
             url = url.replace(':id', id );
 
             var formData = {
@@ -385,7 +361,6 @@
                 data: formData,
                 success: function(response) {
                     $('#edit_id').val(response.id);
-                    $('#edit_price').val(format_rupiah(response.price));
                     $('#edit_quantity').val(response.quantity);
 
                     // product query
@@ -399,16 +374,16 @@
                     });
                     $('#edit_product_id').append(value);
 
-                    // supplier query
-                    var value = "<option value=\"\">--Pilih Supplier--</option>";
-                    $.each(response.suppliers, function(index, item) {
+                    // shop query
+                    var value = "<option value=\"\">--Pilih Toko--</option>";
+                    $.each(response.shops, function(index, item) {
                         value += "<option value=\"" + item.id + "\"";
-                            if (item.id == response.supplier_id) {
+                            if (item.id == response.shop_id) {
                                 value += "selected";
                             }
-                        value += ">" + item.supplier_name + "</option>";
+                        value += ">" + item.name + "</option>";
                     });
-                    $('#edit_supplier_id').append(value);
+                    $('#edit_shop_id').append(value);
 
                     $('.modal-edit').modal('show');
                 }
@@ -425,11 +400,6 @@
             $('#edit_supplier_id').select2({
                 dropdownParent: $('.modal-edit')
             });
-
-            var price = document.getElementById("edit_price");
-            price.addEventListener("keyup", function(e) {
-                price.value = formatRupiah(this.value, "");
-            });
         });
 
         $('#form_edit').submit(function(e) {
@@ -440,14 +410,13 @@
             var formData = {
                 id: $('#edit_id').val(),
                 product_id: $('#edit_product_id').val(),
-                supplier_id: $('#edit_supplier_id').val(),
-                price: $('#create_price').val(),
-                quantity: $('#create_quantity').val(),
+                shop_id: $('#edit_shop_id').val(),
+                quantity: $('#edit_quantity').val(),
                 _token: CSRF_TOKEN
             }
 
             $.ajax({
-                url: '{{ URL::route('product_in.update') }}',
+                url: '{{ URL::route('product_out.update') }}',
                 type: 'POST',
                 data: formData,
                 success: function(response) {
@@ -464,7 +433,7 @@
             $('.delete_title').empty();
 
             var id = $(this).attr('data-id');
-            var url = '{{ route("product_in.delete_btn", ":id") }}';
+            var url = '{{ route("product_out.delete_btn", ":id") }}';
             url = url.replace(':id', id );
 
             var formData = {
@@ -495,7 +464,7 @@
             }
 
             $.ajax({
-                url: '{{ URL::route('product_in.delete') }}',
+                url: '{{ URL::route('product_out.delete') }}',
                 type: 'POST',
                 data: formData,
                 success: function(response) {

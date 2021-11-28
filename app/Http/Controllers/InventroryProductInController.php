@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\InventoryProductIn;
+use App\Models\InventoryStock;
 use App\Models\Product;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
@@ -40,6 +41,18 @@ class InventroryProductInController extends Controller
         $productIn->user_id = Auth::user()->id;
         $productIn->save();
 
+        $stock = InventoryStock::where('product_id', $request->product_id)->first();
+
+        if ($stock) {
+            $stock->stock = $stock->stock + $request->quantity;
+            $stock->save();
+        } else {
+            $new_stock = new InventoryStock;
+            $new_stock->product_id = $request->product_id;
+            $new_stock->stock = $request->quantity;
+            $new_stock->save();
+        }
+
         return response()->json([
             'status' => "Data berhasil disimpan"
         ]);
@@ -65,6 +78,28 @@ class InventroryProductInController extends Controller
     public function update(Request $request)
     {
         $productIn = InventoryProductIn::find($request->id);
+
+        // update stock
+        $quantity = $request->quantity;
+        $quantityNow = $productIn->quantity;
+
+        $stock = InventoryStock::where('product_id', $request->product_id)->first();
+
+        if ($quantity > $quantityNow) {
+            $diff = $quantity - $quantityNow;
+
+            $stock->stock = $stock->stock + $diff;
+        } else if ($quantity < $quantityNow) {
+            $diff = $quantityNow - $quantity;
+
+            $stock->stock = $stock->stock - $diff;
+        } else {
+            $stock->stock = $stock->stock - 0;
+        }
+
+        $stock->save();
+
+        // update query
         $productIn->product_id = $request->product_id;
         $productIn->supplier_id = $request->supplier_id;
         $productIn->price = $request->price;
@@ -72,6 +107,7 @@ class InventroryProductInController extends Controller
         $productIn->sub_total = $request->price * $request->quantity;
         $productIn->user_id = Auth::user()->id;
         $productIn->save();
+
 
         return response()->json([
             'status' => 'Data berhasil diperbaharui'

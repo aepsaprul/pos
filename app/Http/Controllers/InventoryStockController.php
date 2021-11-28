@@ -15,9 +15,7 @@ class InventoryStockController extends Controller
     }
 
     public function getData() {
-        $stock = InventoryProductIn::with('product')
-            ->groupBy('product_id')
-            ->get(array(DB::raw('COUNT(id) as total'), 'product_id', DB::raw('SUM(quantity) as qty')));
+        $stock = InventoryStock::with('product')->get();
 
         return response()->json([
             'stocks' => $stock
