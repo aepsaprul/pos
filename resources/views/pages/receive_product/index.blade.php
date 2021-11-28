@@ -79,7 +79,7 @@
                                     </td>
                                     <td class="text-end">
                                         @if ($item->product)
-                                            {{ $item->product->product_price }}
+                                            {{ $item->product->product_price_selling }}
                                         @else
                                             <span class="text-danger">Product Tidak Ada</span>
                                         @endif
@@ -171,7 +171,7 @@
             <form id="form_edit">
 
                 {{-- id  --}}
-                <input type="hidden" id="edit_received_product_id" name="edit_received_product_id">
+                <input type="hidden" id="edit_id" name="edit_id">
 
                 <div class="modal-header" style="background-color: #32a893;">
                     <h5 class="modal-title text-white">Ubah Produk Masuk</h5>
@@ -204,7 +204,7 @@
             <form id="form_delete">
 
                 {{-- id  --}}
-                <input type="hidden" id="delete_received_product_id" name="delete_received_product_id">
+                <input type="hidden" id="delete_id" name="delete_id">
 
                 <div class="modal-header">
                     <h5 class="modal-title">Yakin akan dihapus <span class="delete_title text-decoration-underline"></span> ?</h5>
@@ -261,8 +261,8 @@
                 success: function(response) {
                     // product query
                     var value = "<option value=\"\">--Pilih Produk--</option>";
-                    $.each(response.product, function(index, item) {
-                        value += "<option value=\"" + item.id + "\">" + item.product_name + "</option>";
+                    $.each(response.products, function(index, item) {
+                        value += "<option value=\"" + item.product.id + "\">" + item.product.product_name + "</option>";
                     });
                     $('#create_product_id').append(value);
 
@@ -322,7 +322,7 @@
                 type: 'GET',
                 data: formData,
                 success: function(response) {
-                    $('#edit_received_product_id').val(response.received_product_id);
+                    $('#edit_id').val(response.id);
                     $('#edit_product_id').val(response.product_id);
                     $('#edit_quantity').val(response.quantity);
 
@@ -356,7 +356,7 @@
             $('.modal-edit').modal('hide');
 
             var formData = {
-                id: $('#edit_received_product_id').val(),
+                id: $('#edit_id').val(),
                 product_id: $('#edit_product_id').val(),
                 quantity: $('#edit_quantity').val(),
                 _token: CSRF_TOKEN
@@ -394,7 +394,7 @@
                 data: formData,
                 success: function(response) {
                     $('.delete_title').append(response.product_name);
-                    $('#delete_received_product_id').val(response.id);
+                    $('#delete_id').val(response.id);
                     $('.modal-delete').modal('show');
                 }
             });
@@ -406,7 +406,7 @@
             $('.modal-delete').modal('hide');
 
             var formData = {
-                id: $('#delete_received_product_id').val(),
+                id: $('#delete_id').val(),
                 _token: CSRF_TOKEN
             }
 

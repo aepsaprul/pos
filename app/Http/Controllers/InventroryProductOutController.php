@@ -125,6 +125,12 @@ class InventroryProductOutController extends Controller
     public function delete(Request $request)
     {
         $productOut = InventoryProductOut::find($request->id);
+
+        // update stock
+        $stock = InventoryStock::where('product_id', $productOut->product_id)->first();
+        $stock->stock = $stock->stock + $productOut->quantity;
+        $stock->save();
+
         $productOut->delete();
 
         return response()->json([

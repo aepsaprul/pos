@@ -86,7 +86,7 @@
                                 if (item.stock <= 20 && item.stock > 0) {
                                     var text_color = "style=\"color: #F3950D;\"";
                                 }
-                                if (item.stock == 0) {
+                                if (item.stock <= 0) {
                                     var text_color = "class=\"text-danger\"";
                                 }
 

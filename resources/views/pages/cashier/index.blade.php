@@ -132,7 +132,7 @@
                                                     @method('delete')
                                                     @csrf
                                                         <button
-                                                            class="border-0 bg-white"
+                                                            class="border-0 bg-transparent"
                                                             onclick="return confirm('Yakin akan dihapus?')"
                                                             title="Hapus">
                                                             <i class="fas fa-trash"></i>

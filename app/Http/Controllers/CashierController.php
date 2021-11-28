@@ -6,6 +6,7 @@ use App\Models\Customer;
 use App\Models\Invoice;
 use App\Models\Product;
 use App\Models\Sales;
+use App\Models\ShopStock;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -58,6 +59,18 @@ class CashierController extends Controller
             $sales->save();
         }
 
+        // update stock
+        $stock = ShopStock::where('product_id', $request->product_id)->first();
+
+        if ($stock) {
+            $stock->stock = $stock->stock - $request->quantity;
+            $stock->save();
+        } else {
+            $new_stock = new ShopStock;
+            $new_stock->product_id = $request->product_id;
+            $new_stock->stock = $request->quantity;
+            $new_stock->save();
+        }
 
         return response()->json([
             'status' => "data berhasil ditambahkan"
@@ -67,32 +80,39 @@ class CashierController extends Controller
     public function delete($id)
     {
         $sales = Sales::find($id);
+
+        // update stock
+        $stock = ShopStock::where('product_id', $sales->product_id)->first();
+        $stock->stock = $stock->stock + $sales->quantity;
+        $stock->save();
+
         $sales->delete();
+
 
         return redirect()->route('cashier.index');
     }
 
-    public function invoice(Request $request)
-    {
-        $char = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz123456789';
-        $shuffle  = substr(str_shuffle($char), 0, 5);
+    // public function invoice(Request $request)
+    // {
+    //     $char = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz123456789';
+    //     $shuffle  = substr(str_shuffle($char), 0, 5);
 
-        $invoice = new Invoice();
+    //     $invoice = new Invoice();
 
-        if ($request->customer_id) {
-            $invoice->customer_id = $request->customer_id;
-        }
+    //     if ($request->customer_id) {
+    //         $invoice->customer_id = $request->customer_id;
+    //     }
 
-        $invoice->total_amount = $request->total_amount;
-        $invoice->date_recorded = date('Y-m-d H:i:s');
-        $invoice->user_id = Auth::user()->id;
-        $invoice->code = $shuffle;
-        $invoice->save();
+    //     $invoice->total_amount = $request->total_amount;
+    //     $invoice->date_recorded = date('Y-m-d H:i:s');
+    //     $invoice->user_id = Auth::user()->id;
+    //     $invoice->code = $shuffle;
+    //     $invoice->save();
 
-        $sales = Sales::where('user_id', Auth::user()->id)->where('invoice_id', null);
-        $sales->invoice_id = $invoice->id;
-        $sales->save();
-    }
+    //     $sales = Sales::where('user_id', Auth::user()->id)->where('invoice_id', null);
+    //     $sales->invoice_id = $invoice->id;
+    //     $sales->save();
+    // }
 
     public function print(Request $request)
     {
