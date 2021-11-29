@@ -230,8 +230,14 @@ Route::middleware(['auth'])->group(function () {
         Route::get('cashier/credit', [CashierController::class, 'credit'])->name('cashier.credit');
 
     // report
-    Route::get('report', [ReportController::class, 'index'])->name('report.index');
-    Route::get('report/get_data', [ReportController::class, 'getData'])->name('report.get_data');
-    Route::get('report/not_customer', [ReportController::class, 'notCustomer'])->name('report.not_customer');
-    Route::get('report/customer', [ReportController::class, 'customer'])->name('report.customer');
+        // sales
+        Route::get('report', [ReportController::class, 'index'])->name('report.index');
+        Route::get('report/sales_get_data', [ReportController::class, 'salesGetData'])->name('report.sales_get_data');
+        Route::get('report/sales_not_customer', [ReportController::class, 'salesNotCustomer'])->name('report.sales_not_customer');
+        Route::get('report/sales_customer', [ReportController::class, 'salesCustomer'])->name('report.sales_customer');
+
+        // customer
+        Route::get('report/customer', [ReportController::class, 'customerIndex'])->name('report.customer_index');
+        Route::get('report/customer_get_data', [ReportController::class, 'customerGetData'])->name('report.customer_get_data');
+        Route::get('report/{id}/customer_detail', [ReportController::class, 'customerDetail'])->name('report.customer_detail');
 });

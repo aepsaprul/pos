@@ -321,7 +321,7 @@
                                     <li>
                                         <a
                                             class="dropdown-item"
-                                            href="#">
+                                            href="{{ route('report.customer_index') }}">
                                                 <i class="fas fa-chevron-right"></i>
                                                     Customer
                                         </a>

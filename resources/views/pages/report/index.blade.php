@@ -23,7 +23,7 @@
 <div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <h6 class="text-uppercase text-center">Data Laporan</h6>
+            <h6 class="text-uppercase text-center">Data Laporan Penjualan</h6>
             @if (session('status'))
                 <div class="alert alert-success">
                     {{ session('status') }}
@@ -65,11 +65,11 @@
     $(document).ready(function() {
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
-        invoiceAll();
-        function invoiceAll() {
+        invoiceSalesAll();
+        function invoiceSalesAll() {
             $('.card-body').empty();
             $.ajax({
-                url: '{{ URL::route('report.get_data') }}',
+                url: '{{ URL::route('report.sales_get_data') }}',
                 type: 'GET',
                 success: function(response) {
                     var invoice_val = "" +
@@ -106,7 +106,7 @@
                                         invoice_val += "</td><td>";
 
                                         if (item.customer) {
-                                            invoice_val += item.customer.customer_name;
+                                            invoice_val += "<span class=\"text-primary\">" + item.customer.customer_name + "</span>";
                                         } else {
                                             invoice_val += "Customer Tidak Ada";
                                         }
@@ -129,10 +129,10 @@
             });
         }
 
-        function invoiceNotCustomer() {
+        function invoiceSalesNotCustomer() {
             $('.card-body').empty();
             $.ajax({
-                url: '{{ URL::route('report.not_customer') }}',
+                url: '{{ URL::route('report.sales_not_customer') }}',
                 type: 'GET',
                 success: function(response) {
                     var invoice_val = "" +
@@ -183,10 +183,10 @@
             });
         }
 
-        function invoiceCustomer() {
+        function invoiceSalesCustomer() {
             $('.card-body').empty();
             $.ajax({
-                url: '{{ URL::route('report.customer') }}',
+                url: '{{ URL::route('report.sales_customer') }}',
                 type: 'GET',
                 success: function(response) {
                     var invoice_val = "" +
@@ -250,18 +250,17 @@
 
         $('#opsi').on('change', function() {
             if ($(this).val() == 1) {
-                invoiceAll();
+                invoiceSalesAll();
             }
             else if ($(this).val() == 2) {
-                invoiceNotCustomer();
+                invoiceSalesNotCustomer();
             }
             else if ($(this).val() == 3) {
-                invoiceCustomer();
+                invoiceSalesCustomer();
             }
             else {
-                invoiceAll();
+                invoiceSalesAll();
             }
-
         });
     } );
 </script>
