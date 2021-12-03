@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use App\Models\Invoice;
+use App\Models\Product;
+use App\Models\ProductShop;
+use App\Models\Sales;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -74,6 +77,37 @@ class ReportController extends Controller
 
         return response()->json([
             'invoices' => $invoice
+        ]);
+    }
+
+    public function productIndex()
+    {
+        $produk_shop = ProductShop::with('product')->get();
+
+        return view('pages.report.product', ['product_shops' => $produk_shop]);
+    }
+
+    public function productGetData()
+    {
+        $sales = Sales::with(['user', 'invoice', 'product'])
+            ->select(DB::raw('count(*) as sold, product_id, sum(quantity) as qty, sum(sub_total) as sub_total'))
+            ->groupBy('product_id')
+            ->orderBy('sold', 'desc')
+            ->get();
+
+        return response()->json([
+            'sales' => $sales
+        ]);
+    }
+
+    public function productDetail($id)
+    {
+        $sales = Sales::with(['user', 'invoice', 'product'])
+            ->where('product_id', $id)
+            ->get();
+
+        return response()->json([
+            'sales' => $sales
         ]);
     }
 }

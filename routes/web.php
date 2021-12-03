@@ -240,4 +240,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('report/customer', [ReportController::class, 'customerIndex'])->name('report.customer_index');
         Route::get('report/customer_get_data', [ReportController::class, 'customerGetData'])->name('report.customer_get_data');
         Route::get('report/{id}/customer_detail', [ReportController::class, 'customerDetail'])->name('report.customer_detail');
+
+        // product
+        Route::get('report/product', [ReportController::class, 'productIndex'])->name('report.product_index');
+        Route::get('report/product_get_data', [ReportController::class, 'productGetData'])->name('report.product_get_data');
+        Route::get('report/{id}/product_detail', [ReportController::class, 'productDetail'])->name('report.product_detail');
 });
