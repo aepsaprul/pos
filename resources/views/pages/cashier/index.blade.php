@@ -19,7 +19,18 @@
                     <div class="mb-1 row">
                         <label for="product_code" class="col-sm-4 col-form-label"><strong>Kode Produk</strong></label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control form-control-sm" id="product_code" name="product_code" autofocus>
+                            <input type="text" class="form-control form-control-sm" id="product_code" name="product_code" autocomplete="off" autofocus>
+                        </div>
+                    </div>
+                    <div class="mb-1 row">
+                        <label for="product_manual" class="col-sm-4 col-form-label"><strong>Nama Produk</strong></label>
+                        <div class="col-sm-8">
+                            <select name="product_manual" id="product_manual" class="form-control form-control-sm product_manual_select2">
+                                <option value="">Manual</option>
+                                @foreach ($product_manuals as $item)
+                                    <option value="{{ $item->product->id }}">{{ $item->product->product_name }}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                     <div class="mb-1 row">
@@ -222,6 +233,7 @@
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
         $('.select_customer').select2();
+        $('.product_manual_select2').select2();
 
         $('#product_code').on('keyup change', function() {
             var product_code = $('#product_code').val();
@@ -273,6 +285,31 @@
                     }
                 });
             }
+        });
+
+        // product manual
+        $('#product_manual').on('keyup change', function() {
+            var product_manual = $('#product_manual').val();
+            var formData = {
+                product_manual: product_manual,
+                _token: CSRF_TOKEN
+            }
+
+            $.ajax({
+                url: '{{ URL::route('cashier.product') }}',
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+                    $('#product_id').val(response.product_id);
+                    $('#product_name').val(response.product_name);
+                    $('#stock').val(response.stock);
+                    $('#quantity').val('1');
+
+                    var product_price = format_rupiah(response.product_price);
+                    $('#product_price').val(product_price);
+                    $('#final_price').val(product_price);
+                }
+            });
         });
 
         $('#quantity').on('keyup change', function() {

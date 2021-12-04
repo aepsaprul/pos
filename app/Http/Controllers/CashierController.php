@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use App\Models\Invoice;
 use App\Models\Product;
+use App\Models\ProductShop;
 use App\Models\Sales;
 use App\Models\ShopStock;
 use Illuminate\Http\Request;
@@ -20,19 +21,23 @@ class CashierController extends Controller
         $sales = Sales::with('product')->where('user_id', Auth::user()->id)->where('invoice_id', null)->get();
         $total_price = $sales->sum('sub_total');
 
+        $product_manual = ProductShop::get();
         $customer = Customer::get();
 
         return view('pages.cashier.index', [
             'sales' => $sales,
             'total_price' => $total_price,
             'invoice_number' => $invoice_number,
+            'product_manuals' => $product_manual,
             'customers' => $customer
         ]);
     }
 
     public function getProduct(Request $request)
     {
-        $product = Product::where('product_code', $request->product_code)->first();
+        $product = Product::where('product_code', $request->product_code)
+            ->orWhere('id', $request->product_manual)
+            ->first();
         $stock = ShopStock::where('product_id', $product->id)->first();
 
         return response()->json([

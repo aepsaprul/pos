@@ -145,7 +145,7 @@
                                     "<th class=\"text-white text-center fw-bold\">No</th>" +
                                     "<th class=\"text-white text-center fw-bold\">Nama Produk</th>" +
                                     "<th class=\"text-white text-center fw-bold\">Nama Kasir</th>" +
-                                    "<th class=\"text-white text-center fw-bold\">Kode Invoice</th>" +
+                                    "<th class=\"text-white text-center fw-bold\">Kode Nota</th>" +
                                     "<th class=\"text-white text-center fw-bold\">Quantity</th>" +
                                     "<th class=\"text-white text-center fw-bold\">Total</th>" +
                                 "</tr>" +
