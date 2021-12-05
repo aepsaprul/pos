@@ -334,6 +334,14 @@
                                                     Produk
                                         </a>
                                     </li>
+                                    <li>
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ route('report.income_index') }}">
+                                                <i class="fas fa-chevron-right"></i>
+                                                    Laba Rugi
+                                        </a>
+                                    </li>
                                 </ul>
                             </li>
                         @else

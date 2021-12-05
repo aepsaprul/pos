@@ -245,4 +245,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('report/product', [ReportController::class, 'productIndex'])->name('report.product_index');
         Route::get('report/product_get_data', [ReportController::class, 'productGetData'])->name('report.product_get_data');
         Route::get('report/{id}/product_detail', [ReportController::class, 'productDetail'])->name('report.product_detail');
+
+        // income
+        Route::get('report/income', [ReportController::class, 'incomeIndex'])->name('report.income_index');
+        Route::get('report/income_get_data', [ReportController::class, 'incomeGetData'])->name('report.income_get_data');
+        Route::post('report/income_filter', [ReportController::class, 'incomeFilter'])->name('report.income_filter');
 });

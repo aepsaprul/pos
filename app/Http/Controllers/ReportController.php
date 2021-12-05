@@ -110,4 +110,32 @@ class ReportController extends Controller
             'sales' => $sales
         ]);
     }
+
+    public function incomeIndex()
+    {
+        return view('pages.report.income');
+    }
+
+    public function incomeGetData()
+    {
+        $sales = Sales::with(['product', 'invoice'])->orderBy('id', 'desc')->get();
+
+        return response()->json([
+            'sales' => $sales
+        ]);
+    }
+
+    public function incomeFilter(Request $request)
+    {
+        $start_date = $request->start_date;
+        $end_date = $request->end_date;
+
+        $sales = Sales::with(['invoice', 'product'])->whereHas('invoice', function ($query) use ($start_date, $end_date) {
+            $query->whereBetween('date_recorded', [$start_date, $end_date]);
+        })->get();
+
+        return response()->json([
+            'sales' => $sales
+        ]);
+    }
 }
