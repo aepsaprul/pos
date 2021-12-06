@@ -17,7 +17,7 @@ class ReportController extends Controller
         return view('pages.report.index');
     }
 
-    public function salesGetData()
+    public function salesGetDataCurrent()
     {
         $invoice = Invoice::with(['customer', 'user'])->orderBy('id', 'desc')->get();
 
@@ -26,10 +26,35 @@ class ReportController extends Controller
         ]);
     }
 
-    public function salesNotCustomer()
+    public function salesGetData(Request $request)
     {
+        $start_date = $request->start_date;
+        $end_date = $request->end_date;
+
+        if ($start_date == null || $end_date == null) {
+            $invoice = Invoice::with(['customer', 'user'])
+                ->orderBy('id', 'desc')
+                ->get();
+        } else {
+            $invoice = Invoice::with(['customer', 'user'])
+                ->whereBetween('date_recorded', [$start_date, $end_date])
+                ->orderBy('id', 'desc')
+                ->get();
+        }
+
+        return response()->json([
+            'invoices' => $invoice
+        ]);
+    }
+
+    public function salesNotCustomer(Request $request)
+    {
+        $start_date = $request->start_date;
+        $end_date = $request->end_date;
+
         $invoice = Invoice::with('user')
             ->whereNull('customer_id')
+            ->whereBetween('date_recorded', [$start_date, $end_date])
             ->orderBy('id', 'desc')
             ->get();
 
@@ -38,10 +63,14 @@ class ReportController extends Controller
         ]);
     }
 
-    public function salesCustomer()
+    public function salesCustomer(Request $request)
     {
+        $start_date = $request->start_date;
+        $end_date = $request->end_date;
+
         $invoice = Invoice::with(['customer', 'user'])
             ->whereNotNull('customer_id')
+            ->whereBetween('date_recorded', [$start_date, $end_date])
             ->orderBy('id', 'desc')
             ->get();
 

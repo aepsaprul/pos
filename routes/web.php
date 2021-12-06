@@ -232,9 +232,10 @@ Route::middleware(['auth'])->group(function () {
     // report
         // sales
         Route::get('report', [ReportController::class, 'index'])->name('report.index');
-        Route::get('report/sales_get_data', [ReportController::class, 'salesGetData'])->name('report.sales_get_data');
-        Route::get('report/sales_not_customer', [ReportController::class, 'salesNotCustomer'])->name('report.sales_not_customer');
-        Route::get('report/sales_customer', [ReportController::class, 'salesCustomer'])->name('report.sales_customer');
+        Route::get('report/sales_get_data_current', [ReportController::class, 'salesGetDataCurrent'])->name('report.sales_get_data_current');
+        Route::post('report/sales_get_data', [ReportController::class, 'salesGetData'])->name('report.sales_get_data');
+        Route::post('report/sales_not_customer', [ReportController::class, 'salesNotCustomer'])->name('report.sales_not_customer');
+        Route::post('report/sales_customer', [ReportController::class, 'salesCustomer'])->name('report.sales_customer');
 
         // customer
         Route::get('report/customer', [ReportController::class, 'customerIndex'])->name('report.customer_index');
