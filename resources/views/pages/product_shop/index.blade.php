@@ -56,6 +56,7 @@
                                 <th class="text-white text-center fw-bold">Nama</th>
                                 <th class="text-white text-center fw-bold">Kategori</th>
                                 <th class="text-white text-center fw-bold">Harga Jual</th>
+                                <th class="text-white text-center fw-bold">Stok</th>
                                 <th class="text-white text-center fw-bold">Aksi</th>
                             </tr>
                         </thead>
@@ -102,6 +103,13 @@
                                                 Harga Jual Produk Kosong
                                             @endif
                                         </span>
+                                    </td>
+                                    <td class="text-center">
+                                        @if ($item->stock == null)
+                                            0
+                                        @else
+                                            {{ $item->stock }}
+                                        @endif
                                     </td>
                                     <td class="text-center">
                                         <div class="btn-group">

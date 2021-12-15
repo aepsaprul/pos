@@ -12,7 +12,7 @@ class ProductShopController extends Controller
     public function index()
     {
         if (Auth::user()->employee) {
-            $product_shop = ProductShop::where('shop_id', Auth::user()->employee->shop->i)->orderBy('id', 'desc')->get();
+            $product_shop = ProductShop::where('shop_id', Auth::user()->employee->shop->id)->orderBy('id', 'desc')->get();
         } else {
             $product_shop = ProductShop::orderBy('id', 'desc')->get();
         }
@@ -31,7 +31,9 @@ class ProductShopController extends Controller
 
     public function store(Request $request)
     {
-        $product_shop_check = ProductShop::where('product_id', $request->product_id)->first();
+        $product_shop_check = ProductShop::where('product_id', $request->product_id)
+            ->where('shop_id', Auth::user()->employee->shop->id)
+            ->first();
 
         if ($product_shop_check) {
             return response()->json([
@@ -67,7 +69,9 @@ class ProductShopController extends Controller
 
     public function update(Request $request)
     {
-        $product_shop_check = ProductShop::where('product_id', $request->product_id)->first();
+        $product_shop_check = ProductShop::where('product_id', $request->product_id)
+            ->where('shop_id', Auth::user()->employee->shop->id)
+            ->first();
 
         if ($product_shop_check) {
             return response()->json([

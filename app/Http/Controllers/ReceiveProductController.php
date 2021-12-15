@@ -37,20 +37,25 @@ class ReceiveProductController extends Controller
         $receive_product->price = $product->product_price_selling;
         $receive_product->quantity = $request->quantity;
         $receive_product->sub_total = $request->quantity * $product->product_price_selling;
+        $receive_product->stock = $request->quantity;
         $receive_product->date = date('Y-m-d H:i:s');
         $receive_product->save();
 
-        $stock = ShopStock::where('product_id', $request->product_id)->first();
+        // $stock = ShopStock::where('product_id', $request->product_id)->first();
 
-        if ($stock) {
-            $stock->stock = $stock->stock + $request->quantity;
-            $stock->save();
-        } else {
-            $new_stock = new ShopStock;
-            $new_stock->product_id = $request->product_id;
-            $new_stock->stock = $request->quantity;
-            $new_stock->save();
-        }
+        // if ($stock) {
+        //     $stock->stock = $stock->stock + $request->quantity;
+        //     $stock->save();
+        // } else {
+        //     $new_stock = new ShopStock;
+        //     $new_stock->product_id = $request->product_id;
+        //     $new_stock->stock = $request->quantity;
+        //     $new_stock->save();
+        // }
+
+        $stock = ProductShop::where('product_id', $request->product_id)->first();
+        $stock->stock = $stock->stock + $request->quantity;
+        $stock->save();
 
         return response()->json([
             'status' => 'Data berhasil di simpan'
@@ -80,7 +85,8 @@ class ReceiveProductController extends Controller
         $quantity = $request->quantity;
         $quantityNow = $receive_product->quantity;
 
-        $stock = ShopStock::where('product_id', $request->product_id)->first();
+        // $stock = ShopStock::where('product_id', $request->product_id)->first();
+        $stock = ProductShop::where('product_id', $request->product_id)->first();
 
         if ($quantity > $quantityNow) {
             $diff = $quantity - $quantityNow;
@@ -102,6 +108,7 @@ class ReceiveProductController extends Controller
         $receive_product->price = $product->product_price_selling;
         $receive_product->quantity = $request->quantity;
         $receive_product->sub_total = $request->quantity * $product->product_price_selling;
+        $receive_product->stock = $request->quantity;
         $receive_product->date = date('Y-m-d H:i:s');
         $receive_product->save();
 

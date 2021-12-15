@@ -6,10 +6,12 @@ use App\Models\Customer;
 use App\Models\Invoice;
 use App\Models\Product;
 use App\Models\ProductShop;
+use App\Models\ReceiveProduct;
 use App\Models\Sales;
 use App\Models\ShopStock;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class CashierController extends Controller
@@ -38,7 +40,7 @@ class CashierController extends Controller
         $product = Product::where('product_code', $request->product_code)
             ->orWhere('id', $request->product_manual)
             ->first();
-        $stock = ShopStock::where('product_id', $product->id)->first();
+        $stock = ProductShop::where('product_id', $product->id)->first();
 
         return response()->json([
             'product_id' => $product->id,
@@ -69,17 +71,48 @@ class CashierController extends Controller
         }
 
         // update stock
-        $stock = ShopStock::where('product_id', $request->product_id)->first();
+        $received_product_stock = ReceiveProduct::where('product_id', $request->product_id)
+            ->whereNotNull('stock')
+            ->where('stock', '>', 0)
+            ->select(DB::raw('sum(stock) as total_stock'))
+            ->first();
 
-        if ($stock) {
-            $stock->stock = $stock->stock - $request->quantity;
-            $stock->save();
+        $stock_all = $received_product_stock->total_stock;
+        $qty = $request->quantity;
+
+        $received_product = ReceiveProduct::where('product_id', $request->product_id)
+            ->whereNotNull('stock')
+            ->where('stock', '>', 0)
+            ->get();
+
+        if ($qty <= $stock_all) {
+            foreach ($received_product as $key => $item) {
+                $id = $item->id;
+                $stock = $item->stock;
+
+                if ($qty > 0) {
+                    $temp = $qty;
+                    $qty = $qty - $stock;
+
+                    if ($qty > 0) {
+                        $stock_update = 0;
+                    } else {
+                        $stock_update = $stock - $temp;
+                    }
+
+                    $received_product_update = ReceiveProduct::where('product_id', $request->product_id)->where('id', $id)->first();
+                    $received_product_update->stock = $stock_update;
+                    $received_product_update->save();
+                }
+            }
         } else {
-            $new_stock = new ShopStock;
-            $new_stock->product_id = $request->product_id;
-            $new_stock->stock = $request->quantity;
-            $new_stock->save();
+            echo "stok barang tidak cukup";
         }
+
+
+        $stock = ProductShop::where('product_id', $request->product_id)->first();
+        $stock->stock = $stock->stock - $request->quantity;
+        $stock->save();
 
         return response()->json([
             'status' => "data berhasil ditambahkan"

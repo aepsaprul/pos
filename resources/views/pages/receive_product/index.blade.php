@@ -57,6 +57,8 @@
                                 <th class="text-white text-center fw-bold">Harga Produk</th>
                                 <th class="text-white text-center fw-bold">Qty</th>
                                 <th class="text-white text-center fw-bold">Sub Total</th>
+                                <th class="text-white text-center fw-bold">Stok</th>
+                                <th class="text-white text-center fw-bold">Saldo</th>
                                 <th class="text-white text-center fw-bold">Tanggal</th>
                                 <th class="text-white text-center fw-bold">Aksi</th>
                             </tr>
@@ -79,13 +81,19 @@
                                     </td>
                                     <td class="text-end">
                                         @if ($item->product)
-                                            {{ $item->product->product_price_selling }}
+                                            {{ rupiah($item->price) }}
                                         @else
                                             <span class="text-danger">Product Tidak Ada</span>
                                         @endif
                                     </td>
                                     <td class="text-center">{{ $item->quantity }}</td>
                                     <td class="text-end">{{ rupiah($item->sub_total) }}</td>
+                                    <td class="text-center">{{ $item->stock }}</td>
+                                    @php
+                                        $stock_sold = $item->quantity - $item->stock;
+                                        $saldo = $stock_sold * $item->price;
+                                    @endphp
+                                    <td class="text-center">{{ rupiah($saldo) }}</td>
                                     <td class="text-center">{{ date('d-m-Y', strtotime($item->date)) }}</td>
                                     <td class="text-center">
                                         <div class="btn-group">
