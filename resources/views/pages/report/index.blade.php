@@ -385,7 +385,6 @@
                 data: formData,
                 type: 'GET',
                 success: function(response) {
-
                     var value_employee = "<option value=\"0\">--Pilih Kasir--</option>"
                     $.each(response.cashiers, function(index, item) {
                         value_employee += "<option value=\"" + item.id + "\">" + item.full_name + "</option>";
@@ -414,27 +413,68 @@
                     _token: CSRF_TOKEN
                 }
 
+                $('.card-body').empty();
+
                 $.ajax({
                     url: '{{ URL::route('report.sales_search') }}',
                     type: 'POST',
                     data: formData,
                     success: function(response) {
-                        console.log(response);
+                        var invoice_val = "" +
+                        "<table id=\"table_one\" class=\"table table-bordered\">" +
+                            "<thead style=\"background-color: #32a893;\">" +
+                                "<tr>" +
+                                    "<th class=\"text-white text-center fw-bold\">No</th>" +
+                                    "<th class=\"text-white text-center fw-bold\">Tanggal</th>" +
+                                    "<th class=\"text-white text-center fw-bold\">Nama Kasir</th>" +
+                                    "<th class=\"text-white text-center fw-bold\">Customer</th>" +
+                                    "<th class=\"text-white text-center fw-bold\">Nego</th>" +
+                                    "<th class=\"text-white text-center fw-bold\">Kode Nota</th>" +
+                                    "<th class=\"text-white text-center fw-bold\">Total</th>" +
+                                "</tr>" +
+                            "</thead>" +
+                            "<tbody>";
+                                $.each(response.invoices, function(index, item) {
+                                    invoice_val += "" +
+                                        "<tr";
+                                        if (index % 2 == 1) {
+                                        invoice_val += " class=\"tabel_active\"";
+                                        }
+                                        invoice_val += ">" +
+                                            "<td class=\"text-center\">" + (index + 1) + "</td>" +
+                                            "<td class=\"text-center\">" + tanggal(item.date_recorded) + "</td>" +
+                                            "<td class=\"text-center\">";
+
+                                            if (item.user) {
+                                                invoice_val += item.user.name;
+                                            } else {
+                                                invoice_val += "User Tidak Ada";
+                                            }
+
+                                            invoice_val += "</td><td>";
+
+                                            if (item.customer) {
+                                                invoice_val += "<span class=\"text-primary\">" + item.customer.customer_name + "</span>";
+                                            } else {
+                                                invoice_val += "Customer Tidak Ada";
+                                            }
+
+                                        invoice_val += "</td>" +
+                                            "<td class=\"text-center\">" + item.bid + "</td>" +
+                                            "<td class=\"text-center\">" + item.code + "</td>" +
+                                            "<td class=\"text-center\">" + format_rupiah(item.total_amount) + "</td>" +
+                                        "</tr>";
+                                });
+                            invoice_val += "</tbody>" +
+                        "</table>";
+
+                        $('.card-body').append(invoice_val);
+
+                        $('#table_one').DataTable({
+                            'ordering': false
+                        });
                     }
                 });
-
-                // if ($('#opsi').val() == 1) {
-                //     invoiceSalesAll();
-                // }
-                // else if ($('#opsi').val() == 2) {
-                //     invoiceSalesNotCustomer();
-                // }
-                // else if ($('#opsi').val() == 3) {
-                //     invoiceSalesCustomer();
-                // }
-                // else {
-                //     invoiceSalesAll();
-                // }
             }
         });
     } );
