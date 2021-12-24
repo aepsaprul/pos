@@ -5,12 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Invoice;
 use App\Models\Sales;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SalesController extends Controller
 {
     public function index()
     {
-        $invoice = Invoice::get();
+        $invoice = Invoice::where('shop_id', Auth::user()->employee->shop_id)->get();
         return view('pages.sales.index', ['invoices' => $invoice]);
     }
 

@@ -14,13 +14,13 @@ class ReceiveProductController extends Controller
 {
     public function index()
     {
-        $receive_product = ReceiveProduct::get();
+        $receive_product = ReceiveProduct::where('shop_id', Auth::user()->employee->shop_id)->get();
         return view('pages.receive_product.index', ['receive_products' => $receive_product]);
     }
 
     public function create()
     {
-        $product = ProductShop::with('product')->get();
+        $product = ProductShop::with('product')->where('shop_id', Auth::user()->employee->shop_id)->get();
 
         return response()->json([
             'products' => $product,
@@ -33,6 +33,7 @@ class ReceiveProductController extends Controller
 
         $receive_product = new ReceiveProduct;
         $receive_product->user_id = Auth::user()->id;
+        $receive_product->shop_id = Auth::user()->employee->shop_id;
         $receive_product->product_id = $request->product_id;
         $receive_product->price = $product->product_price_selling;
         $receive_product->quantity = $request->quantity;

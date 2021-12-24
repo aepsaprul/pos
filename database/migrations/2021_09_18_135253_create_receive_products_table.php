@@ -21,6 +21,7 @@ class CreateReceiveProductsTable extends Migration
             $table->double('sub_total')->nullable();
             $table->dateTimeTz('date')->nullable();
             $table->integer('user_id')->nullable();
+            $table->integer('shop_id')->nullable();
             $table->timestamps();
         });
     }

@@ -236,7 +236,7 @@
                                     </li>
                                 </ul>
                             </li>
-                            <li class="nav-item">
+                            {{-- <li class="nav-item">
                                 <a
                                     class="nav-link {{ set_active(['inventory_stock', 'inventory_stock/*']) }}"
                                     aria-current="page"
@@ -251,7 +251,7 @@
                                     href="{{ route('shop_stock.index') }}">
                                         Stok Toko
                                 </a>
-                            </li>
+                            </li> --}}
                             <li class="nav-item">
                                 <a
                                     class="nav-link {{ set_active(['customer', 'customer/*']) }}"

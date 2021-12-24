@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\Employee;
 use App\Models\Invoice;
 use App\Models\Product;
 use App\Models\ProductShop;
 use App\Models\Sales;
+use App\Models\Shop;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -14,7 +17,70 @@ class ReportController extends Controller
 {
     public function index()
     {
-        return view('pages.report.index');
+        $shop = Shop::get();
+
+        return view('pages.report.index', ['shops' => $shop]);
+    }
+
+    public function salesShop($id)
+    {
+        $cashier = Employee::where('shop_id', $id)->where('position_id', 6)->get();
+
+        return response()->json([
+            'cashiers' => $cashier
+        ]);
+    }
+
+    public function salesSearch(Request $request)
+    {
+        $shop_id = $request->shop_id;
+        $opsi = $request->opsi;
+        $start_date = $request->start_date;
+        $end_date = $request->end_date;
+
+        if ($request->cashier_id != 0) {
+            $cashier_id = $request->cashier_id;
+            $user = User::where('employee_id', $cashier_id)->first();
+        } else {
+            $cashier_id = false;
+            $user = false;
+        }
+
+        if ($opsi == 2) {
+            $invoice = Invoice::with(['customer', 'user'])
+                ->whereBetween('date_recorded', [$start_date, $end_date])
+                ->where('shop_id', $shop_id)
+                ->when($cashier_id, function ($query) use ($user) {
+                    $query->where('user_id', $user->id);
+                })
+                ->whereNull('customer_id')
+                ->orderBy('id', 'desc')
+                ->get();
+        } elseif ($opsi == 3) {
+            $invoice = Invoice::with(['customer', 'user'])
+                ->whereBetween('date_recorded', [$start_date, $end_date])
+                ->where('shop_id', $shop_id)
+                ->when($cashier_id, function ($query) use ($user) {
+                    $query->where('user_id', $user->id);
+                })
+                ->whereNotNull('customer_id')
+                ->orderBy('id', 'desc')
+                ->get();
+        } else {
+            $invoice = Invoice::with(['customer', 'user'])
+                ->whereBetween('date_recorded', [$start_date, $end_date])
+                ->where('shop_id', $shop_id)
+                ->when($cashier_id, function ($query) use ($user) {
+                    $query->where('user_id', $user->id);
+                })
+                ->orderBy('id', 'desc')
+                ->get();
+        }
+
+        return response()->json([
+            'invoices' => $invoice
+        ]);
+
     }
 
     public function salesGetDataCurrent()

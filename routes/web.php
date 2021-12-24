@@ -232,6 +232,8 @@ Route::middleware(['auth'])->group(function () {
     // report
         // sales
         Route::get('report', [ReportController::class, 'index'])->name('report.index');
+        Route::get('repost/{id}/sales_shop', [ReportController::class, 'salesShop'])->name('report.sales_shop');
+        Route::post('report/sales_search', [ReportController::class, 'salesSearch'])->name('report.sales_search');
         Route::get('report/sales_get_data_current', [ReportController::class, 'salesGetDataCurrent'])->name('report.sales_get_data_current');
         Route::post('report/sales_get_data', [ReportController::class, 'salesGetData'])->name('report.sales_get_data');
         Route::post('report/sales_not_customer', [ReportController::class, 'salesNotCustomer'])->name('report.sales_not_customer');

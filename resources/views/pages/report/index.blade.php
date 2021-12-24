@@ -32,9 +32,24 @@
 
             <div class="row mb-2 mt-1">
                 <div class="col-md-2">
+                    <label for="select_shop">Pilih Toko</label>
+                    <select name="select_shop" id="select_shop" class="form-control form-control-sm select_shop">
+                        <option value="0">--Pilih Toko--</option>
+                        @foreach ($shops as $item)
+                            <option value="{{ $item->id }}">{{ $item->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label for="select_cashier">Pilih Kasir</label>
+                    <select name="select_cashier" id="select_cashier" class="form-control form-control-sm select_cashier">
+
+                    </select>
+                </div>
+                <div class="col-md-2">
                     <label for="opsi">Pilih Opsi</label>
                     <select name="opsi" id="opsi" class="form-control form-control-sm">
-                        <option value="">--Pilih Opsi--</option>
+                        <option value="0">--Pilih Opsi--</option>
                         <option value="1">Data Keseluruhan</option>
                         <option value="2">Data Bukan Customer</option>
                         <option value="3">Data Customer</option>
@@ -352,22 +367,74 @@
             });
         }
 
+        $('#select_shop').on('change', function() {
+
+            $('#select_cashier').empty();
+
+            var id = $(this).val();
+            var url = '{{ route("report.sales_shop", ":id") }}';
+            url = url.replace(':id', id );
+
+            var formData = {
+                id: id,
+                _token: CSRF_TOKEN
+            }
+
+            $.ajax({
+                url: url,
+                data: formData,
+                type: 'GET',
+                success: function(response) {
+
+                    var value_employee = "<option value=\"0\">--Pilih Kasir--</option>"
+                    $.each(response.cashiers, function(index, item) {
+                        value_employee += "<option value=\"" + item.id + "\">" + item.full_name + "</option>";
+                    });
+                    $('#select_cashier').append(value_employee);
+                }
+            });
+        });
+
         $('.btn-search').on('click', function() {
             if ($('#start_date').val() == "" || $('#end_date').val() == "") {
                 alert('Tanggal harus diisi!');
             } else {
-                if ($('#opsi').val() == 1) {
-                    invoiceSalesAll();
+                var shop_id = $('#select_shop').val();
+                var cashier_id = $('#select_cashier').val();
+                var opsi = $('#opsi').val();
+                var start_date = $('#start_date').val();
+                var end_date = $('#end_date').val();
+
+                var formData = {
+                    shop_id: shop_id,
+                    cashier_id: cashier_id,
+                    opsi: opsi,
+                    start_date: start_date,
+                    end_date: end_date,
+                    _token: CSRF_TOKEN
                 }
-                else if ($('#opsi').val() == 2) {
-                    invoiceSalesNotCustomer();
-                }
-                else if ($('#opsi').val() == 3) {
-                    invoiceSalesCustomer();
-                }
-                else {
-                    invoiceSalesAll();
-                }
+
+                $.ajax({
+                    url: '{{ URL::route('report.sales_search') }}',
+                    type: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        console.log(response);
+                    }
+                });
+
+                // if ($('#opsi').val() == 1) {
+                //     invoiceSalesAll();
+                // }
+                // else if ($('#opsi').val() == 2) {
+                //     invoiceSalesNotCustomer();
+                // }
+                // else if ($('#opsi').val() == 3) {
+                //     invoiceSalesCustomer();
+                // }
+                // else {
+                //     invoiceSalesAll();
+                // }
             }
         });
     } );

@@ -64,6 +64,7 @@ class CashierController extends Controller
         } else {
             $sales = new Sales;
             $sales->user_id = Auth::user()->id;
+            $sales->shop_id = Auth::user()->employee->shop_id;
             $sales->product_id = $request->product_id;
             $sales->quantity = $request->quantity;
             $sales->sub_total = $request->sub_total;
@@ -171,6 +172,7 @@ class CashierController extends Controller
         $invoice->total_amount = $request->total_amount;
         $invoice->date_recorded = date('Y-m-d H:i:s');
         $invoice->user_id = Auth::user()->id;
+        $invoice->shop_id = Auth::user()->employee->shop_id;
         $invoice->code = $invoice_code;
         $invoice->save();
 
