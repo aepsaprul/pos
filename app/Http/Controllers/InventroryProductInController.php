@@ -39,19 +39,12 @@ class InventroryProductInController extends Controller
         $productIn->sub_total = $request->price * $request->quantity;
         $productIn->date = date('Y-m-d H:i:s');
         $productIn->user_id = Auth::user()->id;
+        $productIn->stock = $request->quantity;
         $productIn->save();
 
-        $stock = InventoryStock::where('product_id', $request->product_id)->first();
-
-        if ($stock) {
-            $stock->stock = $stock->stock + $request->quantity;
-            $stock->save();
-        } else {
-            $new_stock = new InventoryStock;
-            $new_stock->product_id = $request->product_id;
-            $new_stock->stock = $request->quantity;
-            $new_stock->save();
-        }
+        $stock = Product::where('id', $request->product_id)->first();
+        $stock->stock = $stock->stock + $request->quantity;
+        $stock->save();
 
         return response()->json([
             'status' => "Data berhasil disimpan"

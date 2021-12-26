@@ -26,9 +26,9 @@
                         <label for="product_manual" class="col-sm-4 col-form-label"><strong>Nama Produk</strong></label>
                         <div class="col-sm-8">
                             <select name="product_manual" id="product_manual" class="form-control form-control-sm product_manual_select2">
-                                <option value="">Manual</option>
-                                @foreach ($product_manuals as $item)
-                                    <option value="{{ $item->product->id }}">{{ $item->product->product_name }}</option>
+                                <option value="">Manual Produk</option>
+                                @foreach ($products as $item)
+                                    <option value="{{ $item->id }}">{{ $item->product_name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -42,34 +42,14 @@
                 </div>
                 <div class="col-sm-3">
                     <div class="mb-1 row">
-                        <label for="pay" class="col-sm-3 col-form-label"><strong>Bayar</strong></label>
+                        <label for="shop_id" class="col-sm-4 col-form-label"><strong>Toko</strong></label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control form-control-sm" id="pay" name="pay">
-                        </div>
-                    </div>
-                    <div class="mb-1 row">
-                        <label for="change" class="col-sm-3 col-form-label">Kembalian</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control form-control-sm" id="change" name="change" disabled>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-3">
-                    <div class="mb-1 row">
-                        <label for="product_code" class="col-sm-4 col-form-label"><strong>Customer</strong></label>
-                        <div class="col-sm-8">
-                            <select name="customer_id" id="customer_id" class="form-control form-control-sm select_customer" autofocus>
-                                <option value="">--Pilih Customer--</option>
-                                @foreach ($customers as $item)
-                                    <option value="{{ $item->id }}">{{ $item->customer_name }}</option>
+                            <select name="shop_id" id="shop_id" class="form-control form-control-sm select_shop" autofocus>
+                                <option value="0">--Pilih Toko--</option>
+                                @foreach ($shops as $item)
+                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
                                 @endforeach
                             </select>
-                        </div>
-                    </div>
-                    <div class="mb-1 row">
-                        <label for="bid" class="col-sm-4 col-form-label"><strong>Nego</strong></label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control form-control-sm" id="bid" name="bid">
                         </div>
                     </div>
                 </div>
@@ -137,7 +117,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($sales as $key => $item)
+                            @foreach ($product_outs as $key => $item)
                                 <tr
                                     @if ($key % 2 == 1)
                                         echo class="tabel_active";
@@ -152,7 +132,7 @@
                                     <td class="text-center">
                                         <div class="btn-group">
                                             <form
-                                                action="{{ route('cashier.delete', [$item->id]) }}"
+                                                action="{{ route('inventory_cashier.delete', [$item->id]) }}"
                                                 method="POST"
                                                 class="d-inline">
                                                     @method('delete')
@@ -194,7 +174,7 @@
             <div class="row">
                 <div class="col-md-12 col-sm-12 col-12 invoice_data">
                     <table width="100%">
-                        @foreach ($sales as $key => $item)
+                        @foreach ($product_outs as $key => $item)
                         <tr>
                             <td>{{ $item->product->product_name }}</td>
                             <td>{{ rupiah($item->quantity) }}</td>
@@ -232,6 +212,7 @@
     $(document).ready(function() {
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
+        $('.invoice').hide();
         $('.select_customer').select2();
         $('.product_manual_select2').select2();
 
@@ -243,7 +224,7 @@
             }
 
             $.ajax({
-                url: '{{ URL::route('cashier.product') }}',
+                url: '{{ URL::route('inventory_cashier.product') }}',
                 type: 'POST',
                 data: formData,
                 success: function(response) {
@@ -275,7 +256,7 @@
                 }
 
                 $.ajax({
-                    url: '{{ URL::route('cashier.sales_save') }}',
+                    url: '{{ URL::route('inventory_cashier.product_out_save') }}',
                     type: 'POST',
                     data: formData,
                     success: function(response) {
@@ -296,7 +277,7 @@
             }
 
             $.ajax({
-                url: '{{ URL::route('cashier.product') }}',
+                url: '{{ URL::route('inventory_cashier.product') }}',
                 type: 'POST',
                 data: formData,
                 success: function(response) {
@@ -329,16 +310,18 @@
                 var product_price = $('#product_price').val();
                 var product_price_replace = product_price.replace('.', '');
                 var final_price = quantity * product_price_replace;
+                var shop_id = $('#shop_id').val();
 
                 var formData = {
                     quantity: quantity,
                     product_id: product_id,
                     sub_total: final_price,
+                    shop_id: shop_id,
                     _token: CSRF_TOKEN
                 }
 
                 $.ajax({
-                    url: '{{ URL::route('cashier.sales_save') }}',
+                    url: '{{ URL::route('inventory_cashier.product_out_save') }}',
                     type: 'POST',
                     data: formData,
                     success: function(response) {
@@ -350,86 +333,19 @@
             }
         });
 
-        var payRupiah = document.getElementById("pay");
-        payRupiah.addEventListener("keyup", function(e) {
-            payRupiah.value = formatRupiah(this.value, "");
-        });
-
-        $('#pay').on('keypress change', function(event) {
-            if (event.keyCode === 13) {
-                var pay = $('#pay').val();
-                var pay_int = pay.replace(/\./g,'');
-                var total_price = $('#total_price').val();
-
-                if (parseInt(pay_int) < parseInt(total_price)) {
-                    var money_min = total_price - pay_int;
-                    $('#change').val("Bayar kurang " + format_rupiah(money_min));
-                } else if (pay == "") {
-                    alert('Kolom bayar harus diisi');
-                } else {
-                    var calculate = pay_int - total_price;
-                    $('#change').val(format_rupiah(calculate));
-                }
-
-            }
-        });
-
-        var bidRupiah = document.getElementById("bid");
-        bidRupiah.addEventListener("keyup", function(e) {
-            bidRupiah.value = formatRupiah(this.value, "");
-        });
-
-        $('#bid').on('keypress', function(event) {
-            if (event.keyCode === 13) {
-                var bid = $('#bid').val().replace(/\./g,'');
-                var total_price = $('#total_price').val();
-                var nego = total_price - bid;
-                var negoRp = format_rupiah(nego);
-
-                var nego_val = "" +
-                        "<td class=\"text-end\">Nego</td>" +
-                        "<td>:</td>" +
-                        "<td class=\"text-end print_harga_nego\" style=\"border-top: 1px dashed #000;\">" + $('#bid').val() + "</td>";
-
-                $('.nego_layout').append(nego_val);
-                $('.print_total_price').text(negoRp);
-                $('.total_price_show').text(negoRp);
-                $('#total_price').val(nego);
-            }
-        });
-
-        $('.invoice').hide();
-
-        $('#customer_id').on('change', function() {
-            if ($(this).val() != "") {
-                var before_discount = $('#before_discount').val();
-                var discount = before_discount * 0.05;
-                var discount_total = before_discount - discount;
-                var discount_total_rp = format_rupiah(discount_total);
-
-                $('.total_price_show').text(discount_total_rp);
-                $('#total_price').val(discount_total);
-                $('#discount').val(discount);
-            } else {
-                alert('kosong');
-            }
-        });
-
         $('.btn-print').on('click', function() {
-            if ($('#total_price').val() == 0) {
-                alert('Data Pembelian Kosong');
+            if ($('#total_price').val() == 0 || $('#shop_id').val() == 0) {
+                alert('Toko harus dipilih dan Total Harga tidak boleh kosong');
             } else {
 
                 var formData = {
-                    bid: $('#bid').val().replace(/\./g,''),
                     total_amount: $('#total_price').val(),
-                    customer_id: $('#customer_id').val(),
-                    discount: $('#discount').val(),
+                    shop_id: $('#shop_id').val(),
                     _token: CSRF_TOKEN
                 }
 
                 $.ajax({
-                    url: '{{ URL::route('cashier.print') }}',
+                    url: '{{ URL::route('inventory_cashier.print') }}',
                     type: 'POST',
                     data: formData,
                     success: function(response) {

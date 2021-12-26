@@ -57,6 +57,7 @@
                                 <th class="text-white text-center fw-bold">Kategori</th>
                                 <th class="text-white text-center fw-bold">HPP</th>
                                 <th class="text-white text-center fw-bold">Harga Jual</th>
+                                <th class="text-white text-center fw-bold">Stok</th>
                                 <th class="text-white text-center fw-bold">Aksi</th>
                             </tr>
                         </thead>
@@ -73,6 +74,7 @@
                                     <td>{{ $item->category->category_name }}</td>
                                     <td>{{ rupiah($item->product_price) }}</td>
                                     <td>{{ rupiah($item->product_price_selling) }}</td>
+                                    <td>{{ $item->stock }}</td>
                                     <td class="text-center">
                                         <div class="btn-group">
                                             <button

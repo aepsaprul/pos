@@ -197,7 +197,7 @@
                                     <li>
                                         <a
                                             class="dropdown-item"
-                                            href="{{ route('product_out.index') }}">
+                                            href="{{ route('inventory_invoice.index') }}">
                                                 <i class="fas fa-chevron-right"></i>
                                                     Produk Keluar
                                         </a>
@@ -266,6 +266,14 @@
                                     ria-current="page"
                                     href="{{ route('supplier.index') }}">
                                         Supplier
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a
+                                    class="nav-link {{ set_active(['inventory_cashier', 'inventory_cashier/*']) }}"
+                                    aria-current="page"
+                                    href="{{ route('inventory_cashier.index') }}">
+                                        Kasir
                                 </a>
                             </li>
                             <li class="nav-item dropdown">
