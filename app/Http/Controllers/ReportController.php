@@ -230,7 +230,9 @@ class ReportController extends Controller
         })->get();
 
         return response()->json([
-            'sales' => $sales
+            'sales' => $sales,
+            'start_date' => $request->start_date,
+            'end_date' => $end_date
         ]);
     }
 }

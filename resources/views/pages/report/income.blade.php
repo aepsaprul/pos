@@ -46,30 +46,25 @@
             </div>
 
             <div class="card">
-                <div class="card-body table_data">
-
-                </div>
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-2">
-                            <div class="d-flex justify-content-between">
-                                <div class="fw-bold">HPP Keseluruhan:</div>
-                                <div class="total_product_price"></div>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="d-flex justify-content-between">
-                                <div class="fw-bold">Total Terjual:</div>
-                                <div class="total_sold"></div>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="d-flex justify-content-between">
-                                <div class="fw-bold">Total Laba:</div>
-                                <div class="total_profit h6 text-success"></div>
-                            </div>
-                        </div>
-                    </div>
+                    <table id="table_one" class="table table-bordered">
+                        <thead style="background-color: #32a893;">
+                            <tr>
+                                <th class="text-white text-center fw-bold">Tanggal</th>
+                                <th class="text-white text-center fw-bold">Omset</th>
+                                <th class="text-white text-center fw-bold">Total HPP</th>
+                                <th class="text-white text-center fw-bold">Profit</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td id="raw_date" class="text-center"></td>
+                                <td id="raw_revenue" class="text-end"></td>
+                                <td id="raw_total_price" class="text-end"></td>
+                                <td id="raw_profit" class="text-end"></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -91,6 +86,10 @@
     $(document).ready(function() {
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
+        $('#table_one').DataTable({
+                        'ordering': false
+                    });
+
         salesAll();
         function salesAll() {
             $('.table_data').empty();
@@ -98,75 +97,18 @@
                 url: '{{ URL::route('report.income_get_data') }}',
                 type: 'GET',
                 success: function(response) {
-                    var invoice_val = "" +
-                    "<table id=\"table_one\" class=\"table table-bordered\">" +
-                        "<thead style=\"background-color: #32a893;\">" +
-                            "<tr>" +
-                                "<th class=\"text-white text-center fw-bold\">No</th>" +
-                                "<th class=\"text-white text-center fw-bold\">Tanggal</th>" +
-                                "<th class=\"text-white text-center fw-bold\">Nama Produk</th>" +
-                                "<th class=\"text-white text-center fw-bold\">HPP</th>" +
-                                "<th class=\"text-white text-center fw-bold\">Quantitiy</th>" +
-                                "<th class=\"text-white text-center fw-bold\">Total HPP</th>" +
-                                "<th class=\"text-white text-center fw-bold\">Terjual</th>" +
-                            "</tr>" +
-                        "</thead>" +
-                        "<tbody>";
+                    var sum_product_price = 0;
+                    var sum_sub_total = 0;
 
-                            var sum_product_price = 0;
-                            var sum_sub_total = 0;
+                    $.each(response.sales, function(index, item) {
+                        sum_product_price += parseFloat(item.quantity * item.product.product_price);
+                        sum_sub_total += parseFloat(item.sub_total);
+                        var total_profit =  sum_sub_total - sum_product_price;
 
-                            $.each(response.sales, function(index, item) {
-                                invoice_val += "" +
-                                    "<tr";
-                                    if (index % 2 == 1) {
-                                       invoice_val += " class=\"tabel_active\"";
-                                    }
-                                    invoice_val += ">" +
-                                        "<td class=\"text-center\">" + (index + 1) + "</td>";
-
-                                        if (item.invoice) {
-                                            invoice_val += "" +
-                                                "<td>" + tanggal(item.invoice.date_recorded) + "</td>";
-                                        } else {
-                                            invoice_val += "" +
-                                                "<td>Tanggal Kosong</td>";
-                                        }
-
-                                        if (item.product) {
-                                            invoice_val += "" +
-                                                "<td>" + item.product.product_name + "</td>" +
-                                                "<td class=\"text-end\">" + format_rupiah(item.product.product_price) + "</td>" +
-                                                "<td class=\"text-center\">" + item.quantity + "</td>" +
-                                                "<td class=\"text-end\">" + format_rupiah((item.quantity * item.product.product_price)) + "</td>";
-                                        } else {
-                                            invoice_val += "" +
-                                                "<td>Produk Kosong</td>" +
-                                                "<td>HPP Kosong</td>" +
-                                                "<td>Quantity Kosong</td>" +
-                                                "<td>Total HPP Kosong</td>";
-                                        }
-
-                                    invoice_val += "" +
-                                        "<td class=\"text-end\">" + format_rupiah(item.sub_total) + "</td>" +
-                                    "</tr>";
-
-                                    sum_product_price += parseFloat(item.quantity * item.product.product_price);
-                                    sum_sub_total += parseFloat(item.sub_total);
-
-                                    var total_profit =  sum_sub_total - sum_product_price;
-
-                                    $('.total_product_price').html(format_rupiah(sum_product_price));
-                                    $('.total_sold').html(format_rupiah(sum_sub_total));
-                                    $('.total_profit').html(format_rupiah(total_profit));
-                            });
-                        invoice_val += "</tbody>" +
-                    "</table>";
-
-                    $('.table_data').append(invoice_val);
-
-                    $('#table_one').DataTable({
-                        'ordering': false
+                        $('#raw_date').html(tanggal(item.invoice.date_recorded));
+                        $('#raw_revenue').html(format_rupiah(sum_product_price));
+                        $('#raw_total_price').html(format_rupiah(sum_sub_total));
+                        $('#raw_profit').html(format_rupiah(total_profit));
                     });
                 }
             });
@@ -190,163 +132,26 @@
                     type: 'POST',
                     data: formData,
                     success: function(response) {
-                        var invoice_val = "" +
-                        "<table id=\"table_one\" class=\"table table-bordered\">" +
-                            "<thead style=\"background-color: #32a893;\">" +
-                                "<tr>" +
-                                    "<th class=\"text-white text-center fw-bold\">No</th>" +
-                                    "<th class=\"text-white text-center fw-bold\">Tanggal</th>" +
-                                    "<th class=\"text-white text-center fw-bold\">Nama Produk</th>" +
-                                    "<th class=\"text-white text-center fw-bold\">HPP</th>" +
-                                    "<th class=\"text-white text-center fw-bold\">Quantitiy</th>" +
-                                    "<th class=\"text-white text-center fw-bold\">Total HPP</th>" +
-                                    "<th class=\"text-white text-center fw-bold\">Terjual</th>" +
-                                "</tr>" +
-                            "</thead>" +
-                            "<tbody>";
+                    var sum_product_price = 0;
+                    var sum_sub_total = 0;
 
-                                var sum_product_price = 0;
-                                var sum_sub_total = 0;
+                    $.each(response.sales, function(index, item) {
+                        sum_product_price += parseFloat(item.quantity * item.product.product_price);
+                        sum_sub_total += parseFloat(item.sub_total);
+                        var total_profit =  sum_sub_total - sum_product_price;
 
-                                $.each(response.sales, function(index, item) {
-                                    invoice_val += "" +
-                                        "<tr";
-                                        if (index % 2 == 1) {
-                                        invoice_val += " class=\"tabel_active\"";
-                                        }
-                                        invoice_val += ">" +
-                                            "<td class=\"text-center\">" + (index + 1) + "</td>";
+                        var start_date = tanggal(response.start_date);
+                        var end_date = tanggal(response.end_date);
 
-                                            if (item.invoice) {
-                                                invoice_val += "" +
-                                                    "<td>" + tanggal(item.invoice.date_recorded) + "</td>";
-                                            } else {
-                                                invoice_val += "" +
-                                                    "<td>Tanggal Kosong</td>";
-                                            }
-
-                                            if (item.product) {
-                                                invoice_val += "" +
-                                                    "<td>" + item.product.product_name + "</td>" +
-                                                    "<td class=\"text-end\">" + format_rupiah(item.product.product_price) + "</td>" +
-                                                    "<td class=\"text-center\">" + item.quantity + "</td>" +
-                                                    "<td class=\"text-end\">" + format_rupiah((item.quantity * item.product.product_price)) + "</td>";
-                                            } else {
-                                                invoice_val += "" +
-                                                    "<td>Produk Kosong</td>" +
-                                                    "<td>HPP Kosong</td>" +
-                                                    "<td>Quantity Kosong</td>" +
-                                                    "<td>Total HPP Kosong</td>";
-                                            }
-
-                                        invoice_val += "" +
-                                            "<td class=\"text-end\">" + format_rupiah(item.sub_total) + "</td>" +
-                                        "</tr>";
-
-                                        sum_product_price += parseFloat(item.quantity * item.product.product_price);
-                                        sum_sub_total += parseFloat(item.sub_total);
-
-                                        var total_profit =  sum_sub_total - sum_product_price;
-
-                                        $('.total_product_price').html(format_rupiah(sum_product_price));
-                                        $('.total_sold').html(format_rupiah(sum_sub_total));
-                                        $('.total_profit').html(format_rupiah(total_profit));
-                                });
-                            invoice_val += "</tbody>" +
-                        "</table>";
-
-                        $('.table_data').append(invoice_val);
-
-                        $('#table_one').DataTable({
-                            'ordering': false
-                        });
+                        $('#raw_date').html(start_date + " s/d " + end_date);
+                        $('#raw_revenue').html(format_rupiah(sum_product_price));
+                        $('#raw_total_price').html(format_rupiah(sum_sub_total));
+                        $('#raw_profit').html(format_rupiah(total_profit));
+                    });
                     }
                 });
             }
         });
-
-        // $('#opsi').on('change', function() {
-        //     if ($(this).val() == "") {
-        //         salesAll();
-        //     }
-        //     else {
-        //         $('.card-body').empty();
-
-        //         var id = $(this).val();
-        //         var url = '{{ route("report.product_detail", ":id") }}';
-        //         url = url.replace(':id', id );
-
-        //         var formData = {
-        //             id: id,
-        //             _token: CSRF_TOKEN
-        //         }
-        //         $.ajax({
-        //             url: url,
-        //             data: formData,
-        //             type: 'GET',
-        //             success: function(response) {
-        //                 var sales_val = "" +
-        //                 "<table id=\"table_one\" class=\"table table-bordered\">" +
-        //                     "<thead style=\"background-color: #32a893;\">" +
-        //                         "<tr>" +
-        //                             "<th class=\"text-white text-center fw-bold\">No</th>" +
-        //                             "<th class=\"text-white text-center fw-bold\">Nama Produk</th>" +
-        //                             "<th class=\"text-white text-center fw-bold\">Nama Kasir</th>" +
-        //                             "<th class=\"text-white text-center fw-bold\">Kode Nota</th>" +
-        //                             "<th class=\"text-white text-center fw-bold\">Quantity</th>" +
-        //                             "<th class=\"text-white text-center fw-bold\">Total</th>" +
-        //                         "</tr>" +
-        //                     "</thead>" +
-        //                     "<tbody>";
-        //                         $.each(response.sales, function(index, item) {
-        //                             sales_val += "" +
-        //                             "<tr";
-        //                             if (index % 2 == 1) {
-        //                                sales_val += " class=\"tabel_active\"";
-        //                             }
-        //                             sales_val += ">" +
-        //                                 "<td class=\"text-center\">" + (index + 1) + "</td>" +
-        //                                 "<td class=\"text-center\">";
-
-        //                                 if (item.product) {
-        //                                     sales_val += item.product.product_name;
-        //                                 } else {
-        //                                     sales_val += "Produk Tidak Ada";
-        //                                 }
-
-        //                                 sales_val += "</td><td>";
-
-        //                                 if (item.user) {
-        //                                     sales_val += item.user.name;
-        //                                 } else {
-        //                                     sales_val += "User Tidak Ada";
-        //                                 }
-
-        //                                 sales_val += "</td><td>";
-
-        //                                 if (item.invoice) {
-        //                                     sales_val += item.invoice.code;
-        //                                 } else {
-        //                                     sales_val += "Invoice Tidak Ada";
-        //                                 }
-
-        //                             sales_val += "</td>" +
-        //                                 "<td class=\"text-center\">" + item.quantity + "</td>" +
-        //                                 "<td class=\"text-center\">" + format_rupiah(item.sub_total) + "</td>" +
-        //                             "</tr>";
-        //                         });
-        //                     sales_val += "</tbody>" +
-        //                 "</table>";
-
-        //                 $('.card-body').append(sales_val);
-
-        //                 $('#table_one').DataTable({
-        //                     'ordering': false
-        //                 });
-        //             }
-        //         });
-        //     }
-        // });
     } );
 </script>
 @endsection
